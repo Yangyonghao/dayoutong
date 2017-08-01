@@ -1,0 +1,4 @@
+*
+!.gitignor
+conf/database.php
+runtime/*
