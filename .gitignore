@@ -6,3 +6,5 @@
 composer.lock
 /api
 /public/api
+data/conf/database.php
+data/runtime/*
