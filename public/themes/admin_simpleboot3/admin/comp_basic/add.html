@@ -1,47 +1,168 @@
-<include file="public@header" />
+<include file="public@header"/>
+<script type="text/html" id="photos-item-tpl">
+	<li id="saved-image{id}">
+		<input id="photo-{id}" type="hidden" name="photo_urls[]" value="{filepath}">
+		<input class="form-control" id="photo-{id}-name" type="text" name="photo_names[]" value="{name}"
+			   style="width: 200px;" title="图片名称">
+		<img id="photo-{id}-preview" src="{url}" style="height:36px;width: 36px;"
+			 onclick="imagePreviewDialog(this.src);">
+		<a href="javascript:uploadOneImage('图片上传','#photo-{id}');">替换</a>
+		<a href="javascript:(function(){$('#saved-image{id}').remove();})();">移除</a>
+	</li>
+</script>
 </head>
 <body>
-	<div class="wrap">
-		<ul class="nav nav-tabs">
-			<li><a href="{:url('user/index')}">{:lang('ADMIN_USER_INDEX')}</a></li>
-			<li class="active"><a href="{:url('user/add')}">{:lang('ADMIN_USER_ADD')}</a></li>
-		</ul>
-		<form method="post" class="form-horizontal js-ajax-form margin-top-20" action="{:url('user/addpost')}">
-			<div class="form-group">
-				<label for="input-user_login" class="col-sm-2 control-label"><span class="form-required">*</span>{:lang('USERNAME')}</label>
-				<div class="col-md-6 col-sm-10">
-					<input type="text" class="form-control" id="input-user_login" name="user_login">
+<div class="wrap js-check-wrap">
+	<ul class="nav nav-tabs">
+		<li><a href="{:url('comp_basic/index')}">企业基本信息列表</a></li>
+		<li class="active"><a href="{:url('comp_basic/add')}">添加企业基本信息</a></li>
+	</ul>
+	<div class="row margin-top-20">
+
+		<div class="col-md-8">
+			<form class="js-ajax-form" action="{:url('CompBasic/addPost')}" method="post">
+				<div class="tab-content">
+					<div class="tab-pane active" id="A">
+						<!--企业名称-->
+						<div class="form-group">
+							<label for="comp_name"><span class="form-required">*</span>企业名称</label>
+							<div>
+								<input type="text" class="form-control" id="comp_name" name="comp_name">
+							</div>
+						</div>
+						<!--企业分类-->
+						<div class="form-group">
+							<label for="comp-classify"><span class="form-required">*</span>企业分类</label>
+							<div>
+								<select class="form-control" id="comp-classify" name="comp_classify" >
+									<option value="0">请选择</option>
+									<option value="贸易型">贸易型</option>
+									<option value="实业型">实业型</option>
+								</select>
+							</div>
+						</div>
+						<!--成立时间-->
+						<div class="form-group">
+							<label for="datetimepicker1"><span class="form-required">*</span>成立时间</label>
+							<div>
+								<input class="form-control js-date" id="datetimepicker1" type="text" name="reg_time"
+									   placeholder="{:date('Y-m-d',time())}">
+
+							</div>
+						</div>
+						<!--注册资本-->
+						<div class="form-group">
+							<label for="reg-money">注册资本</label>
+							<div>
+								<input type="text" class="form-control" id="reg-money" name="reg_money" placeholder="万元为单位">
+							</div>
+						</div>
+						<!--企业法人-->
+						<div class="form-group">
+							<label for="legal_person">企业法人</label>
+							<div>
+								<input type="text" class="form-control" id="legal_person" name="legal_person" placeholder="法人姓名">
+							</div>
+						</div>
+						<!--企业联系地-->
+						<div class="form-group">
+							<label for="link-addr">企业联系地</label>
+							<div>
+								<input type="text" class="form-control" id="link-addr" name="link_addr" placeholder="万元为单位">
+							</div>
+						</div>
+						<!--企业基础资质-->
+						<div class="form-group">
+							<label for="js-thumbnail-input">企业基础资质</label>
+							<div>
+								<input type="hidden" name="business_license_pic" class="form-control"
+									   id="js-thumbnail-input">
+								<div>
+									<a href="javascript:uploadOneImage('图片上传','#js-thumbnail-input');">
+										<img src="__TMPL__/public/assets/images/default-thumbnail.png"
+											 id="js-thumbnail-input-preview"
+											 width="135" style="cursor: pointer"/>
+									</a>
+								</div>
+							</div>
+						</div>
+
+						<!--企业附加资质-->
+						<div class="form-group">
+							<label for="js-thumbnail-input">企业附加资质</label>
+							<div class="checkbox">
+								<label class="checkbox-inline">
+									<input type="checkbox" id="inlineCheckbox1" value="option1"> 危化证
+								</label>
+								<label class="checkbox-inline">
+									<input type="checkbox" id="inlineCheckbox2" value="option2"> 成品油经营资质
+								</label>
+								<label class="checkbox-inline">
+									<input type="checkbox" id="inlineCheckbox3" value="option3"> 进出口贸易证
+								</label>
+							</div>
+						</div>
+						<!--<div class="form-group">-->
+							<!--<label for="photos">企业附加资质</label>-->
+							<!--<div>-->
+								<!--<ul id="photos" class="pic-list list-unstyled form-inline"></ul>-->
+								<!--<a href="javascript:uploadMultiImage('图片上传','#photos','photos-item-tpl');"-->
+								   <!--class="btn btn-default btn-sm">选择图片</a>-->
+							<!--</div>-->
+						<!--</div>-->
+						<!--是否有效-->
+						<div class="form-group">
+							<label for="service_pay">是否支付服务费</label>
+							<div>
+								<select class="form-control" name="service_pay" id="service_pay">
+									<option value="否">否</option>
+									<option value="是">是</option>
+								</select>
+							</div>
+						</div>
+						<!--是否有效-->
+						<div class="form-group">
+							<label for="input-status">是否有效</label>
+							<div>
+								<select class="form-control" name="status" id="input-status">
+									<option value="1">启用</option>
+									<option value="0">禁用</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<button type="submit" class="btn btn-primary js-ajax-submit">{:lang('ADD')}</button>
+						<a class="btn btn-default" href="{:url('AdminCategory/index')}">{:lang('BACK')}</a>
+					</div>
 				</div>
-			</div>
-			<div class="form-group">
-				<label for="input-user_pass" class="col-sm-2 control-label"><span class="form-required">*</span>{:lang('PASSWORD')}</label>
-				<div class="col-md-6 col-sm-10">
-					<input type="text" class="form-control" id="input-user_pass" name="user_pass" placeholder="******">
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="input-user_email" class="col-sm-2 control-label"><span class="form-required">*</span>{:lang('EMAIL')}</label>
-				<div class="col-md-6 col-sm-10">
-					<input type="text" class="form-control" id="input-user_email" name="user_email">
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="input-user_email" class="col-sm-2 control-label"><span class="form-required">*</span>{:lang('ROLE')}</label>
-				<div class="col-md-6 col-sm-10">
-					<foreach name="roles" item="vo">
-						<label class="checkbox-inline">
-							<input value="{$vo.id}" type="checkbox" name="role_id[]" <if condition="cmf_get_current_admin_id() neq 1 && $vo['id'] eq 1">disabled="true"</if>>{$vo.name}
-						</label>
-					</foreach>
-				</div>
-			</div>
-			<div class="form-group">
-				<div class="col-sm-offset-2 col-sm-10">
-					<button type="submit" class="btn btn-primary js-ajax-submit">{:lang('ADD')}</button>
-				</div>
-			</div>
-		</form>
+			</form>
+		</div>
 	</div>
-	<script src="__STATIC__/js/admin.js"></script>
+</div>
+<script type="text/javascript" src="__STATIC__/js/admin.js"></script>
+<script type="text/javascript">
+	//编辑器路径定义
+	var editorURL = GV.WEB_ROOT;
+</script>
+<script type="text/javascript" src="__STATIC__/js/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="__STATIC__/js/ueditor/ueditor.all.min.js"></script>
+<script type="text/javascript">
+	$(function () {
+
+		editorcontent = new baidu.editor.ui.Editor();
+		editorcontent.render('content');
+		try {
+			editorcontent.sync();
+		} catch (err) {
+		}
+
+		$('.btn-cancel-thumbnail').click(function () {
+			$('#thumbnail-preview').attr('src', '__TMPL__/public/assets/images/default-thumbnail.png');
+			$('#thumbnail').val('');
+		});
+	});
+
+</script>
 </body>
 </html>

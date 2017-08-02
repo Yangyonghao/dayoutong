@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2017-08-01 16:19:00
+Date: 2017-08-02 16:50:18
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -36,7 +36,7 @@ CREATE TABLE `spec_admin_menu` (
   KEY `status` (`status`),
   KEY `parentid` (`parent_id`),
   KEY `model` (`controller`)
-) ENGINE=InnoDB AUTO_INCREMENT=161 DEFAULT CHARSET=utf8 COMMENT='后台菜单表';
+) ENGINE=InnoDB AUTO_INCREMENT=163 DEFAULT CHARSET=utf8 COMMENT='后台菜单表';
 
 -- ----------------------------
 -- Records of spec_admin_menu
@@ -221,11 +221,24 @@ CREATE TABLE `spec_asset` (
   `suffix` varchar(10) NOT NULL DEFAULT '' COMMENT '文件后缀名,不包括点',
   `more` text COMMENT '其它详细信息,JSON格式',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='资源表';
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COMMENT='资源表';
 
 -- ----------------------------
 -- Records of spec_asset
 -- ----------------------------
+INSERT INTO `spec_asset` VALUES ('1', '1', '283294', '1501645859', '1', '0', '00992bd3f1099d9215e36fb45686e57fc73f684a898b6136d407bfee8275eda0', '2.jpg', 'portal/20170802/4ad41f47e04a83a2311d1fb06cc60a9d.jpg', '00992bd3f1099d9215e36fb45686e57f', '038f0281e2d8749cb09510ab9bf901d738def6ad', 'jpg', null);
+INSERT INTO `spec_asset` VALUES ('2', '1', '531950', '1501645871', '1', '0', 'bbe80c8df3a5cb8282aa6ecde49d5793febdecfbc8fc59429a9dc4e5995bfbb3', '3.jpg', 'portal/20170802/111ca59f6d02f73e87e3c4607d41a8b7.jpg', 'bbe80c8df3a5cb8282aa6ecde49d5793', 'f1a58a87447e84fe27d94cd1af8bb75759d07f07', 'jpg', null);
+INSERT INTO `spec_asset` VALUES ('3', '1', '319759', '1501645897', '1', '0', '5b0b16afd5f32a4c1ba3988773c7c2fd193d0b72e9719cf6444c27bc7d5f15ad', '1.jpg', 'portal/20170802/7a7cd41ef42dd14185f7e8ed673c8b90.jpg', '5b0b16afd5f32a4c1ba3988773c7c2fd', '50c53929d11ca43b42b5a87434050d2093712c33', 'jpg', null);
+INSERT INTO `spec_asset` VALUES ('4', '1', '61899', '1501645962', '1', '0', 'b66d86c103fcfa9a1c6eb997a009d35e980359dc9639152ccd6bd72a654926ce', 'd439b6003af33a8755f7ac04ce5c10385343b512.jpg', 'portal/20170802/4a36b4f6a8b69200d4ff853bca8cfdc9.jpg', 'b66d86c103fcfa9a1c6eb997a009d35e', '346553c67e966ffd3b45f05353368c31a1c4b078', 'jpg', null);
+INSERT INTO `spec_asset` VALUES ('5', '1', '3823202', '1501645986', '1', '0', '7fe95b5649e4f14a7061b2e2afde6e2b2169348635d458db041e00aee10b506b', 'IMG_2257.JPG', 'portal/20170802/28cf3c351d621740c7a2940797f6d99b.jpg', '7fe95b5649e4f14a7061b2e2afde6e2b', 'df8dce3d63d56c3a9e0886050c6143010f0c581a', 'jpg', null);
+INSERT INTO `spec_asset` VALUES ('6', '1', '103871', '1501658791', '1', '0', '736eb6ddd4f5ae0e834c652c23e27ee5e2bfbe5aedd8a4547c12212d15917a2e', '82198590752459988.jpg', '20170802/e3096a3086b0074beded5c063f5bf475.jpg', '736eb6ddd4f5ae0e834c652c23e27ee5', '61e44352beaa5b15ada30c4faf35a29b1b005af3', 'jpg', null);
+INSERT INTO `spec_asset` VALUES ('7', '1', '166578', '1501658813', '1', '0', 'e346c7082b8f23504d78298e1f6d861b00b89002fc8b8b0e8a5be217459c82c1', '111.jpg', '20170802/b37dd223a6ad6526df4bae9276b09c5f.jpg', 'e346c7082b8f23504d78298e1f6d861b', '318d148390d9a0b820e34387024fd0d457a212bd', 'jpg', null);
+INSERT INTO `spec_asset` VALUES ('8', '1', '36386', '1501658830', '1', '0', '351f0f6607b0ea06d2e016bedba94ab2a83a73751e12b838aa8091538cd90e72', '9f191a4eb88c4917a6e94a67ed1f91dc20160927173700.jpg', '20170802/9d592f8bf0f0c66e876c154f8f9f2b91.jpg', '351f0f6607b0ea06d2e016bedba94ab2', '31baed222fb83251a6bdfb106b6f189b563a30fe', 'jpg', null);
+INSERT INTO `spec_asset` VALUES ('9', '1', '23789', '1501658844', '1', '0', '118f52f90d7178c6ab3a881e0b13d76de22ff83bb9bc9c9660a8016b455117bd', '2cd7950441c1af7b5261c3f22b442613.jpg', '20170802/bb7572f1229c6274b364787bf98cd22d.jpg', '118f52f90d7178c6ab3a881e0b13d76d', '571eb12dcf38decf9d40c9e45e3459814806489d', 'jpg', null);
+INSERT INTO `spec_asset` VALUES ('10', '1', '47223', '1501658844', '1', '0', '6f45257e2170a96a7788ac3ec0e938de5ae1d066be0a2a0f57bc04f6f2f61a55', '7af40ad162d9f2d385864284a8ec8a136227ccc2.jpg', '20170802/1381dc7842fcaaf077e9cff9a0e5bcd4.jpg', '6f45257e2170a96a7788ac3ec0e938de', '9a2a8d1097317317a90a41a8b4711cc547281c7a', 'jpg', null);
+INSERT INTO `spec_asset` VALUES ('11', '1', '32355', '1501659767', '1', '0', '6c30bb03d392cb63ab37bba1d7511913204d916004e78fd5ab0b6573636385cc', '13beda65ed00f9920610550bde8b1c23.jpg', 'admin/20170802/00f66a4baa1be9f78906062fc5e4f132.jpg', '6c30bb03d392cb63ab37bba1d7511913', '565a27a26ca22a6f22f60546a8692bd974a40f79', 'jpg', null);
+INSERT INTO `spec_asset` VALUES ('12', '1', '106777', '1501660975', '1', '0', '2688c03192e6c449eb7ef5e2e439863eb7d0a6120fc45c992313c80e87a0dcd8', '对的1736.jpg', 'admin/20170802/bfad9267f3c1ee3cec68047f84c3e205.jpg', '2688c03192e6c449eb7ef5e2e439863e', 'ae8bba0c0debdd0ded7812cf5d22361875734e50', 'jpg', null);
+INSERT INTO `spec_asset` VALUES ('13', '1', '2454069', '1501661075', '1', '0', '123635f9f1107cc93f8b12e4ccabc0b895f3672416ae739bfe6f5803cf393400', '2015831161736.jpg', 'admin/20170802/ecd71d37e90aa6ad3a5c59f18d33b55f.jpg', '123635f9f1107cc93f8b12e4ccabc0b8', '634d2ba2b577e8e321503e3accd9bb18ded4d76e', 'jpg', null);
 
 -- ----------------------------
 -- Table structure for `spec_auth_access`
@@ -239,7 +252,7 @@ CREATE TABLE `spec_auth_access` (
   PRIMARY KEY (`id`),
   KEY `role_id` (`role_id`),
   KEY `rule_name` (`rule_name`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 COMMENT='权限授权表';
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8 COMMENT='权限授权表';
 
 -- ----------------------------
 -- Records of spec_auth_access
@@ -270,6 +283,9 @@ INSERT INTO `spec_auth_access` VALUES ('23', '2', 'user/adminindex/ban', 'admin_
 INSERT INTO `spec_auth_access` VALUES ('24', '2', 'user/adminindex/cancelban', 'admin_url');
 INSERT INTO `spec_auth_access` VALUES ('25', '2', 'user/adminoauth/index', 'admin_url');
 INSERT INTO `spec_auth_access` VALUES ('26', '2', 'user/adminoauth/delete', 'admin_url');
+INSERT INTO `spec_auth_access` VALUES ('30', '3', 'admin/compbasic/default', 'admin_url');
+INSERT INTO `spec_auth_access` VALUES ('31', '3', 'admin/compbasic/index', 'admin_url');
+INSERT INTO `spec_auth_access` VALUES ('32', '3', 'admin/compbasic/list', 'admin_url');
 
 -- ----------------------------
 -- Table structure for `spec_auth_rule`
@@ -287,7 +303,7 @@ CREATE TABLE `spec_auth_rule` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`) USING BTREE,
   KEY `module` (`app`,`status`,`type`)
-) ENGINE=InnoDB AUTO_INCREMENT=161 DEFAULT CHARSET=utf8 COMMENT='权限规则表';
+) ENGINE=InnoDB AUTO_INCREMENT=163 DEFAULT CHARSET=utf8 COMMENT='权限规则表';
 
 -- ----------------------------
 -- Records of spec_auth_rule
@@ -452,6 +468,8 @@ INSERT INTO `spec_auth_rule` VALUES ('157', '1', 'admin', 'admin_url', 'admin/Co
 INSERT INTO `spec_auth_rule` VALUES ('158', '1', 'admin', 'admin_url', 'admin/CompBasic/index', '', '企业基本信息', '');
 INSERT INTO `spec_auth_rule` VALUES ('159', '1', 'admin', 'admin_url', 'admin/CompFinance/index', '', '企业财务信息', '');
 INSERT INTO `spec_auth_rule` VALUES ('160', '1', 'admin', 'admin_url', 'admin/CompBusiness/index', '', '企业业务信息', '');
+INSERT INTO `spec_auth_rule` VALUES ('161', '1', 'admin', 'admin_url', 'admin/CompBasic/list', '', '上半部分字段', '');
+INSERT INTO `spec_auth_rule` VALUES ('162', '1', 'admin', 'admin_url', 'admin/CompBasic/arr', '', '下半部分字段', '');
 
 -- ----------------------------
 -- Table structure for `spec_comment`
@@ -485,6 +503,33 @@ CREATE TABLE `spec_comment` (
 -- ----------------------------
 -- Records of spec_comment
 -- ----------------------------
+
+-- ----------------------------
+-- Table structure for `spec_comp_basic`
+-- ----------------------------
+DROP TABLE IF EXISTS `spec_comp_basic`;
+CREATE TABLE `spec_comp_basic` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `comp_name` varchar(30) NOT NULL DEFAULT '' COMMENT '公司名称',
+  `comp_classify` enum('贸易型','实业型') NOT NULL COMMENT '企业分类',
+  `reg_time` date NOT NULL COMMENT '成立时间',
+  `reg_money` int(11) NOT NULL DEFAULT '0' COMMENT '注册资本',
+  `business_license_pic` varchar(50) NOT NULL DEFAULT '' COMMENT '营业执照图片',
+  `link_addr` varchar(255) NOT NULL DEFAULT '' COMMENT '企业联系地址',
+  `legal_person` varchar(11) NOT NULL DEFAULT '' COMMENT '法人代表',
+  `service_pay` char(3) NOT NULL DEFAULT '否' COMMENT '服务费支付情况',
+  `add_time` timestamp NOT NULL COMMENT '添加数据时间',
+  `update_time` timestamp NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `status` int(11) NOT NULL DEFAULT '1' COMMENT '是否有效',
+  `comp_imgs` varchar(255) NOT NULL DEFAULT '' COMMENT '企业附加图片',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of spec_comp_basic
+-- ----------------------------
+INSERT INTO `spec_comp_basic` VALUES ('1', '上海石油', '实业型', '2017-08-09', '100', '', '上海市奉贤区惠南路上市7号', '杨永豪', '否', '2017-08-02 11:47:25', '2017-08-02 13:41:36', '1', '');
+INSERT INTO `spec_comp_basic` VALUES ('2', '博彦科技', '贸易型', '2011-08-26', '3000', '', '上海市浦东新区市7号', '阿三', '是', '2017-08-02 11:47:25', '2017-08-02 13:51:21', '1', '');
 
 -- ----------------------------
 -- Table structure for `spec_hook`
@@ -680,11 +725,12 @@ CREATE TABLE `spec_portal_category` (
   `one_tpl` varchar(50) NOT NULL DEFAULT '' COMMENT '分类文章页模板',
   `more` text COMMENT '扩展属性',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='portal应用 文章分类表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='portal应用 文章分类表';
 
 -- ----------------------------
 -- Records of spec_portal_category
 -- ----------------------------
+INSERT INTO `spec_portal_category` VALUES ('1', '0', '0', '1', '0', '10000', '第一套人民币', '', '0-1', '', '', '', 'list', 'article', '{\"thumbnail\":\"20170802\\/bb7572f1229c6274b364787bf98cd22d.jpg\"}');
 
 -- ----------------------------
 -- Table structure for `spec_portal_category_post`
@@ -698,11 +744,12 @@ CREATE TABLE `spec_portal_category_post` (
   `status` tinyint(3) unsigned NOT NULL DEFAULT '1' COMMENT '状态,1:发布;0:不发布',
   PRIMARY KEY (`id`),
   KEY `term_taxonomy_id` (`category_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='portal应用 分类文章对应表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='portal应用 分类文章对应表';
 
 -- ----------------------------
 -- Records of spec_portal_category_post
 -- ----------------------------
+INSERT INTO `spec_portal_category_post` VALUES ('1', '1', '1', '10000', '1');
 
 -- ----------------------------
 -- Table structure for `spec_portal_post`
@@ -737,11 +784,12 @@ CREATE TABLE `spec_portal_post` (
   KEY `post_parent` (`parent_id`),
   KEY `post_author` (`user_id`),
   KEY `post_date` (`create_time`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='portal应用 文章表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='portal应用 文章表';
 
 -- ----------------------------
 -- Records of spec_portal_post
 -- ----------------------------
+INSERT INTO `spec_portal_post` VALUES ('1', '0', '1', '1', '1', '1', '1', '0', '0', '0', '0', '0', '1501659276', '1501659276', '1501659248', '0', '呵呵', '', '', '', '&lt;p&gt;的算法噶噶多过过过过过过过过过过过&lt;/p&gt;', null, '{\"thumbnail\":\"\",\"template\":\"\",\"photos\":[{\"url\":\"20170802\\/bb7572f1229c6274b364787bf98cd22d.jpg\",\"name\":\"2cd7950441c1af7b5261c3f22b442613.jpg\"},{\"url\":\"20170802\\/1381dc7842fcaaf077e9cff9a0e5bcd4.jpg\",\"name\":\"7af40ad162d9f2d385864284a8ec8a136227ccc2.jpg\"},{\"url\":\"20170802\\/9d592f8bf0f0c66e876c154f8f9f2b91.jpg\",\"name\":\"9f191a4eb88c4917a6e94a67ed1f91dc20160927173700.jpg\"}]}');
 
 -- ----------------------------
 -- Table structure for `spec_portal_tag`
@@ -810,13 +858,14 @@ CREATE TABLE `spec_role` (
   PRIMARY KEY (`id`),
   KEY `parentId` (`parent_id`),
   KEY `status` (`status`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='角色表';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='角色表';
 
 -- ----------------------------
 -- Records of spec_role
 -- ----------------------------
 INSERT INTO `spec_role` VALUES ('1', '0', '1', '1329633709', '1329633709', '0', '超级管理员', '拥有网站最高管理员权限！');
 INSERT INTO `spec_role` VALUES ('2', '0', '1', '1329633709', '1329633709', '0', '普通管理员', '权限由最高管理员分配！');
+INSERT INTO `spec_role` VALUES ('3', '0', '1', '0', '0', '0', '企业基本部分信息', '维护');
 
 -- ----------------------------
 -- Table structure for `spec_role_user`
@@ -829,12 +878,13 @@ CREATE TABLE `spec_role_user` (
   PRIMARY KEY (`id`),
   KEY `group_id` (`role_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COMMENT='用户角色对应表';
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COMMENT='用户角色对应表';
 
 -- ----------------------------
 -- Records of spec_role_user
 -- ----------------------------
 INSERT INTO `spec_role_user` VALUES ('11', '2', '8');
+INSERT INTO `spec_role_user` VALUES ('12', '3', '9');
 
 -- ----------------------------
 -- Table structure for `spec_route`
@@ -1008,13 +1058,14 @@ CREATE TABLE `spec_user` (
   PRIMARY KEY (`id`),
   KEY `user_login_key` (`user_login`),
   KEY `user_nicename` (`user_nickname`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='用户表';
 
 -- ----------------------------
 -- Records of spec_user
 -- ----------------------------
-INSERT INTO `spec_user` VALUES ('1', '1', '0', '0', '1501574712', '0', '0', '1501561508', '1', 'admin', '###5078bc152a94fd5940e1575db1de5c25', 'admin', '1139933051@qq.com', '', '', '', '127.0.0.1', '', '');
-INSERT INTO `spec_user` VALUES ('8', '1', '0', '0', '1501561757', '0', '0', '0', '1', 'abcdef', '###5078bc152a94fd5940e1575db1de5c25', '', '1122@qq.com', '', '', '', '127.0.0.1', '', '');
+INSERT INTO `spec_user` VALUES ('1', '1', '0', '0', '1501644830', '0', '0', '1501561508', '1', 'admin', '###5078bc152a94fd5940e1575db1de5c25', 'admin', '1139933051@qq.com', '', '', '', '127.0.0.1', '', '');
+INSERT INTO `spec_user` VALUES ('8', '1', '0', '0', '1501577272', '0', '0', '0', '1', 'abcdef', '###5078bc152a94fd5940e1575db1de5c25', '', '1122@qq.com', '', '', '', '127.0.0.1', '', '');
+INSERT INTO `spec_user` VALUES ('9', '1', '0', '0', '1501580252', '0', '0', '0', '1', 'aaa', '###5078bc152a94fd5940e1575db1de5c25', '', '123456@qq.com', '', '', '', '127.0.0.1', '', '');
 
 -- ----------------------------
 -- Table structure for `spec_user_action_log`
@@ -1088,13 +1139,14 @@ CREATE TABLE `spec_user_token` (
   `token` varchar(64) NOT NULL DEFAULT '' COMMENT 'token',
   `device_type` varchar(10) NOT NULL DEFAULT '' COMMENT '设备类型;mobile,android,iphone,ipad,web,pc,mac,wxapp',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='用户客户端登录 token 表';
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='用户客户端登录 token 表';
 
 -- ----------------------------
 -- Records of spec_user_token
 -- ----------------------------
-INSERT INTO `spec_user_token` VALUES ('3', '1', '1517126712', '1501574712', 'af34fc70a94550bbbefed75b787e696980f0694bdc1651f99f9bf1f575e86eaf', 'web');
-INSERT INTO `spec_user_token` VALUES ('4', '8', '1517113757', '1501561757', '2e30e04ab5eb420aaf2e0a135fd81475c71a00548c6dd273d62bd8a83b83a372', 'web');
+INSERT INTO `spec_user_token` VALUES ('3', '1', '1517196830', '1501644830', '55a43a37bd0b3040cdc88d16db52c5ec208b4518bef3166c119286cb03072fcc', 'web');
+INSERT INTO `spec_user_token` VALUES ('4', '8', '1517129272', '1501577272', '5fa1afcee9cfebd1a0ee10bdb19e1e3009d2e9e6721e2378661de8fc562ee69a', 'web');
+INSERT INTO `spec_user_token` VALUES ('5', '9', '1517132252', '1501580252', 'e8b02e1c88d17f8e7fe56e29ba9f9450f2405b87fbcee87322a642f3cede258b', 'web');
 
 -- ----------------------------
 -- Table structure for `spec_verification_code`
