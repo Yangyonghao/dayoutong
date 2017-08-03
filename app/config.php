@@ -116,7 +116,11 @@ $configs = [
         'taglib_end'      => '>',
         'taglib_build_in' => 'cmf\lib\taglib\Cmf,cx',
         'tpl_cache'       => APP_DEBUG ? false : true,
-        'tpl_deny_php'    => false
+        'tpl_deny_php'    => false,
+        'tpl_replace_string'=>[
+            '__UPLOAD__'=>'/upload',
+            '_PUBLIC_ADMIN_'=>'/admin'
+        ],
     ],
     // 视图输出字符串内容替换
     'view_replace_str'        => [],

@@ -15,6 +15,8 @@ define("APP_DEBUG", true);
 // 定义CMF根目录,可更改此目录
 define('CMF_ROOT', __DIR__ . '/../');
 
+//define('__UPLOAD__', __DIR__ . '/upload/');
+
 // 定义应用目录
 define('APP_PATH', CMF_ROOT . 'app/');
 

@@ -8,6 +8,7 @@
 namespace app\admin\controller;
 
 use cmf\controller\AdminBaseController;
+use app\admin\model\CompBasicModel;
 use think\Db;
 
 /**
@@ -67,10 +68,19 @@ class CompBasicController extends AdminBaseController
 
     public function addPost(){
         if ($this->request->isPost()) {
-            $result_arr=$this->request->param();
-            $post   = $result_arr['post'];
-            var_dump($result_arr);
-            var_dump($post);die;
+            $compBasicModel = new CompBasicModel();
+            $post=$this->request->param();
+            $result = $this->validate($post, 'CompBasic');
+            if ($result !== true) {
+                $this->error($result);
+            }
+            $result = $compBasicModel->addCompBasic($post);
+
+            if ($result === false) {
+                $this->error('添加失败!');
+            }
+
+            $this->success('添加成功!', url('AdminCategory/index'));
         }
     }
 }

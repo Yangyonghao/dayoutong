@@ -35,7 +35,13 @@
 						<td>{$vo.comp_classify}</td>
 						<td>{$vo.reg_time}</td>
 						<td>{$vo.reg_money}</td>
-						<td>{$vo.business_license_pic}</td>
+						<td>
+							<if condition="$vo.business_license_pic neq ''">
+								<img src="__UPLOAD__/{$vo.business_license_pic}" onclick="parent.imagePreviewDialog(this.src);" style="width: 56px;height: 56px;cursor: pointer"/>
+							<else/>
+								<img src="__TMPL__/public/assets/images/default-thumbnail.png" width="56" style="cursor: pointer"/>
+							</if>
+						</td>
 						<td>{$vo.link_addr}</td>
 						<td>{$vo.legal_person}</td>
 						<td>{$vo.service_pay}</td>
