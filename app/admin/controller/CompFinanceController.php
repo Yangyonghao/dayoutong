@@ -13,5 +13,8 @@ use cmf\controller\AdminBaseController;
 
 class CompFinanceController extends AdminBaseController
 {
+    public function index(){
 
+        return $this->fetch();
+    }
 }
