@@ -14,7 +14,7 @@ use think\Db;
  * Class NavController 导航类别管理控制器
  * @package app\admin\controller
  */
-class CompBasicController extends AdminBaseController
+class CompOperateController extends AdminBaseController
 {
     /**
      * 导航管理

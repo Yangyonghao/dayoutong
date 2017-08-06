@@ -9,11 +9,11 @@
 namespace app\admin\controller;
 
 
+use app\admin\model\CompBusinessModel;
 use cmf\controller\AdminBaseController;
-use app\admin\model\CompFinanceModel;
 use think\Db;
 
-class CompFinanceController extends AdminBaseController
+class CompBusinessController extends AdminBaseController
 {
     public function index(){
 
@@ -25,7 +25,7 @@ class CompFinanceController extends AdminBaseController
             $where['comp_name'] = ['like', "%$comp_name%"];
         }
 
-        $result_list=Db::name('comp_finance')
+        $result_list=Db::name('comp_business')
             ->alias('a')
             ->join('spec_comp_basic w','a.comp_id = w.id')
             ->where($where)
@@ -46,7 +46,7 @@ class CompFinanceController extends AdminBaseController
     {
         $comp_arr=Db::name('comp_basic')
             ->where('id','NOT IN',function($query){
-                $query->name('comp_finance')->where('status',1)->field('comp_id');
+                $query->name('comp_business')->where('status',1)->field('comp_id');
             })
             ->field('id,comp_name')->select();
 
@@ -62,19 +62,19 @@ class CompFinanceController extends AdminBaseController
     public function addPost(){
         if ($this->request->isPost()) {
 
-            $compFinanceModel = new CompFinanceModel();
+            $compBusinessModel = new CompBusinessModel();
             $post=$this->request->param();
-            $result = $this->validate($post, 'CompFinance');
+            $result = $this->validate($post, 'CompBusiness');
             if ($result !== true) {
                 $this->error($result);
             }
-            $result = $compFinanceModel->addCompFinance($post);
+            $result = $compBusinessModel->addCompBusiness($post);
 
             if ($result === false) {
                 $this->error('添加失败!');
             }
 
-            $this->success('添加成功!', url('CompFinance/index'));
+            $this->success('添加成功!', url('CompBusiness/index'));
         }
     }
 

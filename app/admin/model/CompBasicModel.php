@@ -19,10 +19,11 @@ class CompBasicModel extends Model
     public function addCompBasic($data){
         //添加到公司信息表
         $data['comp_aptitude']=rtrim(implode('|',$data['check_box']),'|');
+        $data['add_time']=date('Y-m-d H:i:s');
         unset($data['check_box']);
         $result_id=$this->insertGetId($data);
         if($result_id !=false){
-            unset($data['status']);
+            unset($data['status']);unset($data['add_time']);
             $artitude_score_count=count(explode('|',$data['comp_aptitude']));
             $result_list=$this->scoreRole($artitude_score_count);
             if($data['service_pay']=='是'){
@@ -36,8 +37,8 @@ class CompBasicModel extends Model
                     $app[$i]['comp_id']=$result_id;
                     $app[$i]['score']=isset($result_list[$key]['score'])?$result_list[$key]['score']:0;
                     $app[$i]['score_source']=$result_list[$key]['remark'];
-                    $app[$i]['add_time']=date('Y-m-d H:i:s');
                     $app[$i]['department_type']='会员部数据';
+                    $app[$i]['add_time']=date('Y-m-d H:i:s');
                     $app[$i]['key_name']=$key;
                     $app[$i]['ip']=get_client_ip();
                     $score_num +=$result_list[$key]['score'];

@@ -8,38 +8,34 @@
 namespace app\admin\controller;
 
 use cmf\controller\AdminBaseController;
-use app\admin\model\CompBasicModel;
+use app\admin\model\CompAdministrationModel;
 use think\Db;
 
 /**
- * Class NavController 导航类别管理控制器
+ * Class CompAdministrationController 财务部数据
+ *
  * @package app\admin\controller
  */
-class CompBasicController extends AdminBaseController
+class CompStatementsController extends AdminBaseController
 {
     /**
-     * 导航管理
-     * @adminMenu(
-     *     'name'   => '导航管理',
-     *     'parent' => 'admin/Setting/default',
-     *     'display'=> true,
-     *     'hasView'=> true,
-     *     'order'  => 30,
-     *     'icon'   => '',
-     *     'remark' => '导航管理',
-     *     'param'  => ''
-     * )
+     * 财务管理列表
+     *
      */
     public function index()
     {
-        $where = ["status" => 1];
         /**搜索条件**/
-        $comp_name = trim($this->request->param('comp_name'));
-
+        $comp_name = trim($this->request->param('comp_statements'));
+        $where=[];
         if ($comp_name) {
             $where['comp_name'] = ['like', "%$comp_name%"];
         }
-        $result_list=Db::name('comp_basic')->where($where)->order("id DESC")->paginate(10);
+
+        $result_list=Db::name('comp_statements')
+            ->alias('a')
+            ->join('spec_comp_basic w','a.comp_id = w.id')
+            ->where($where)
+            ->order("a.id DESC")->paginate(10);
         // 获取分页显示
         $page = $result_list->render();
         $this->assign('result_list',$result_list);
@@ -63,24 +59,35 @@ class CompBasicController extends AdminBaseController
      */
     public function add()
     {
+        $comp_arr=Db::name('comp_basic')
+            ->where('id','NOT IN',function($query){
+                $query->name('comp_administration')->where('status',1)->field('comp_id');
+            })
+            ->field('id,comp_name')->select();
+
+        $this->assign('comp_arr',$comp_arr);
         return $this->fetch();
     }
-
+    /*
+     * @function:执行添加
+     * @author：yangyh
+     * @date:2017,8,6
+     * */
     public function addPost(){
         if ($this->request->isPost()) {
-            $compBasicModel = new CompBasicModel();
+            $CompAdministrationModel = new CompAdministrationModel();
             $post=$this->request->param();
-            $result = $this->validate($post, 'CompBasic');
+            $result = $this->validate($post, 'CompAdministration');
             if ($result !== true) {
                 $this->error($result);
             }
-            $result = $compBasicModel->addCompBasic($post);
+            $result = $CompAdministrationModel->addCompAdministration($post);
 
             if ($result === false) {
                 $this->error('添加失败!');
             }
 
-            $this->success('添加成功!', url('CompBasic/index'));
+            $this->success('添加成功!', url('CompAdministration/index'));
         }
     }
 
