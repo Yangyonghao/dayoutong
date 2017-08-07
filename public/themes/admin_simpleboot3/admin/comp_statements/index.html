@@ -4,11 +4,13 @@
 	<div class="wrap js-check-wrap">
 		<ul class="nav nav-tabs">
 			<li class="active"><a href="{:url('comp_statements/index')}">财务部管理</a></li>
-			<li><a href="{:url('comp_statements/add')}">添加企业财务信息</a></li>
+			<li><a href="{:url('comp_statements/add')}">添加企业财务明细</a></li>
 		</ul>
         <form class="well form-inline margin-top-20" method="post" action="{:url('comp_statements/index')}">
-            用户名:
-            <input type="text" class="form-control" name="comp_name" style="width: 120px;" value="{:input('request.comp_name/s','')}" placeholder="请输入企业名称">
+			企业名称:
+            <input type="text" class="form-control" name="comp_name" style="width: 136px;" value="{:input('request.comp_name/s','')}" placeholder="请输入企业名称">
+			月份:
+			<input type="text" class="form-control" name="input_monthly" style="width: 136px;" value="{:input('request.input_monthly/s','')}" placeholder="请输入录入月份">
             <input type="submit" class="btn btn-primary" value="搜索" />
             <a class="btn btn-danger" href="{:url('comp_statements/index')}">清空</a>
         </form>
@@ -16,6 +18,7 @@
 			<thead>
 				<tr>
 					<th>企业名称</th>
+					<th>录入月份</th>
 					<th>月度销售额</th>
 					<th>月税收额</th>
 					<th>企业所得税</th>
@@ -35,6 +38,7 @@
 				<volist name="result_list" id="vo">
 					<tr>
 						<td>{$vo.comp_name}</td>
+						<td>{$vo.input_monthly}</td>
 						<td>{$vo.monthly_sales}</td>
 						<td>{$vo.monthly_tax_amount}</td>
 						<td>{$vo.comp_income_tax}</td>

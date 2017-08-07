@@ -14,122 +14,112 @@
 <body>
 <div class="wrap js-check-wrap">
 	<ul class="nav nav-tabs">
-		<li><a href="{:url('comp_basic/index')}">企业基本信息列表</a></li>
-		<li class="active"><a href="{:url('comp_basic/add')}">添加企业基本信息</a></li>
+		<li><a href="{:url('comp_statements/index')}">财务部管理</a></li>
+		<li class="active"><a href="{:url('comp_statements/add')}">添加企业财务明细</a></li>
 	</ul>
 	<div class="row margin-top-20">
 
 		<div class="col-md-8">
-			<form class="js-ajax-form" action="{:url('CompBasic/addPost')}" method="post">
+			<form class="js-ajax-form" action="{:url('comp_statements/addPost')}" method="post">
 				<div class="tab-content">
 					<div class="tab-pane active" id="A">
 						<!--企业名称-->
 						<div class="form-group">
-							<label for="comp_name"><span class="form-required">*</span>企业名称</label>
+							<label for="comp_id"><span class="form-required">*</span>企业名称</label>
 							<div>
-								<input type="text" class="form-control" id="comp_name" name="comp_name">
-							</div>
-						</div>
-						<!--企业分类-->
-						<div class="form-group">
-							<label for="comp-classify"><span class="form-required">*</span>企业分类</label>
-							<div>
-								<select class="form-control" id="comp-classify" name="comp_classify" >
+								<select class="form-control" id="comp_id" name="comp_id" >
 									<option value="0">请选择</option>
-									<option value="贸易型">贸易型</option>
-									<option value="实业型">实业型</option>
+									<volist name="comp_arr" id="vo">
+										<option value="{$vo.id}">{$vo.comp_name}</option>
+									</volist>
 								</select>
 							</div>
 						</div>
-						<!--成立时间-->
+						<!--月度销售额-->
 						<div class="form-group">
-							<label for="datetimepicker1"><span class="form-required">*</span>成立时间</label>
+							<label for="monthly-sales"><span class="form-required">*</span>月度销售额</label>
 							<div>
-								<input class="form-control js-date" id="datetimepicker1" type="text" name="reg_time"
-									   placeholder="{:date('Y-m-d',time())}">
+								<input type="text" class="form-control" id="monthly-sales" name="monthly_sales" placeholder="">
+							</div>
+						</div>
+						<!--月税收额-->
+						<div class="form-group">
+							<label for="monthly-tax-amount"><span class="form-required">*</span>月税收额</label>
+							<div>
+								<input type="text" class="form-control" id="monthly-tax-amount" name="monthly_tax_amount" placeholder="">
+							</div>
+						</div>
+						<!--企业所得税-->
+						<div class="form-group">
+							<label for="comp-income-tax"><span class="form-required">*</span>企业所得税</label>
+							<div>
+								<input type="text" class="form-control" id="comp-income-tax" name="comp_income_tax" placeholder="">
+							</div>
+						</div>
+						<!--城建税-->
+						<div class="form-group">
+							<label for="construction-tax"><span class="form-required">*</span>城建税</label>
+							<div>
+								<input type="text" class="form-control" id="construction-tax" name="construction_tax" placeholder="">
+							</div>
+						</div>
+						<!--个人所得税-->
+						<div class="personal_tax">
+							<label for="personal_tax"><span class="form-required">*</span>个人所得税</label>
+							<div>
+								<input type="text" class="form-control" id="personal_tax" name="personal_tax" placeholder="">
+							</div>
+						</div>
+						<!--河道管理费-->
+						<div class="form-group">
+							<label for="river_management_fee"><span class="form-required">*</span>河道管理费</label>
+							<div>
+								<input type="text" class="form-control" id="river_management_fee" name="river_management_fee" placeholder="">
+							</div>
+						</div>
+						<!--教育附加费-->
+						<div class="form-group">
+							<label for="additional_edu_fees"><span class="form-required">*</span>教育附加费</label>
+							<div>
+								<input type="text" class="form-control" id="additional_edu_fees" name="additional_edu_fees" placeholder="">
+							</div>
+						</div>
+						<!--地方教育附加费-->
+						<div class="form-group">
+							<label for="local_edu_fees"><span class="form-required">*</span>地方教育附加费</label>
+							<div>
+								<input type="text" class="form-control" id="local_edu_fees" name="local_edu_fees" placeholder="">
+							</div>
+						</div>
+						<!--本期净利润-->
+						<div class="form-group">
+							<label for="profit_current"><span class="form-required">*</span>本期净利润</label>
+							<div>
+								<input type="text" class="form-control" id="profit_current" name="profit_current" placeholder="">
+							</div>
+						</div>
+						<!--本期净利润-->
+						<div class="form-group">
+							<label for="profit_year"><span class="form-required">*</span>本年净利润</label>
+							<div>
+								<input type="text" class="form-control" id="profit_year" name="profit_year" placeholder="">
+							</div>
+						</div>
+						<!--本期净利润-->
+						<div class="form-group">
+							<label for="taxable_sales"><span class="form-required">*</span>应税销售额</label>
+							<div>
+								<input type="text" class="form-control" id="taxable_sales" name="taxable_sales" placeholder="">
+							</div>
+						</div>
+						<!--本期净利润-->
+						<div class="form-group">
+							<label for="add_value_tax"><span class="form-required">*</span>增值税</label>
+							<div>
+								<input type="text" class="form-control" id="add_value_tax" name="add_value_tax" placeholder="">
+							</div>
+						</div>
 
-							</div>
-						</div>
-						<!--注册资本-->
-						<div class="form-group">
-							<label for="reg-money"><span class="form-required">*</span>注册资本</label>
-							<div>
-								<input type="text" class="form-control" id="reg-money" name="reg_money" placeholder="万元为单位">
-							</div>
-						</div>
-						<!--企业法人-->
-						<div class="form-group">
-							<label for="legal_person"><span class="form-required">*</span>企业法人</label>
-							<div>
-								<input type="text" class="form-control" id="legal_person" name="legal_person" placeholder="法人姓名">
-							</div>
-						</div>
-						<!--企业联系地-->
-						<div class="form-group">
-							<label for="link-addr"><span class="form-required">*</span>企业联系地</label>
-							<div>
-								<input type="text" class="form-control" id="link-addr" name="link_addr" placeholder="万元为单位">
-							</div>
-						</div>
-						<!--企业基础资质-->
-						<div class="form-group">
-							<label for="js-thumbnail-input"><span class="form-required">*</span>企业基础资质</label>
-							<div>
-								<input type="hidden" name="business_license_pic" class="form-control"
-									   id="js-thumbnail-input">
-								<div>
-									<a href="javascript:uploadOneImage('图片上传','#js-thumbnail-input');">
-										<img src="__TMPL__/public/assets/images/default-thumbnail.png"
-											 id="js-thumbnail-input-preview"
-											 width="135" style="cursor: pointer"/>
-									</a>
-								</div>
-							</div>
-						</div>
-
-						<!--企业附加资质-->
-						<div class="form-group">
-							<label for="js-thumbnail-input"><span class="form-required">*</span>企业附加资质</label>
-							<div class="checkbox">
-								<label class="checkbox-inline">
-									<input type="checkbox" id="inlineCheckbox1" name="check_box[]" value="危化证"> 危化证
-								</label>
-								<label class="checkbox-inline">
-									<input type="checkbox" id="inlineCheckbox2" name="check_box[]" value="成品油经营资质"> 成品油经营资质
-								</label>
-								<label class="checkbox-inline">
-									<input type="checkbox" id="inlineCheckbox3" name="check_box[]" value="进出口贸易证"> 进出口贸易证
-								</label>
-							</div>
-						</div>
-						<!--<div class="form-group">-->
-							<!--<label for="photos">企业附加资质</label>-->
-							<!--<div>-->
-								<!--<ul id="photos" class="pic-list list-unstyled form-inline"></ul>-->
-								<!--<a href="javascript:uploadMultiImage('图片上传','#photos','photos-item-tpl');"-->
-								   <!--class="btn btn-default btn-sm">选择图片</a>-->
-							<!--</div>-->
-						<!--</div>-->
-						<!--是否有效-->
-						<div class="form-group">
-							<label for="service_pay"><span class="form-required">*</span>是否支付服务费</label>
-							<div>
-								<select class="form-control" name="service_pay" id="service_pay">
-									<option value="否">否</option>
-									<option value="是">是</option>
-								</select>
-							</div>
-						</div>
-						<!--是否有效-->
-						<div class="form-group">
-							<label for="input-status">是否有效</label>
-							<div>
-								<select class="form-control" name="status" id="input-status">
-									<option value="1">启用</option>
-									<option value="0">禁用</option>
-								</select>
-							</div>
-						</div>
 					</div>
 					<div class="form-group">
 						<button type="submit" class="btn btn-primary js-ajax-submit">{:lang('ADD')}</button>
