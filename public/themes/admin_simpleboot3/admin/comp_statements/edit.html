@@ -1,51 +1,134 @@
-<include file="public@header" />
+<include file="public@header"/>
+<script type="text/html" id="photos-item-tpl">
+	<li id="saved-image{id}">
+		<input id="photo-{id}" type="hidden" name="photo_urls[]" value="{filepath}">
+		<input class="form-control" id="photo-{id}-name" type="text" name="photo_names[]" value="{name}"
+			   style="width: 200px;" title="图片名称">
+		<img id="photo-{id}-preview" src="{url}" style="height:36px;width: 36px;"
+			 onclick="imagePreviewDialog(this.src);">
+		<a href="javascript:uploadOneImage('图片上传','#photo-{id}');">替换</a>
+		<a href="javascript:(function(){$('#saved-image{id}').remove();})();">移除</a>
+	</li>
+</script>
 </head>
 <body>
-	<div class="wrap">
-		<ul class="nav nav-tabs">
-			<li><a href="{:url('user/index')}">{:lang('ADMIN_USER_INDEX')}</a></li>
-			<li><a href="{:url('user/add')}">{:lang('ADMIN_USER_ADD')}</a></li>
-			<li class="active"><a>编辑管理员</a></li>
-		</ul>
-		<form method="post" class="form-horizontal js-ajax-form margin-top-20" action="{:url('User/editPost')}">
-			<div class="form-group">
-				<label for="input-user_login" class="col-sm-2 control-label"><span class="form-required">*</span>{:lang('USERNAME')}</label>
-				<div class="col-md-6 col-sm-10">
-					<input type="text" class="form-control" id="input-user_login" name="user_login" value="{$user_login}">
+<div class="wrap js-check-wrap">
+	<ul class="nav nav-tabs">
+		<li><a href="{:url('comp_statements/index')}">财务部管理</a></li>
+		<li class="active"><a href="{:url('comp_statements/edit')}">编辑企业财务明细</a></li>
+	</ul>
+	<div class="row margin-top-20">
+
+		<div class="col-md-8">
+			<form class="js-ajax-form" action="{:url('comp_statements/editPost',['id'=>$statement_info['id']])}" method="post">
+				<div class="tab-content">
+					<div class="tab-pane active" id="A">
+						<!--企业名称-->
+						<div class="form-group">
+							<label for="comp_id"><span class="form-required">*</span>企业名称</label>
+							<div>
+								<select class="form-control" id="comp_id" name="comp_id" >
+									<volist name="comp_arr" id="vo">
+										<option value="{$vo.id}" <?php if($vo['id'] == $statement_info['comp_id'])echo "selected=\"selected\"";?> >{$vo.comp_name}</option>
+									</volist>
+								</select>
+							</div>
+						</div>
+						<!--月度销售额-->
+						<div class="form-group">
+							<label for="monthly-sales"><span class="form-required">*</span>月度销售额</label>
+							<div>
+								<input type="text" class="form-control" id="monthly-sales" name="monthly_sales"  value="{$statement_info.monthly_sales}" placeholder="">
+							</div>
+						</div>
+						<!--月税收额-->
+						<div class="form-group">
+							<label for="monthly-tax-amount"><span class="form-required">*</span>月税收额</label>
+							<div>
+								<input type="text" class="form-control" id="monthly-tax-amount" name="monthly_tax_amount" value="{$statement_info.monthly_tax_amount}" placeholder="">
+							</div>
+						</div>
+						<!--企业所得税-->
+						<div class="form-group">
+							<label for="comp-income-tax"><span class="form-required">*</span>企业所得税</label>
+							<div>
+								<input type="text" class="form-control" id="comp-income-tax" name="comp_income_tax" value="{$statement_info.comp_income_tax}" placeholder="">
+							</div>
+						</div>
+						<!--城建税-->
+						<div class="form-group">
+							<label for="construction-tax"><span class="form-required">*</span>城建税</label>
+							<div>
+								<input type="text" class="form-control" id="construction-tax" name="construction_tax" value="{$statement_info.construction_tax}" placeholder="">
+							</div>
+						</div>
+						<!--个人所得税-->
+						<div class="personal_tax">
+							<label for="personal_tax"><span class="form-required">*</span>个人所得税</label>
+							<div>
+								<input type="text" class="form-control" id="personal_tax" name="personal_tax" value="{$statement_info.personal_tax}" placeholder="">
+							</div>
+						</div>
+						<!--河道管理费-->
+						<div class="form-group">
+							<label for="river_management_fee"><span class="form-required">*</span>河道管理费</label>
+							<div>
+								<input type="text" class="form-control" id="river_management_fee" name="river_management_fee" value="{$statement_info.river_management_fee}" placeholder="">
+							</div>
+						</div>
+						<!--教育附加费-->
+						<div class="form-group">
+							<label for="additional_edu_fees"><span class="form-required">*</span>教育附加费</label>
+							<div>
+								<input type="text" class="form-control" id="additional_edu_fees" name="additional_edu_fees" value="{$statement_info.additional_edu_fees}" placeholder="">
+							</div>
+						</div>
+						<!--地方教育附加费-->
+						<div class="form-group">
+							<label for="local_edu_fees"><span class="form-required">*</span>地方教育附加费</label>
+							<div>
+								<input type="text" class="form-control" id="local_edu_fees" name="local_edu_fees" value="{$statement_info.local_edu_fees}" placeholder="">
+							</div>
+						</div>
+						<!--本期净利润-->
+						<div class="form-group">
+							<label for="profit_current"><span class="form-required">*</span>本期净利润</label>
+							<div>
+								<input type="text" class="form-control" id="profit_current" name="profit_current" value="{$statement_info.profit_current}" placeholder="">
+							</div>
+						</div>
+						<!--本期净利润-->
+						<div class="form-group">
+							<label for="profit_year"><span class="form-required">*</span>本年净利润</label>
+							<div>
+								<input type="text" class="form-control" id="profit_year" name="profit_year" value="{$statement_info.profit_year}" placeholder="">
+							</div>
+						</div>
+						<!--本期净利润-->
+						<div class="form-group">
+							<label for="taxable_sales"><span class="form-required">*</span>应税销售额</label>
+							<div>
+								<input type="text" class="form-control" id="taxable_sales" name="taxable_sales" value="{$statement_info.taxable_sales}" placeholder="">
+							</div>
+						</div>
+						<!--本期净利润-->
+						<div class="form-group">
+							<label for="add_value_tax"><span class="form-required">*</span>增值税</label>
+							<div>
+								<input type="text" class="form-control" id="add_value_tax" name="add_value_tax" value="{$statement_info.add_value_tax}" placeholder="">
+							</div>
+						</div>
+
+					</div>
+					<div class="form-group">
+						<button type="submit" class="btn btn-primary js-ajax-submit">{:lang('ADD')}</button>
+						<a class="btn btn-default" href="{:url('AdminCategory/index')}">{:lang('BACK')}</a>
+					</div>
 				</div>
-			</div>
-			<div class="form-group">
-				<label for="input-user_pass" class="col-sm-2 control-label"><span class="form-required">*</span>{:lang('PASSWORD')}</label>
-				<div class="col-md-6 col-sm-10">
-					<input type="text" class="form-control" id="input-user_pass" name="user_pass" value="" placeholder="******">
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="input-user_email" class="col-sm-2 control-label"><span class="form-required">*</span>{:lang('EMAIL')}</label>
-				<div class="col-md-6 col-sm-10">
-					<input type="text" class="form-control" id="input-user_email" name="user_email" value="{$user_email}">
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="input-user_email" class="col-sm-2 control-label"><span class="form-required">*</span>{:lang('ROLE')}</label>
-				<div class="col-md-6 col-sm-10">
-					<foreach name="roles" item="vo">
-						<label class="checkbox-inline">
-							<php>$role_id_checked=in_array($vo['id'],$role_ids)?"checked":"";</php>
-							<input value="{$vo.id}" type="checkbox" name="role_id[]" {$role_id_checked} <if condition="cmf_get_current_admin_id() neq 1 && $vo['id'] eq 1">disabled="true"</if>>{$vo.name}
-						</label>
-					</foreach>
-				</div>
-			</div>
-			<div class="form-group">
-				<div class="col-sm-offset-2 col-sm-10">
-					<input type="hidden" name="id" value="{$id}" />
-					<button type="submit" class="btn btn-primary js-ajax-submit">{:lang('SAVE')}</button>
-					<a class="btn btn-default" href="javascript:history.back(-1);">{:lang('BACK')}</a>
-				</div>
-			</div>
-		</form>
+			</form>
+		</div>
 	</div>
-	<script src="__STATIC__/js/admin.js"></script>
+</div>
+<script type="text/javascript" src="__STATIC__/js/admin.js"></script>
 </body>
 </html>

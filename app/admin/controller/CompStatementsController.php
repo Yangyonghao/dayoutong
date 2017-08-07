@@ -37,9 +37,14 @@ class CompStatementsController extends AdminBaseController
 
         $result_list=Db::name('comp_statements')
             ->alias('a')
-            ->join('spec_comp_basic w','a.comp_id = w.id')
+            ->join('spec_comp_basic w','a.comp_id = w.id')->field('a.id as statement_id,a.*,w.*')
             ->where($where)
             ->order("a.id DESC")->paginate(10);
+        foreach ($result_list as $a){
+            $ff[]=$a;
+        }
+//        echo Db::name('comp_statements')->getLastSql();
+//        var_dump($ff);die;
         // 获取分页显示
         $page = $result_list->render();
         $this->assign('result_list',$result_list);
@@ -66,7 +71,6 @@ class CompStatementsController extends AdminBaseController
         //获取未添
         $comp_arr=Db::name('comp_basic')
             ->where('status',1)->field('id,comp_name')->select();
-
         $this->assign('comp_arr',$comp_arr);
         return $this->fetch();
     }
@@ -91,17 +95,37 @@ class CompStatementsController extends AdminBaseController
         }
     }
 
-    public function scoreRole($artitude_score_count){
-        $account_score = array(
-            "comp_name"            => array("remark" => "添加名称获取1积分","score" => "1"),
-            'comp_classify'        => array("remark" => "企业分类获取1分","score" => "1"),
-            'reg_time'             => array("remark" => "填写成立时间记1分","score" => "1"),
-            'reg_money'            => array("remark" => "填写注册资本记1分","score" => "1"),
-            'legal_person'         => array("remark" => "填写企业法人记1分","score" => "1"),
-            'link_addr'            => array("remark" => "填写地址记1分","score" => "1"),
-            'business_license_pic' => array("remark" => "上传营业执照记1分","score" => "1"),
-            'comp_aptitude'        => array("remark" => '添加附加资质记'.$artitude_score_count.'分',"score" => $artitude_score_count),
-        );
-        return $account_score;
+    public function edit(){
+        $statement_id=$this->request->param('statement_id');
+        $statement_info=Db::name('comp_statements')->where('id',$statement_id)->find();
+        //获取未添
+        $comp_arr=Db::name('comp_basic')
+            ->where('status',1)->field('id,comp_name')->select();
+//        var_dump($statement_info);die;
+        $this->assign('comp_arr',$comp_arr);
+        $this->assign('statement_info',$statement_info);
+        return $this->fetch();
+    }
+
+    /*
+     * 保存修改数据
+     * @date:20170807
+     * @author:yangyonghao
+     * */
+    public function editPost(){
+        if($this->request->isPost()){
+            $data_post=$this->request->param();
+            $result = $this->validate($data_post, 'CompStatements');
+            if ($result !== true) {
+                $this->error($result);
+            }
+            $id=$data_post['id'];unset($data_post['id']);
+            $result_id=Db::name('comp_statements')->where('id',$id)->update($data_post);
+            if($result_id){
+                $this->success('保存成功!', url('CompStatements/index'));
+            }else{
+                $this->error('未更新数据！');
+            }
+        }
     }
 }
