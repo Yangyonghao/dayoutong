@@ -149,15 +149,25 @@ class CompStatementsController extends AdminBaseController
         $this->assign('comp_info',$comp_info);
         return $this->fetch();
     }
-
+    /*
+     * @date:2017.8.8
+     * @author:yyh
+     * @function:添加财务明细计分信息
+     * */
     public function addBasic(){
         $comp_arr=Db::name('comp_basic')
             ->where('id','NOT IN',function($query){
                 $query->name('comp_basic_finance')->where('status',1)->field('comp_id');
             })->field('id,comp_name')->select();
         $this->assign('comp_arr',$comp_arr);
+
         return $this->fetch();
     }
+    /*
+     * @date:2017.8.8
+     * @author:yyh
+     * @function:执行添加财务明细计分信息
+     * */
     public function addBasicPost(){
         if ($this->request->isPost()) {
 
@@ -173,7 +183,37 @@ class CompStatementsController extends AdminBaseController
                 $this->error('添加失败!');
             }
 
-            $this->success('添加成功!', url('CompFinance/index'));
+            $this->success('添加成功!', url('CompStatements/index'));
         }
+    }
+
+    /*
+     * @date:2017.8.8
+     * @author:yyh
+     * @function:执行添加财务明细计分信息
+     * */
+    public function basicFinanceList(){
+        $comp_name = trim($this->request->param('comp_name'));
+        $where = [];
+        if ($comp_name) {
+            $where['comp_name'] = ['like', "%$comp_name%"];
+        }
+
+        $fields='a.id as basic_finance_id,a.*,w.*';
+        $result_list = Db::name('comp_basic_finance')
+            ->alias('a')
+            ->join('spec_comp_basic w', 'a.comp_id = w.id')->field($fields)
+            ->where($where)
+            ->order("a.id DESC")->paginate(10);
+
+        foreach($result_list as $val){
+            $app[]=$val;
+        }
+//        var_dump($app);die;
+        // 获取分页显示
+        $page = $result_list->render();
+        $this->assign('result_list', $result_list);
+        $this->assign('page', $page);
+        return $this->fetch();
     }
 }

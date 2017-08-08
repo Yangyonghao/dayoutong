@@ -75,4 +75,26 @@ class CompFinanceModel extends Model
         return Db::name('comp_score')->where('comp_id',$id)->find();
     }
 
+    public function editCompFinance($data){
+
+        var_dump($data);
+
+        $where['comp_id']=$data['comp_id'];
+        $where['key_name']=array_keys($data)[1];
+        $result=Db::name('comp_score_log')->where($where)->find();
+        echo 'ss';
+        echo 'ss';
+        echo 'ss';
+
+        if(is_array($result)){
+            $app['comp_id']=$data['comp_id'];
+            $app['score']='-1';
+            $app['score_source']='选择否减1分';
+            $app['department_type']='金融部数据';
+            $app['add_time']=date('Y-m-d H:i:s');
+            $app['key_name']=$where['key_name'];
+            $app['ip']=get_client_ip();
+        }
+    }
+
 }
