@@ -1,0 +1,68 @@
+<include file="public@header" />
+</head>
+<body>
+<div class="wrap js-check-wrap">
+	<ul class="nav nav-tabs">
+		<li><a href="{:url('comp_statements/index')}">财务部管理</a></li>
+		<!--<li><a href="{:url('comp_statements/add')}">添加企业财务明细</a></li>-->
+		<li><a href="{:url('comp_statements/addBasic')}">添加企业财务基本信息</a></li>
+		<li class="active"><a href="javascript:void(0);">财务明细详情</a></li>
+	</ul>
+	<table class="table table-hover table-bordered">
+		<thead>
+			<tr>
+				<th colspan="4"><span class="pull-left">{$comp_info.comp_name}企业财务明细</span>
+					<a href="{:url('comp_statements/edit',array('statement_id'=>$comp_info.statement_id))}" class="pull-right btn btn-success">编辑</a>
+					<a href="{:url('comp_statements/add')} " class="btn btn-success pull-right clearfix" style="margin-right: 5px;">添加企业财务明细</a>
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+		<tr>
+			<th>企业名称</th>
+			<td>{$comp_info.comp_name}</td>
+			<th>录入月份</th>
+			<td>{$comp_info.input_monthly}</td>
+		</tr>
+		<tr>
+			<th>月度销售额</th>
+			<td>{$comp_info.monthly_sales}</td>
+			<th>月税收额</th>
+			<td>{$comp_info.monthly_tax_amount}</td>
+		</tr>
+		<tr>
+			<th>企业所得税</th>
+			<td>{$comp_info.comp_income_tax}</td>
+			<th>城建税</th>
+			<td>{$comp_info.construction_tax}</td>
+		</tr>
+		<tr>
+			<th>个人所得税</th>
+			<td>{$comp_info.personal_tax}</td>
+			<th>河道管理费</th>
+			<td>{$comp_info.river_management_fee}</td>
+		</tr>
+		<tr>
+			<th>教育附加费</th>
+			<td>{$comp_info.additional_edu_fees}</td>
+			<th>地方教育附加费</th>
+			<td>{$comp_info.local_edu_fees}</td>
+		</tr>
+		<tr>
+			<th>本期净利润</th>
+			<td>{$comp_info.profit_current}</td>
+			<th>本年净利润</th>
+			<td>{$comp_info.profit_year}</td>
+		</tr>
+		<tr>
+			<th>应税销售额</th>
+			<td>{$comp_info.taxable_sales}</td>
+			<th>增值税</th>
+			<td>{$comp_info.add_value_tax}</td>
+		</tr>
+		</tbody>
+	</table>
+</div>
+<script src="__STATIC__/js/admin.js"></script>
+</body>
+</html>
