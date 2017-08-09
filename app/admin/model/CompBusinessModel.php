@@ -57,61 +57,59 @@ class CompBusinessModel extends Model
 
         //是否有仓库
         if($data['storage']=='是'){
-            $account_score['storage']=["remark" => "选择是记2分", "score" => "2"];
+            $account_score['storage']=["remark" => "选择是记2分", "score" => "+2"];
         }else{
             unset($data['storage']);
         }
         //是否有物流
         if($data['logistics']=='是'){
-            $account_score['logistics']=["remark" => "选择是记2分", "score" => "2"];
+            $account_score['logistics']=["remark" => "选择是记2分", "score" => "+2"];
         }else{
             unset($data['logistics']);
         }
         //是否有货物质量问题
         if($data['oil_quality']=='是'){
-            $account_score['oil_quality']=["remark" => "选择是记2分", "score" => "2"];
+            $account_score['oil_quality']=["remark" => "选择是记2分", "score" => "+2"];
         }else{
             unset($data['oil_quality']);
         }
         //是否有货物质量问题 是否有货物质量问题，是或者否 选择是，记2分
         if($data['collection']=='较好'){
-            $account_score['collection']=["remark" => "选择较好记5分", "score" => "5"];
+            $account_score['collection']=["remark" => "选择较好记5分", "score" => "+5"];
         }elseif($data['collection']=='正常') {
-            $account_score['collection']=["remark" => "选择正常记2分", "score" => "3"];
+            $account_score['collection']=["remark" => "选择正常记2分", "score" => "+3"];
         }elseif ($data['collection']=='一般'){
-            $account_score['collection']=["remark" => "选择一般记2分", "score" => "1"];
+            $account_score['collection']=["remark" => "选择一般记2分", "score" => "+1"];
         }else{
             unset($data['collection']);
         }
         //请选择交易频次 交易频次 频繁记5分、较频繁记4分、一般记3分、较少记2分、极少记1分
         if($data['transaction_num']=='频繁'){
-            $account_score['transaction_num']=["remark" => "选择频繁记5分", "score" => "5"];
+            $account_score['transaction_num']=["remark" => "选择频繁记5分", "score" => "+5"];
         }elseif($data['transaction_num']=='较频繁') {
-            $account_score['transaction_num']=["remark" => "选择较频繁记4分", "score" => "4"];
+            $account_score['transaction_num']=["remark" => "选择较频繁记4分", "score" => "+4"];
         }elseif ($data['transaction_num']=='一般'){
-            $account_score['transaction_num']=["remark" => "选择一般记3分", "score" => "3"];
+            $account_score['transaction_num']=["remark" => "选择一般记3分", "score" => "+3"];
         }elseif($data['transaction_num']=='较少') {
-            $account_score['transaction_num']=["remark" => "选择较少记2分", "score" => "2"];
+            $account_score['transaction_num']=["remark" => "选择较少记2分", "score" => "+2"];
         }elseif ($data['transaction_num']=='极少'){
-            $account_score['transaction_num']=["remark" => "选择极少记1分", "score" => "1"];
+            $account_score['transaction_num']=["remark" => "选择极少记1分", "score" => "+1"];
         }else{
             unset($data['transaction_num']);
         }
 
         //请选择请选择 履约情况很好记4分，较好记3分，正常记2分，一般记1分
         if($data['performance']=='很好') {
-            $account_score['performance']=["remark" => "选择很好记4分", "score" => "4"];
+            $account_score['performance']=["remark" => "选择很好记4分", "score" => "+4"];
         }elseif ($data['performance']=='较好'){
-            $account_score['performance']=["remark" => "选择较好记3分", "score" => "3"];
+            $account_score['performance']=["remark" => "选择较好记3分", "score" => "+3"];
         }elseif($data['performance']=='正常') {
-            $account_score['performance']=["remark" => "选择正常记2分", "score" => "2"];
+            $account_score['performance']=["remark" => "选择正常记2分", "score" => "+2"];
         }elseif ($data['performance']=='一般'){
-            $account_score['performance']=["remark" => "选择极少记1分", "score" => "1"];
+            $account_score['performance']=["remark" => "选择极少记1分", "score" => "+1"];
         }else{
             unset($data['performance']);
         }
-
-
 
         return ['a'=>$account_score,'b'=>$data];
     }

@@ -60,7 +60,7 @@ class CompFinanceModel extends CommonModel
 
         //是否有仓库
         if($data['financing']=='是'){
-            $account_score['financing']=["remark" => "选择是记1分", "score" => "1"];
+            $account_score['financing']=["remark" => "选择是记1分", "score" => "+1"];
         }else{
             unset($data['financing']);
         }
