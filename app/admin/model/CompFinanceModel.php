@@ -9,10 +9,11 @@
 namespace app\admin\model;
 
 use think\Db;
+use think\Exception;
 use think\Model;
 
 
-class CompFinanceModel extends Model
+class CompFinanceModel extends CommonModel
 {
     //添加企业信息
     public function addCompFinance($data){
@@ -75,26 +76,50 @@ class CompFinanceModel extends Model
         return Db::name('comp_score')->where('comp_id',$id)->find();
     }
 
-    public function editCompFinance($data){
+    public function editCompFinance($data,$id){
 
-        var_dump($data);
+        $return_msg=Db::name('comp_finance')->where('id',$id)->update($data);
+        $comp_id=$data['comp_id'];
+        if($return_msg){
+            Db::startTrans();
+            try{
+                $where['comp_id']=$comp_id;
+                $where['key_name']=array_keys($data)[1];
+                $result=Db::name('comp_score_log')->where($where)->sum('score');
+                if($result>0){
+                    $app['score']='-1';
+                    $app['score_source']='选择否减1分';
+                }else{
+                    $app['score']='+1';
+                    $app['score_source']='选择否加1分';
+                }
+                $app['comp_id']=$comp_id;
+                $app['department_type']='金融部数据';
+                $app['add_time']=date('Y-m-d H:i:s');
+                $app['key_name']=$where['key_name'];
+                $app['ip']=get_client_ip();
+                $score_status=Db::name('comp_score_log')->insertGetId($app);
 
-        $where['comp_id']=$data['comp_id'];
-        $where['key_name']=array_keys($data)[1];
-        $result=Db::name('comp_score_log')->where($where)->find();
-        echo 'ss';
-        echo 'ss';
-        echo 'ss';
+                Db::commit();
+            }catch(Exception $e){
+                // 回滚事务
+                Db::rollback();
+                $this->error($e->getMessage());
+            }
 
-        if(is_array($result)){
-            $app['comp_id']=$data['comp_id'];
-            $app['score']='-1';
-            $app['score_source']='选择否减1分';
-            $app['department_type']='金融部数据';
-            $app['add_time']=date('Y-m-d H:i:s');
-            $app['key_name']=$where['key_name'];
-            $app['ip']=get_client_ip();
+            if($score_status){
+                $score=Db::name('comp_score_log')->where($where)->sum('score');
+                $comp_score_msg=self::getCompScoreBasic($comp_id);
+                $total_num=$this->calculate_score($comp_score_msg['total_score'],$app['score']);
+                $comp_score=[
+                    'comp_id'=>$comp_id,
+                    'total_score'=>$total_num,
+                    'finance_score'=>$score,
+                ];
+                Db::name('comp_score')->where('comp_id',$comp_id)->update($comp_score);
+            }
         }
+        return $return_msg;
     }
 
 }

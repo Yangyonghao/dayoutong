@@ -10,7 +10,7 @@
 	<div class="row margin-top-20">
 
 		<div class="col-md-8">
-			<form class="js-ajax-form" action="{:url('CompFinance/editPost')}" method="post">
+			<form class="js-ajax-form" action="{:url('CompFinance/editPost',['id'=>$finance_info['id']])}" method="post">
 				<div class="tab-content">
 					<div class="tab-pane active" id="A">
 						<!--企业分类-->
@@ -29,10 +29,10 @@
 							<label for="financing"><span class="form-required">*</span>银行融资/贷款情况</label>
 							<div>
 								<label class="radio-inline">
-									<input type="radio" name="financing" id="financing" value="是" checked>是
+									<input type="radio" name="financing" id="financing" value="是" <?php if($finance_info['financing']=='是'){echo "checked";}?>>是
 								</label>
 								<label class="radio-inline">
-									<input type="radio" name="financing" id="financing1"  value="否">否
+									<input type="radio" name="financing" id="financing1"  value="否" <?php if($finance_info['financing']=='否'){echo "checked";}?>>否
 								</label>
 							</div>
 						</div>
@@ -40,7 +40,7 @@
 
 					</div>
 					<div class="form-group">
-						<button type="submit" class="btn btn-primary js-ajax-submit">{:lang('ADD')}</button>
+						<button type="submit" class="btn btn-primary js-ajax-submit">{:lang('SAVE')}</button>
 						<a class="btn btn-default" href="{:url('CompFinance/index')}">{:lang('BACK')}</a>
 					</div>
 				</div>

@@ -79,8 +79,10 @@ class CompFinanceController extends AdminBaseController
     }
 
     public function edit(){
+
         $finance_id=$post=$this->request->param('finance_id');
         $finance_info=Db::name('comp_finance')->where('id',$finance_id)->find();
+//        var_dump($finance_info);die;
         $comp_arr=Db::name('comp_basic')->where('status',1)->field('id,comp_name')->select();
         $this->assign('finance_info',$finance_info);
         $this->assign('comp_arr',$comp_arr);
@@ -92,17 +94,18 @@ class CompFinanceController extends AdminBaseController
 
             $compFinanceModel = new CompFinanceModel();
             $post=$this->request->param();
+            $id=$post['id'];unset($post['id']);
 //            $result = $this->validate($post, 'CompFinance');
 //            if ($result !== true) {
 //                $this->error($result);
 //            }
-            $result = $compFinanceModel->editCompFinance($post);
+            $result = $compFinanceModel->editCompFinance($post,$id);
 
             if ($result === false) {
                 $this->error('添加失败!');
             }
 
-            $this->success('添加成功!', url('CompFinance/index'));
+            $this->success('保存成功!', url('CompFinance/index'));
         }
     }
 
