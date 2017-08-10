@@ -127,8 +127,11 @@ class CompAdministrationController extends AdminBaseController
                 $this->error($result);
             }
             $admin_id=$this->request->param('admin_id');
-            $admin_info[]=Db::name('comp_administration')->field('is_website,evil_network,criminal_law,civil_law,bank_credit,abnormal_operation,illegal_dishonesty,legal_disputes')->where('id',$admin_id)->find();
-            $result = $CompAdministrationModel->editCompAdministration($post);
+            $admin_info=Db::name('comp_administration')->field('is_website,evil_network,criminal_law,civil_law,bank_credit,abnormal_operation,illegal_dishonesty,legal_disputes')->where('id',$admin_id)->find();
+//            $result = $CompAdministrationModel->editCompAdministration($post);
+
+            $ssp=array_diff_assoc($admin_info,$post);
+            dump($ssp);
             if ($result === false) {
                 $this->error('添加失败!');
             }
