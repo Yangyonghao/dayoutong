@@ -49,6 +49,29 @@ class CompAdministrationController extends AdminBaseController
 //            $aa[]=$v;
 //        }
 //        var_dump($aa);die;
+
+        $b=['is_website' => "是"
+            ,'evil_network' => "否"
+            ,'criminal_law' => 0
+            ,'civil_law' => 2
+            ,'bank_credit' => "否"
+            ,'abnormal_operation' => "是"
+            ,'illegal_dishonesty' => "否"
+            ,'legal_disputes' => 0];
+
+        $a=[
+            'is_website' => "否",
+            ' evil_network' => "否"
+            ,'criminal_law' => 1
+            ,'civil_law' => "否"
+            ,'bank_credit' => "否"
+            ,'abnormal_operation' => "0"
+            ,'illegal_dishonesty' => "2"
+            ,'legal_disputes' => "0"
+            ,'admin_id' => "2"];
+        $ssp=array_diff_assoc($a,$b);
+        dump($ssp);die;
+
         // 获取分页显示
         $page = $result_list->render();
         $this->assign('result_list',$result_list);

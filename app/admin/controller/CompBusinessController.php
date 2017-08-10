@@ -78,7 +78,16 @@ class CompBusinessController extends AdminBaseController
         }
     }
 
+    public function edit(){
+        $id=$this->request->param('id');
+        $business_info=Db::name('comp_business')->where('id',$id)->find();
+//        var_dump($business_info);die;
+        $comp_arr=Db::name('comp_basic')->where('status',1)->field('id,comp_name')->select();
+        $this->assign('business_info',$business_info);
+        $this->assign('comp_arr',$comp_arr);
 
+        return $this->fetch();
+    }
 
 
 }

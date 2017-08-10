@@ -1,0 +1,115 @@
+<include file="public@header"/>
+
+</head>
+<body>
+<div class="wrap js-check-wrap">
+	<ul class="nav nav-tabs">
+		<li><a href="{:url('CompBusiness/index')}">业务部管理</a></li>
+		<li class="active"><a href="{:url('CompBusiness/add')}">添加企业业务信息</a></li>
+	</ul>
+	<div class="row margin-top-20">
+
+		<div class="col-md-8">
+			<form class="js-ajax-form" action="{:url('CompBusiness/addPost')}" method="post">
+				<div class="tab-content">
+					<div class="tab-pane active" id="A">
+						<!--企业分类-->
+						<div class="form-group">
+							<label for="comp_name"><span class="form-required">*</span>企业分类</label>
+							<div>
+								<select class="form-control" id="comp_name" name="comp_id" >
+									<volist name="comp_arr" id="vo">
+										<option value="{$vo.id}" <?php if($vo['id']==$business_info['comp_id']){echo "selected=\"selected\"";}?>>{$vo.comp_name}</option>
+									</volist>
+								</select>
+							</div>
+						</div>
+						<!--仓储资源-->
+						<div class="form-group">
+							<label for="storage"><span class="form-required">*</span>仓储资源</label>
+							<div>
+								<label class="radio-inline">
+									<input type="radio" name="storage" id="storage3" value="是" <?php if($business_info['storage']=='是'){echo "checked";}?>>是
+								</label>
+								<label class="radio-inline">
+									<input type="radio" name="storage" id="storage"  value="否" <?php if($business_info['storage']=='否'){echo "checked";}?>>否
+								</label>
+							</div>
+						</div>
+						<!--物流资源-->
+						<div class="form-group">
+							<label for="logistics"><span class="form-required">*</span>物流资源</label>
+							<div>
+								<label class="radio-inline">
+									<input type="radio" name="logistics" id="logistics" value="是" <?php if($business_info['logistics']=='是'){echo "checked";}?>>是
+								</label>
+								<label class="radio-inline">
+									<input type="radio" name="logistics" id="logistics1"  value="否" <?php if($business_info['logistics']=='否'){echo "checked";}?>>否
+								</label>
+							</div>
+						</div>
+
+						<!--油品质量达标率-->
+						<div class="form-group">
+							<label for="oil_quality"><span class="form-required">*</span>油品质量达标率</label>
+							<div>
+								<label class="radio-inline">
+									<input type="radio" name="oil_quality" id="oil_quality" value="是" <?php if($business_info['oil_quality']=='是'){echo "checked";}?>>是
+								</label>
+								<label class="radio-inline">
+									<input type="radio" name="oil_quality" id="oil_quality1"  value="否" <?php if($business_info['oil_quality']=='否'){echo "checked";}?>>否
+								</label>
+							</div>
+						</div>
+						<!--回款周期-->
+						<div class="form-group">
+							<label for="collection"><span class="form-required">*</span>回款周期</label>
+							<div>
+								<select class="form-control" id="collection" name="collection" >
+									<option value="较好" <?php if('较好'==$business_info['collection']){echo "selected=\"selected\"";}?>>较好</option>
+									<option value="一般" <?php if('一般'==$business_info['collection']){echo "selected=\"selected\"";}?>>一般</option>
+									<option value="正常" <?php if('正常'==$business_info['collection']){echo "selected=\"selected\"";}?>>正常</option>
+								</select>
+							</div>
+						</div>
+						<!--交易频次-->
+						<div class="form-group">
+							<label for="transaction_num"><span class="form-required">*</span>交易频次</label>
+							<div>
+								<select class="form-control" id="transaction_num" name="transaction_num" >
+									<option value="频繁" <?php if('频繁'==$business_info['transaction_num']){echo "selected=\"selected\"";}?>>频繁</option>
+									<option value="较频繁" <?php if('较好'==$business_info['transaction_num']){echo "selected=\"selected\"";}?>>较频繁</option>
+									<option value="一般" <?php if('一般'==$business_info['transaction_num']){echo "selected=\"selected\"";}?>>一般</option>
+									<option value="较少" <?php if('较少'==$business_info['transaction_num']){echo "selected=\"selected\"";}?>>较少</option>
+									<option value="极少" <?php if('极少'==$business_info['transaction_num']){echo "selected=\"selected\"";}?>>极少</option>
+								</select>
+							</div>
+						</div>
+						<!--履约情况-->
+						<div class="form-group">
+							<label for="performance"><span class="form-required">*</span>履约情况</label>
+							<div>
+								<select class="form-control" id="performance" name="performance" >
+									<option value="0">请选择</option>
+									<option value="很好" <?php if('很好'==$business_info['performance']){echo "selected=\"selected\"";}?>>很好</option>
+									<option value="较好" <?php if('较好'==$business_info['performance']){echo "selected=\"selected\"";}?>>较好</option>
+									<option value="正常" <?php if('正常'==$business_info['performance']){echo "selected=\"selected\"";}?>>正常</option>
+									<option value="一般" <?php if('一般'==$business_info['performance']){echo "selected=\"selected\"";}?>>一般</option>
+								</select>
+							</div>
+						</div>
+
+					</div>
+					<div class="form-group">
+						<button type="submit" class="btn btn-primary js-ajax-submit">{:lang('SAVE')}</button>
+						<a class="btn btn-default" href="{:url('CompFinance/index')}">{:lang('BACK')}</a>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src="__STATIC__/js/admin.js"></script>
+
+</body>
+</html>

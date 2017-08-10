@@ -1,0 +1,21 @@
+
+$b=['is_website' => "是"
+,'evil_network' => "否"
+,'criminal_law' => 0
+,'civil_law' => 2
+,'bank_credit' => "否"
+,'abnormal_operation' => "是"
+,'illegal_dishonesty' => "否"
+,'legal_disputes' => 0]
+
+
+$a=['comp_id' => "2"
+,'bank_credit' => "否"
+,'abnormal_operation' => "否"
+,'illegal_dishonesty' => "否"
+,'is_website' => "否"
+,'evil_network' => "否"
+,'legal_disputes' => "0"
+,'civil_law' => "2"
+,'criminal_law' => "0"
+,'admin_id' => "2"]
