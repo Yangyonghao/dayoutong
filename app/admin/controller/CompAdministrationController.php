@@ -42,9 +42,13 @@ class CompAdministrationController extends AdminBaseController
 
         $result_list=Db::name('comp_administration')
             ->alias('a')
-            ->join('spec_comp_basic w','a.comp_id = w.id')
+            ->join('spec_comp_basic w','a.comp_id = w.id')->field('a.id as admin_id,a.*,w.comp_name,w.id')
             ->where($where)
             ->order("a.id DESC")->paginate(10);
+//        foreach ($result_list as $v){
+//            $aa[]=$v;
+//        }
+//        var_dump($aa);die;
         // 获取分页显示
         $page = $result_list->render();
         $this->assign('result_list',$result_list);
@@ -99,7 +103,39 @@ class CompAdministrationController extends AdminBaseController
             $this->success('添加成功!', url('CompAdministration/index'));
         }
     }
+    /*
+     * @function：编辑页面
+     * */
+    public function edit(){
+        $admin_id = $this->request->param('id');
+        $comp_admin_info = Db::name('comp_administration')->where('id', $admin_id)->find();
+        //获取未添
+        $comp_arr = Db::name('comp_basic')
+            ->where('status', 1)->field('id,comp_name')->select();
+        $this->assign('comp_arr', $comp_arr);
+        $this->assign('comp_admin_info', $comp_admin_info);
+        return $this->fetch();
+    }
+    /*
+     * */
+    public function editPost(){
+        if ($this->request->isPost()) {
+            $CompAdministrationModel = new CompAdministrationModel();
+            $post=$this->request->param();
+            $result = $this->validate($post, 'CompAdministration');
+            if ($result !== true) {
+                $this->error($result);
+            }
+            $admin_id=$this->request->param('admin_id');
+            $admin_info[]=Db::name('comp_administration')->field('is_website,evil_network,criminal_law,civil_law,bank_credit,abnormal_operation,illegal_dishonesty,legal_disputes')->where('id',$admin_id)->find();
+            $result = $CompAdministrationModel->editCompAdministration($post);
+            if ($result === false) {
+                $this->error('添加失败!');
+            }
 
+            $this->success('保存成功!', url('CompAdministration/index'));
+        }
+    }
     public function scoreRole($artitude_score_count){
         $account_score = array(
             "comp_name"            => array("remark" => "添加名称获取1积分", "score" => "1"),
