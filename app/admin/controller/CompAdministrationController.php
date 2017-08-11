@@ -122,6 +122,9 @@ class CompAdministrationController extends AdminBaseController
 
             $CompAdministrationModel = new CompAdministrationModel();
             $post=$this->request->param();
+            //获取减去行政部分数的总分
+            $comp_id=$post['comp_id'];
+            $old_score=$this->getOldTotalScore($comp_id);
             $result = $this->validate($post, 'CompAdministration');
             if ($result !== true) {
                 $this->error($result);
@@ -140,28 +143,25 @@ class CompAdministrationController extends AdminBaseController
                     $app[$i]['score']=$value["score"];
                     $app[$i]['score_source']=$value["remark"];
                     $app[$i]['comp_id']=$comp_id;
-                    $app[$i]['department_type']='金融部数据';
+                    $app[$i]['department_type']='行政部数据';
                     $app[$i]['add_time']=date('Y-m-d H:i:s');
                     $app[$i]['key_name']=$key;
                     $app[$i]['ip']=get_client_ip();
                     Db::name('comp_score_log')->insert($app[$i]);
                     $i+=1;
                 }
-
                 $data=[
                     'comp_id'=>$comp_id,
                     'department_type'=>'行政部数据'
                 ];
-                $data_arr=['comp_id'=>$comp_id];
                 $score=Db::name('comp_score_log')->where($data)->sum('score');
-                $score_detail=Db::name('comp_score')->field('total_score,admin_score')->where($data_arr)->find();
-                $total_score=$score_detail['total_score']-$score_detail['admin_score']+$score;
+                $new_total_score=$score+$old_score;
                 $comp_score=[
                     'comp_id'=>$comp_id,
-                    'total_score'=>$total_score,
+                    'total_score'=>$new_total_score,
                     'admin_score'=>$score,
                 ];
-                Db::name('comp_score')->where($data_arr)->update($comp_score);
+                Db::name('comp_score')->where('comp_id',$comp_id)->update($comp_score);
 
                 $this->success('保存成功!', url('CompAdministration/index'));
             }else{
@@ -278,5 +278,13 @@ class CompAdministrationController extends AdminBaseController
             }
         }
         return $account_score;
+    }
+
+    //获取总分数
+    public function getOldTotalScore($comp_id){
+        $data_arr=['comp_id'=>$comp_id];
+        $score_detail=Db::name('comp_score')->field('total_score,admin_score')->where($data_arr)->find();
+        $total_score=$score_detail['total_score']-$score_detail['admin_score'];
+        return $total_score;
     }
 }
