@@ -103,4 +103,25 @@ class AdminBaseController extends BaseController
         }
     }
 
+    /*
+     * @function:获取old总分数
+     * @date:20170813
+     * @yyh
+     * */
+    public function getOldTotalScore($comp_id,$str){
+        $data_arr=['comp_id'=>$comp_id];
+        $score_detail=Db::name('comp_score')->field('total_score,account_score,finance_score,admin_score,sales_score')->where($data_arr)->find();
+        if($str=='admin_score'){
+            $total_score=$score_detail['total_score']-$score_detail['admin_score'];
+        }elseif($str=='sales_score'){
+            $total_score=$score_detail['total_score']-$score_detail['sales_score'];
+        }elseif($str=='finance_score'){
+            $total_score=$score_detail['total_score']-$score_detail['finance_score'];
+        }elseif($str=='account_score'){
+            $total_score=$score_detail['total_score']-$score_detail['account_score'];
+        }
+
+        return $total_score;
+    }
+
 }

@@ -124,7 +124,7 @@ class CompAdministrationController extends AdminBaseController
             $post=$this->request->param();
             //获取减去行政部分数的总分
             $comp_id=$post['comp_id'];
-            $old_score=$this->getOldTotalScore($comp_id);
+            $old_score=$this->getOldTotalScore($comp_id,'admin_score');
             $result = $this->validate($post, 'CompAdministration');
             if ($result !== true) {
                 $this->error($result);
@@ -134,7 +134,7 @@ class CompAdministrationController extends AdminBaseController
                 //取差集
                 $ssp=array_diff_assoc($post,$admin_info);
 
-                $comp_id    =   $ssp["comp_id"];
+//                $comp_id    =   $ssp["comp_id"];
                 unset($ssp["comp_id"]);unset($ssp["admin_id"]);
                 //获取字段相应的分数数组
                 $result =  $this->getScoreRole($ssp,$admin_info);
@@ -168,45 +168,6 @@ class CompAdministrationController extends AdminBaseController
                 $this->error('保存失败!');
             }
         }
-    }
-
-
-    public function lostScore($data){
-        //bank_credit //是否被银行列入不诚信名单，是或者否   选择否， 记3分
-        //abnormal_operation //是否被列入经营异常名录      选择否，记2分
-        //illegal_dishonesty //否被列入严重违法失信企业名单 选择否，记2分
-        //legal_disputes //企业民事法律纠纷次数            0记两分
-        //civil_law //股东、法人、高管民事法律纠纷次数       0记两分
-        //criminal_law //股东、法人、高管刑事法律纠纷次数    0记两分
-        //is_website //是否有公司官网 0记两分              选择是， 记1分
-        //evil_network //是否有网络搜索恶评 0记两分         选择是， 记1分
-
-        $account_score =[];
-        //是否被银行列入不诚信名单，是或者否   选择否， 记3分
-        if(isset($data['bank_credit']) && $data['bank_credit']=='是'){
-            $account_score['bank_credit']=["remark" => "选择是记-3分", "score" => "-3"];
-        }elseif(isset($data['abnormal_operation']) && $data['abnormal_operation']=='是'){
-            $account_score['abnormal_operation']=["remark" => "选择是记2分", "score" => "-2"];
-        }elseif(isset($data['illegal_dishonesty']) && $data['illegal_dishonesty']=='是'){
-            //否被列入严重违法失信企业名单 选择否，记2分
-            $account_score['illegal_dishonesty']=["remark" => "选择否记-2分", "score" => "-2"];
-        }elseif(isset($data['legal_disputes']) && $data['legal_disputes']>0){
-            //企业民事法律纠纷次数0次记2分
-            $account_score['legal_disputes']=["remark" => "纠纷次数大于0记-2分", "score" => "-2"];
-        }elseif(isset($data['civil_law']) && $data['civil_law']>0){
-            //股东、法人、高管民事法律纠纷次数
-            $account_score['civil_law']=["remark" => "纠纷次数大于0记-2分", "score" => "-2"];
-        }elseif(isset($data['criminal_law']) && $data['criminal_law']>0){
-            //股东、法人、高管刑事法律纠纷次数选择否，记2分
-            $account_score['criminal_law']=["remark" => "纠纷次数大于0记-2分", "score" => "-2"];
-        }elseif(isset($data['is_website']) && $data['is_website']=='否'){
-            //是否有公司官网选择是， 记1分
-            $account_score['is_website']=["remark" => "选择是记-1分", "score" => "-1"];
-        }elseif(isset($data['evil_network']) && $data['evil_network']=='否'){
-            //是否有网络搜索恶评选择是记1分
-            $account_score['evil_network']=["remark" => "选择是记-1分", "score" => "-1"];
-        }
-        return $account_score;
     }
 
 
@@ -280,11 +241,5 @@ class CompAdministrationController extends AdminBaseController
         return $account_score;
     }
 
-    //获取总分数
-    public function getOldTotalScore($comp_id){
-        $data_arr=['comp_id'=>$comp_id];
-        $score_detail=Db::name('comp_score')->field('total_score,admin_score')->where($data_arr)->find();
-        $total_score=$score_detail['total_score']-$score_detail['admin_score'];
-        return $total_score;
-    }
+
 }

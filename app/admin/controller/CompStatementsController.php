@@ -206,14 +206,115 @@ class CompStatementsController extends AdminBaseController
             ->where($where)
             ->order("a.id DESC")->paginate(10);
 
-        foreach($result_list as $val){
-            $app[]=$val;
-        }
-//        var_dump($app);die;
         // 获取分页显示
         $page = $result_list->render();
         $this->assign('result_list', $result_list);
         $this->assign('page', $page);
         return $this->fetch();
     }
+
+    /*
+     * @function:编辑财务部基本信息
+     * @author:yangyh
+     * */
+    public function editBasic(){
+        $statement_id = $this->request->param('basic_finance_id');
+
+
+        $basic_finance_info = Db::name('comp_basic_finance')->where('id', $statement_id)->find();
+//        dump($basic_finance_info);die;
+        //获取未添
+        $comp_arr=Db::name('comp_basic')
+            ->where('id','NOT IN',function($query){
+                $query->name('comp_basic_finance')->where('status',1)->field('comp_id');
+            })->field('id,comp_name')->select();
+//        dump($comp_arr);die;
+        $this->assign('comp_arr', $comp_arr);
+        $this->assign('basic_finance_info', $basic_finance_info);
+        return $this->fetch();
+    }
+
+    public function editBasicPost(){
+        $post=$this->request->param();
+
+        $admin_info=Db::name('comp_basic_finance')
+            ->field('agency_fee,invoice_version,')
+            ->where('id',$post['basic_finance_id'])->find();
+
+        $compBusinessModel = new CompBusinessModel();
+
+        $result = $this->validate($post, 'CompBusiness');
+        if ($result !== true) {
+            $this->error($result);
+        }
+        //获取减掉业务部分数的总分
+        $comp_id=$post['comp_id'];
+        $old_score=$this->getOldTotalScore($comp_id,'sales_score');
+
+        $result = $compBusinessModel->editCompBasicFinance($post);
+
+        if($result){
+            //取差集
+            $ssp=array_diff_assoc($post,$admin_info);
+            unset($ssp["comp_id"]);unset($ssp["business_id"]);
+            //获取字段相应的分数数组
+            $result =  $this->getScoreRole($ssp,$admin_info);
+            $i=0;
+            foreach ($result as $key => $value){
+                $app[$i]['score']=$value["score"];
+                $app[$i]['score_source']=$value["remark"];
+                $app[$i]['comp_id']=$comp_id;
+                $app[$i]['department_type']='业务部数据';
+                $app[$i]['add_time']=date('Y-m-d H:i:s');
+                $app[$i]['key_name']=$key;
+                $app[$i]['ip']=get_client_ip();
+                Db::name('comp_score_log')->insert($app[$i]);
+                $i+=1;
+            }
+            $data=[
+                'comp_id'=>$comp_id,
+                'department_type'=>'业务部数据'
+            ];
+            $score=Db::name('comp_score_log')->where($data)->sum('score');
+            $new_total_score=$score+$old_score;
+            $comp_score=[
+                'comp_id'=>$comp_id,
+                'total_score'=>$new_total_score,
+                'sales_score'=>$score,
+            ];
+            Db::name('comp_score')->where('comp_id',$comp_id)->update($comp_score);
+        }
+
+        if ($result === false) {
+            $this->error('更新失败!');
+        }
+        $this->success('保存成功!', url('CompBusiness/index'));
+    }
+
+    public function getNewScore($data,$admin_info){
+        //分数加法计算规则发票版本 万元版，十万版，百万版，千万元版
+        $account_score =[];
+
+        if(isset($data['invoice_version'])){
+            if($data['invoice_version']=='万元版'){
+                $account_score['storage']=["remark" => "有仓库,加2分", "score" => "+2"];
+            }elseif($data['invoice_version']=='十万版'){
+                $account_score['storage']=["remark" => "有仓库,加3分", "score" => "+3"];
+            }elseif ($data['invoice_version']=='百万版'){
+                $account_score['storage']=["remark" => "有仓库,加4分", "score" => "+4"];
+            }elseif ($data['invoice_version']=='千万元版'){
+                $account_score['storage']=["remark" => "有仓库,加5分", "score" => "+5"];
+            }
+        }
+
+        if(isset($data['agency_fee'])){
+            //是否缴纳代理记账费
+            $logistics=$data['agency_fee']=='是'?["remark" => "有物流,加2分", "score" => "+2"]:["remark" => "没有物流，减2分", "score" => "-2"];
+            $account_score['agency_fee']=$logistics;
+        }
+
+        return $account_score;
+    }
+
+
 }

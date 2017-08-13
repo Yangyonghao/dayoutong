@@ -5,12 +5,12 @@
 <div class="wrap js-check-wrap">
 	<ul class="nav nav-tabs">
 		<li><a href="{:url('CompBusiness/index')}">业务部管理</a></li>
-		<li class="active"><a href="{:url('CompBusiness/add')}">添加企业业务信息</a></li>
+		<li class="active"><a href="#">编辑业务信息</a></li>
 	</ul>
 	<div class="row margin-top-20">
 
 		<div class="col-md-8">
-			<form class="js-ajax-form" action="{:url('CompBusiness/addPost')}" method="post">
+			<form class="js-ajax-form" action="{:url('CompBusiness/editPost',['business_id'=>$business_info['id']])}" method="post">
 				<div class="tab-content">
 					<div class="tab-pane active" id="A">
 						<!--企业分类-->
@@ -67,8 +67,8 @@
 							<div>
 								<select class="form-control" id="collection" name="collection" >
 									<option value="较好" <?php if('较好'==$business_info['collection']){echo "selected=\"selected\"";}?>>较好</option>
-									<option value="一般" <?php if('一般'==$business_info['collection']){echo "selected=\"selected\"";}?>>一般</option>
 									<option value="正常" <?php if('正常'==$business_info['collection']){echo "selected=\"selected\"";}?>>正常</option>
+									<option value="一般" <?php if('一般'==$business_info['collection']){echo "selected=\"selected\"";}?>>一般</option>
 								</select>
 							</div>
 						</div>

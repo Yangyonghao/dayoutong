@@ -34,7 +34,7 @@
 						<td>{$vo.gross_profit_rate}</td>
 						<td>{$vo.invoice_version}</td>
 						<td>{$vo.agency_fee}</td>
-						<td><a href="{:url('comp_statements/edit',array('statement_id'=>$vo.basic_finance_id))}">编辑</a></td>
+						<td><a href="{:url('comp_statements/editBasic',['basic_finance_id'=>$vo.basic_finance_id])}">编辑</a></td>
 					</tr>
 				</volist>
 

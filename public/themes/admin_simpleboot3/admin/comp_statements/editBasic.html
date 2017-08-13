@@ -1,0 +1,80 @@
+<include file="public@header"/>
+
+</head>
+<body>
+<div class="wrap js-check-wrap">
+	<ul class="nav nav-tabs">
+		<li ><a href="{:url('comp_statements/index')}">财务部管理</a></li>
+		<!--<li><a href="{:url('comp_statements/add')}">添加企业财务明细</a></li>-->
+		<li class="active"><a href="{:url('comp_statements/addBasic')}">编辑企业财务基本信息</a></li>
+	</ul>
+	<div class="row margin-top-20">
+
+		<div class="col-md-8">
+			<form class="js-ajax-form" action="{:url('CompStatements/editBasicPost',['basic_finance_id'=>$basic_finance_info['id']])}" method="post">
+				<div class="tab-content">
+					<div class="tab-pane active" id="A">
+						<!--企业分类-->
+						<div class="form-group">
+							<label for="comp_name"><span class="form-required">*</span>企业名称</label>
+							<div>
+								<select class="form-control" id="comp_name" name="comp_id" >
+									<volist name="comp_arr" id="vo">
+										<option value="{$vo.id}" <?php if($vo['id'] == $basic_finance_info['comp_id'])echo "selected=\"selected\"";?>>{$vo.comp_name}</option>
+									</volist>
+								</select>
+							</div>
+						</div>
+						<!--月度销售额-->
+						<div class="form-group">
+							<label for="gross-profit-rate"><span class="form-required">*</span>毛利率</label>
+							<div>
+								<input type="text" class="form-control" id="gross-profit-rate" name="gross_profit_rate" placeholder="" value="{$basic_finance_info.gross_profit_rate}">
+							</div>
+						</div>
+						<!--仓储资源-->
+						<div class="form-group">
+							<label for="agency_fee"><span class="form-required">*</span>是否缴纳记账费</label>
+							<div>
+								<label class="radio-inline">
+									<input type="radio" name="agency_fee" id="agency_fee" value="是" <?php if($basic_finance_info['agency_fee']=='是'){echo "checked";}?>>是
+								</label>
+								<label class="radio-inline">
+									<input type="radio" name="agency_fee" id="agency_fee1"  value="否" <?php if($basic_finance_info['agency_fee']=='否'){echo "checked";}?>>否
+								</label>
+							</div>
+						</div>
+						<!--企业附加资质-->
+						<div class="form-group">
+							<label for="invoice-version"><span class="form-required">*</span>发票版本</label>
+							<div>
+								<label class="radio-inline">
+									<input type="radio" name="invoice_version" id="invoice-version" value="万元版" <?php if($basic_finance_info['invoice_version']=='万元版'){echo "checked";}?>>万元版
+								</label>
+								<label class="radio-inline">
+									<input type="radio" name="invoice_version" id="invoice-version1"  value="十万版" <?php if($basic_finance_info['invoice_version']=='十万版'){echo "checked";}?>>十万版
+								</label>
+								<label class="radio-inline">
+									<input type="radio" name="invoice_version" id="invoice-version2"  value="百万版" <?php if($basic_finance_info['invoice_version']=='百万版'){echo "checked";}?>>百万版
+								</label>
+								<label class="radio-inline">
+									<input type="radio" name="invoice_version" id="invoice-version3"  value="千万元版" <?php if($basic_finance_info['invoice_version']=='千万元版'){echo "checked";}?>>千万元版
+								</label>
+							</div>
+
+						</div>
+
+					</div>
+					<div class="form-group">
+						<button type="submit" class="btn btn-primary js-ajax-submit">{:lang('ADD')}</button>
+						<a class="btn btn-default" href="{:url('CompStatements/index')}">{:lang('BACK')}</a>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src="__STATIC__/js/admin.js"></script>
+
+</body>
+</html>

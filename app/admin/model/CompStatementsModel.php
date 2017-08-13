@@ -44,5 +44,15 @@ class CompStatementsModel extends Model
     public function getCompScoreBasic($id){
         return Db::name('comp_score')->where('comp_id',$id)->find();
     }
+    /*
+     * @function：修改财务基本信息
+     * @author：yyh
+     * */
+    public function editCompBasicFinance($param){
+        $business_id=$param['business_id'];unset($param['business_id']);
+        //添加到公司信息表
+        $result_id=Db::name('comp_basic_finance')->where('id',$business_id)->update($param);
+        return $result_id;
+    }
 
 }
