@@ -110,7 +110,7 @@ class AdminBaseController extends BaseController
      * */
     public function getOldTotalScore($comp_id,$str){
         $data_arr=['comp_id'=>$comp_id];
-        $score_detail=Db::name('comp_score')->field('total_score,account_score,finance_score,admin_score,sales_score')->where($data_arr)->find();
+        $score_detail=Db::name('comp_score')->field('total_score,account_score,member_score,finance_score,admin_score,sales_score')->where($data_arr)->find();
         if($str=='admin_score'){
             $total_score=$score_detail['total_score']-$score_detail['admin_score'];
         }elseif($str=='sales_score'){
@@ -119,6 +119,8 @@ class AdminBaseController extends BaseController
             $total_score=$score_detail['total_score']-$score_detail['finance_score'];
         }elseif($str=='account_score'){
             $total_score=$score_detail['total_score']-$score_detail['account_score'];
+        }elseif($str=='member_score'){
+            $total_score=$score_detail['total_score']-$score_detail['member_score'];
         }
 
         return $total_score;

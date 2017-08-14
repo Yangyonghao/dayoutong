@@ -259,7 +259,7 @@ class CompStatementsController extends AdminBaseController
         if($result){
             //取差集
             $ssp=array_diff_assoc($post,$admin_info);
-            unset($ssp["comp_id"]);unset($ssp["basic_finance_id"]);
+            unset($ssp["id"]);unset($ssp["basic_finance_id"]);
             //获取字段相应的分数数组
             $result =  $this->getNewScore($ssp,$admin_info);
             if(is_array($result) && !empty($result)){

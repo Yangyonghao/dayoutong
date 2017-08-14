@@ -87,11 +87,13 @@ class CompBasicController extends AdminBaseController
     public function edit(){
         $id=$this->request->param('id');
         $list=[
-            '企业附加资质','成品油经营资质','进出口贸易证'
+            '危化证','成品油经营资质','进出口贸易证'
         ];
         $param=['id'=>$id];
         $basic_info=$this->getProjectInfo('comp_basic',$param);
         $basic_info['comp_aptitude']=explode('|',$basic_info['comp_aptitude']);
+//        var_dump($list);
+//        var_dump($basic_info);die;
         $this->assign('list',$list);
         $this->assign('basic_info',$basic_info);
         return $this->fetch();
@@ -109,7 +111,7 @@ class CompBasicController extends AdminBaseController
             //字段验证是否为空
             $result = $this->validate($post, 'CompBasic');
             $post['comp_aptitude']=rtrim(implode('|',$post['check_box']),'|');
-            $comp_id=$post['id'];
+            $comp_id=$post['basic_id'];
 
             if ($result !== true) {
                 $this->error($result);
@@ -118,6 +120,8 @@ class CompBasicController extends AdminBaseController
             $basic_info=Db::name('comp_basic')
                 ->field('comp_aptitude,service_pay')
                 ->where('id',$post['basic_id'])->find();
+            //获取减去会员部分数的总分数
+            $old_score=$this->getOldTotalScore($comp_id,'member_score');
             $result = $compBasicModel->editCompBasic($post);
             if($result){
                 //取差集
@@ -131,7 +135,7 @@ class CompBasicController extends AdminBaseController
                         $app[$i]['score']=$value["score"];
                         $app[$i]['score_source']=$value["remark"];
                         $app[$i]['comp_id']=$comp_id;
-                        $app[$i]['department_type']='财务部数据';
+                        $app[$i]['department_type']='会员部数据';
                         $app[$i]['add_time']=date('Y-m-d H:i:s');
                         $app[$i]['key_name']=$key;
                         $app[$i]['ip']=get_client_ip();
@@ -140,7 +144,7 @@ class CompBasicController extends AdminBaseController
                     }
                     $data=[
                         'comp_id'=>$comp_id,
-                        'department_type'=>'财务部数据'
+                        'department_type'=>'会员部数据'
                     ];
                     $score=Db::name('comp_score_log')->where($data)->sum('score');
                     //减去财务部的分数总分数+新财务部分数
@@ -148,17 +152,17 @@ class CompBasicController extends AdminBaseController
                     $comp_score=[
                         'comp_id'=>$comp_id,
                         'total_score'=>$new_total_score,
-                        'sales_score'=>$score,
+                        'member_score'=>$score,
                     ];
                     //更新分数
                     Db::name('comp_score')->where('comp_id',$comp_id)->update($comp_score);
                 }
             }
             if ($result === false) {
-                $this->error('添加失败!');
+                $this->error('保存失败!');
             }
 
-            $this->success('添加成功!', url('CompBasic/index'));
+            $this->success('保存成功!', url('CompBasic/index'));
         }
     }
 
@@ -191,16 +195,16 @@ class CompBasicController extends AdminBaseController
             $old_score=count(explode('|',$admin_info['comp_aptitude']));;
             if($new_score>$old_score){
                 $sco=$new_score-$old_score;
-                $account_score['comp_aptitude']=["remark" => "企业附加资质选择".$data['invoice_version'].",加".$sco."分", "score" => "+".$sco];
+                $account_score['comp_aptitude']=["remark" => "企业附加资质选择".$data['comp_aptitude'].",加".$sco."分", "score" => "+".$sco];
             }else{
                 $sco=$old_score-$new_score;
-                $account_score['comp_aptitude']=["remark" => "企业附加资质选择".$data['invoice_version'].",减".$sco."分", "score" => "-".$sco];
+                $account_score['comp_aptitude']=["remark" => "企业附加资质选择".$data['comp_aptitude'].",减".$sco."分", "score" => "-".$sco];
             }
         }
 
         if(isset($data['service_pay'])){
             //是否缴纳代理记账费
-            $logistics=$data['service_pay']=='是'?["remark" => "支付服务费,加5分", "score" => "+5"]:["remark" => "没有支付服务费，减5分", "score" => "-2"];
+            $logistics=$data['service_pay']=='是'?["remark" => "支付服务费,加5分", "score" => "+5"]:["remark" => "没有支付服务费，减5分", "score" => "-5"];
             $account_score['service_pay']=$logistics;
         }
 
