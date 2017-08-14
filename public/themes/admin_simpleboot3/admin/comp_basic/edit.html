@@ -1,51 +1,165 @@
-<include file="public@header" />
+<include file="public@header"/>
+<script type="text/html" id="photos-item-tpl">
+	<li id="saved-image{id}">
+		<input id="photo-{id}" type="hidden" name="photo_urls[]" value="{filepath}">
+		<input class="form-control" id="photo-{id}-name" type="text" name="photo_names[]" value="{name}"
+			   style="width: 200px;" title="图片名称">
+		<img id="photo-{id}-preview" src="{url}" style="height:36px;width: 36px;"
+			 onclick="imagePreviewDialog(this.src);">
+		<a href="javascript:uploadOneImage('图片上传','#photo-{id}');">替换</a>
+		<a href="javascript:(function(){$('#saved-image{id}').remove();})();">移除</a>
+	</li>
+</script>
 </head>
 <body>
-	<div class="wrap">
-		<ul class="nav nav-tabs">
-			<li><a href="{:url('user/index')}">{:lang('ADMIN_USER_INDEX')}</a></li>
-			<li><a href="{:url('user/add')}">{:lang('ADMIN_USER_ADD')}</a></li>
-			<li class="active"><a>编辑管理员</a></li>
-		</ul>
-		<form method="post" class="form-horizontal js-ajax-form margin-top-20" action="{:url('User/editPost')}">
-			<div class="form-group">
-				<label for="input-user_login" class="col-sm-2 control-label"><span class="form-required">*</span>{:lang('USERNAME')}</label>
-				<div class="col-md-6 col-sm-10">
-					<input type="text" class="form-control" id="input-user_login" name="user_login" value="{$user_login}">
+<div class="wrap js-check-wrap">
+	<ul class="nav nav-tabs">
+		<li><a href="{:url('comp_basic/index')}">会员部管理</a></li>
+		<li class="active"><a href="#">编辑企业基本信息</a></li>
+	</ul>
+	<div class="row margin-top-20">
+
+		<div class="col-md-8">
+			<form class="js-ajax-form" action="{:url('CompBasic/editPost',['basic_id'=>$basic_info['id']])}" method="post">
+				<div class="tab-content">
+					<div class="tab-pane active" id="A">
+						<!--企业名称-->
+						<div class="form-group">
+							<label for="comp_name"><span class="form-required">*</span>企业名称</label>
+							<div>
+								<input type="text" class="form-control" id="comp_name" name="comp_name" value="{$basic_info.comp_name}">
+							</div>
+						</div>
+						<!--企业分类-->
+						<div class="form-group">
+							<label for="comp-classify"><span class="form-required">*</span>企业分类</label>
+							<div>
+								<select class="form-control" id="comp-classify" name="comp_classify" >
+									<option value="贸易型" <?php if($basic_info['comp_classify']=='贸易型'){echo "selected";}?>>贸易型</option>
+									<option value="实业型" <?php if($basic_info['comp_classify']=='实业型'){echo "selected";}?>>实业型</option>
+								</select>
+							</div>
+						</div>
+						<!--成立时间-->
+						<div class="form-group">
+							<label for="datetimepicker1"><span class="form-required">*</span>成立时间</label>
+							<div>
+								<input class="form-control js-date" id="datetimepicker1" type="text" name="reg_time"
+									   value="{$basic_info.reg_time}">
+
+							</div>
+						</div>
+						<!--注册资本-->
+						<div class="form-group">
+							<label for="reg-money"><span class="form-required">*</span>注册资本</label>
+							<div>
+								<input type="text" class="form-control" id="reg-money" name="reg_money" value="{$basic_info.reg_money}">
+							</div>
+						</div>
+						<!--企业法人-->
+						<div class="form-group">
+							<label for="legal_person"><span class="form-required">*</span>企业法人</label>
+							<div>
+								<input type="text" class="form-control" id="legal_person" name="legal_person" value="{$basic_info.legal_person}">
+							</div>
+						</div>
+						<!--企业联系地-->
+						<div class="form-group">
+							<label for="link-addr"><span class="form-required">*</span>企业联系地</label>
+							<div>
+								<input type="text" class="form-control" id="link-addr" name="link_addr" value="{$basic_info.link_addr}">
+							</div>
+						</div>
+						<!--企业基础资质-->
+						<div class="form-group">
+							<label for="js-thumbnail-input"><span class="form-required">*</span>企业基础资质</label>
+							<div>
+								<input type="hidden" name="business_license_pic" class="form-control"
+									   id="js-thumbnail-input" value="{$basic_info.business_license_pic}">
+								<div>
+									<a href="javascript:uploadOneImage('图片上传','#js-thumbnail-input');">
+										<img src="__UPLOAD__/{$basic_info.business_license_pic}"
+											 id="js-thumbnail-input-preview"
+											 width="135" style="cursor: pointer"/>
+									</a>
+								</div>
+							</div>
+						</div>
+
+						<!--企业附加资质-->
+						<div class="form-group">
+							<label for="js-thumbnail-input"><span class="form-required">*</span>企业附加资质</label>
+							<div class="checkbox">
+								<foreach name="list" id="value">
+
+									<label class="checkbox-inline">
+										<input type="checkbox" id="inlineCheckbox1" name="check_box[]" value="{$value}"
+											<foreach name="$basic_info['comp_aptitude']" id="val">
+												<?php if($val==$value){echo "checked";}?>
+											</foreach>
+										> {$value}
+									</label>
+								</foreach>
+							</div>
+						</div>
+						<!--是否有效-->
+						<div class="form-group">
+							<label for="service_pay"><span class="form-required">*</span>是否支付服务费</label>
+							<div>
+								<label class="radio-inline">
+									<input type="radio" name="service_pay" id="service_pay" value="是" <?php if($basic_info['service_pay']=='是'){echo "checked";}?>>是
+								</label>
+								<label class="radio-inline">
+									<input type="radio" name="service_pay" id="service_pay1"  value="否" <?php if($basic_info['service_pay']=='否'){echo "checked";}?>>否
+								</label>
+
+							</div>
+						</div>
+						<!--是否有效-->
+						<div class="form-group">
+							<label for="input-status">是否有效</label>
+							<div>
+								<label class="radio-inline">
+									<input type="radio" name="status" id="input-status" value="1" <?php if($basic_info['status']==1){echo "checked";}?>>启用
+								</label>
+								<label class="radio-inline">
+									<input type="radio" name="status" id="input-status1"  value="0" <?php if($basic_info['status']==0){echo "checked";}?>>禁用
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<button type="submit" class="btn btn-primary js-ajax-submit">{:lang('ADD')}</button>
+						<a class="btn btn-default" href="{:url('AdminCategory/index')}">{:lang('BACK')}</a>
+					</div>
 				</div>
-			</div>
-			<div class="form-group">
-				<label for="input-user_pass" class="col-sm-2 control-label"><span class="form-required">*</span>{:lang('PASSWORD')}</label>
-				<div class="col-md-6 col-sm-10">
-					<input type="text" class="form-control" id="input-user_pass" name="user_pass" value="" placeholder="******">
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="input-user_email" class="col-sm-2 control-label"><span class="form-required">*</span>{:lang('EMAIL')}</label>
-				<div class="col-md-6 col-sm-10">
-					<input type="text" class="form-control" id="input-user_email" name="user_email" value="{$user_email}">
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="input-user_email" class="col-sm-2 control-label"><span class="form-required">*</span>{:lang('ROLE')}</label>
-				<div class="col-md-6 col-sm-10">
-					<foreach name="roles" item="vo">
-						<label class="checkbox-inline">
-							<php>$role_id_checked=in_array($vo['id'],$role_ids)?"checked":"";</php>
-							<input value="{$vo.id}" type="checkbox" name="role_id[]" {$role_id_checked} <if condition="cmf_get_current_admin_id() neq 1 && $vo['id'] eq 1">disabled="true"</if>>{$vo.name}
-						</label>
-					</foreach>
-				</div>
-			</div>
-			<div class="form-group">
-				<div class="col-sm-offset-2 col-sm-10">
-					<input type="hidden" name="id" value="{$id}" />
-					<button type="submit" class="btn btn-primary js-ajax-submit">{:lang('SAVE')}</button>
-					<a class="btn btn-default" href="javascript:history.back(-1);">{:lang('BACK')}</a>
-				</div>
-			</div>
-		</form>
+			</form>
+		</div>
 	</div>
-	<script src="__STATIC__/js/admin.js"></script>
+</div>
+<script type="text/javascript" src="__STATIC__/js/admin.js"></script>
+<script type="text/javascript">
+	//编辑器路径定义
+	var editorURL = GV.WEB_ROOT;
+</script>
+<script type="text/javascript" src="__STATIC__/js/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="__STATIC__/js/ueditor/ueditor.all.min.js"></script>
+<script type="text/javascript">
+	$(function () {
+
+		editorcontent = new baidu.editor.ui.Editor();
+		editorcontent.render('content');
+		try {
+			editorcontent.sync();
+		} catch (err) {
+		}
+
+		$('.btn-cancel-thumbnail').click(function () {
+			$('#thumbnail-preview').attr('src', '__TMPL__/public/assets/images/default-thumbnail.png');
+			$('#thumbnail').val('');
+		});
+	});
+
+</script>
 </body>
 </html>

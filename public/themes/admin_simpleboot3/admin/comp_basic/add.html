@@ -114,20 +114,24 @@
 						<div class="form-group">
 							<label for="service_pay"><span class="form-required">*</span>是否支付服务费</label>
 							<div>
-								<select class="form-control" name="service_pay" id="service_pay">
-									<option value="否">否</option>
-									<option value="是">是</option>
-								</select>
+								<label class="radio-inline">
+									<input type="radio" name="service_pay" id="service_pay" value="是" checked>是
+								</label>
+								<label class="radio-inline">
+									<input type="radio" name="service_pay" id="service_pay1"  value="否">否
+								</label>
 							</div>
 						</div>
 						<!--是否有效-->
 						<div class="form-group">
 							<label for="input-status">是否有效</label>
 							<div>
-								<select class="form-control" name="status" id="input-status">
-									<option value="1">启用</option>
-									<option value="0">禁用</option>
-								</select>
+								<label class="radio-inline">
+									<input type="radio" name="status" id="input-status" value="1" checked>启用
+								</label>
+								<label class="radio-inline">
+									<input type="radio" name="status" id="input-status1"  value="0">禁用
+								</label>
 							</div>
 						</div>
 					</div>

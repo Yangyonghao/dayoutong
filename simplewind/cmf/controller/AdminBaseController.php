@@ -124,4 +124,13 @@ class AdminBaseController extends BaseController
         return $total_score;
     }
 
+    /*
+     * @function:根据id获取获取详细信息
+     * @author：yyh
+     * */
+    public function getProjectInfo($table_name,$param){
+        $result=Db::name($table_name)->where($param)->find();
+        return $result;
+    }
+
 }

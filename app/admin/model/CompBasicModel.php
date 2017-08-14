@@ -75,4 +75,14 @@ class CompBasicModel extends Model
         );
         return $account_score;
     }
+    /*
+     * @function：编辑企业基本信息
+     * @date:20170814
+     * */
+    public function editCompBasic($param){
+        $basic_id=$param['basic_id'];
+        unset($param['basic_id']);unset($param['check_box']);
+        $result_id=Db::name('comp_basic')->where('id',$basic_id)->update($param);
+        return $result_id;
+    }
 }

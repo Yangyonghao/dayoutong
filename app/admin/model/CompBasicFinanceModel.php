@@ -59,19 +59,19 @@ class CompBasicFinanceModel extends Model
 
         //是否缴纳记账费
         if($data['agency_fee']=='是'){
-            $account_score['agency_fee']=["remark" => "选择是记5分", "score" => "5"];
+            $account_score['agency_fee']=["remark" => "缴纳记账费,加5分", "score" => "+5"];
         }else{
             unset($data['agency_fee']);
         }
         //发票版本
         if($data['invoice_version']=='万元版'){
-            $account_score['invoice_version']=["remark" => "选择万元版记2分", "score" => "2"];
+            $account_score['invoice_version']=["remark" => "发票版本选择万元版，加2分", "score" => "+2"];
         }elseif ($data['invoice_version']=='十万版'){
-            $account_score['invoice_version']=["remark" => "选择十万版记3分", "score" => "3"];
+            $account_score['invoice_version']=["remark" => "发票版本选择十万版，加3分", "score" => "+3"];
         }elseif ($data['invoice_version']=='百万版'){
-            $account_score['invoice_version']=["remark" => "选择百万版记4分", "score" => "4"];
+            $account_score['invoice_version']=["remark" => "发票版本选择百万版，加4分", "score" => "+4"];
         }elseif ($data['invoice_version']=='千万元版'){
-            $account_score['invoice_version']=["remark" => "选择千万元版记5分", "score" => "5"];
+            $account_score['invoice_version']=["remark" => "发票版本选择千万元版，加5分", "score" => "+5"];
         }else{
             unset($data['invoice_version']);
         }
@@ -86,5 +86,14 @@ class CompBasicFinanceModel extends Model
     public function getCompScoreBasic($id){
         return Db::name('comp_score')->where('comp_id',$id)->find();
     }
-
+    /*
+         * @function：修改财务基本信息
+         * @author：yyh
+         * */
+    public function editCompBasicFinance($param){
+        $business_id=$param['basic_finance_id'];unset($param['basic_finance_id']);
+        //添加到公司信息表
+        $result_id=Db::name('comp_basic_finance')->where('id',$business_id)->update($param);
+        return $result_id;
+    }
 }
