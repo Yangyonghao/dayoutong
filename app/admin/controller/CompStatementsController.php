@@ -157,8 +157,9 @@ class CompStatementsController extends AdminBaseController
     public function addBasic(){
         $comp_arr=Db::name('comp_basic')
             ->where('id','NOT IN',function($query){
-                $query->name('comp_basic_finance')->where('status',1)->field('comp_id');
-            })->field('id,comp_name')->select();
+                $query->name('comp_basic_finance')->field('comp_id');
+            })->where('status',1)->field('id,comp_name')->select();
+
         $this->assign('comp_arr',$comp_arr);
 
         return $this->fetch();
@@ -193,6 +194,68 @@ class CompStatementsController extends AdminBaseController
      * @function:执行添加财务明细计分信息
      * */
     public function basicFinanceList(){
+        $num=Db::name('comp_basic_finance')->order('gross_profit_rate desc')->select();
+        $sum_count=count($num);
+        $num_s=$sum_count%10;
+        if($num_s>5){
+            $sum_count=$sum_count-$num_s+10;
+        }else{
+            $sum_count=$sum_count-$num_s;
+        }
+
+//        $value_k=$sum_count%10;
+        $value=$sum_count/10;
+//        var_dump($value_k);
+//        echo '<br/>';
+//        var_dump($value);die;
+        $i=0;
+        foreach ($num as $k=>$v){
+            switch ($k){
+                case $k>0 && $k<=$value:
+                    $score=10;
+                    break;
+                case $k>$value && $k<=$value*2:
+                    $score=9;
+                    break;
+                case $k>$value*2 && $k<=$value*3:
+                    $score=8;
+                    break;
+                case $k>$value*3 && $k<=$value*4:
+                    $score=7;
+                    break;
+                case $k>$value*4 && $k<=$value*5:
+                    $score=6;
+                    break;
+                case $k>$value*5 && $k<=$value*6:
+                    $score=5;
+                    break;
+                case $k>$value*6 && $k<=$value*7:
+                    $score=4;
+                    break;
+                case $k>$value*7 && $k<=$value*8:
+                    $score=3;
+                    break;
+                case $k>$value*8 && $k<=$value*9:
+                    $score=2;
+                    break;
+                case $k>$value*9 && $k<=$value*10:
+                    $score=1;
+                    break;
+            }
+            if($score>0){
+                $comp_score=Db::name('comp_score')->where('comp_id',$v['comp_id'])->find();
+                $account_s=$comp_score['account_score']+$score;
+                $app[$i]['comp_id']=$v['comp_id'];
+                $app[$i]['account_score']=$account_s;
+                $app[$i]['total_score']=$comp_score['total_score']+$score;
+                $app[$i]['add_s']=$score;
+                $i+=1;
+            }
+
+        }
+        dump($app);die;
+
+
         $comp_name = trim($this->request->param('comp_name'));
         $where = [];
         if ($comp_name) {
@@ -344,6 +407,15 @@ class CompStatementsController extends AdminBaseController
                 break;
         }
         return $score;
+    }
+
+    /*
+     * @function：根据毛利率算分数
+     * */
+    public function getScoreByRate(){
+        $num=Db::name('comp_basic_finance')->order('gross_profit_rate desc')->select();
+
+
     }
 
 

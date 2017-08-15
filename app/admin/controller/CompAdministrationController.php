@@ -245,6 +245,4 @@ class CompAdministrationController extends AdminBaseController
         }
         return $account_score;
     }
-
-
 }
