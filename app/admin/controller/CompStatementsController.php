@@ -194,65 +194,184 @@ class CompStatementsController extends AdminBaseController
      * @function:执行添加财务明细计分信息
      * */
     public function basicFinanceList(){
-        $num=Db::name('comp_basic_finance')->order('gross_profit_rate desc')->select();
-        $sum_count=count($num);
-        $num_s=$sum_count%10;
-        if($num_s>5){
-            $sum_count=$sum_count-$num_s+10;
-        }else{
-            $sum_count=$sum_count-$num_s;
+        $num=Db::name('comp_basic_finance')->order('gross_profit_rate desc')->select()->toArray();
+//        $aaa=count($num);
+//
+//        $a=[
+//          0=>1,
+//          1=>1,
+//          2=>1,
+//          3=>1,
+//          4=>0,
+//          5=>0,
+//          6=>0,
+//          7=>0,
+//          8=>0,
+//          9=>0,
+//        ];
+
+//        dump($num);die;
+//        $sum_count=count($num);
+//        $num_s=$sum_count%10;
+//        if($num_s>5){
+//            $sum_count=$sum_count-$num_s+10;
+//        }else{
+//            $sum_count=$sum_count-$num_s;
+//        }
+//        $sum_count=300;
+//        $value=$sum_count/10;
+//        $yushu=4;
+//        $total=300;
+//        $value=intval($aaa/10);
+//
+//        $i=0;
+//        foreach ($num as $k=>$v){
+//            switch ($k){
+//                case $k>=0 && $k<$value+$a[$k]:
+//                    $score=10;
+//                    break;
+//                case $k>=$value+$a[$k] && $k<$value*2+$a[$k]:
+//                    $score=9;
+//                    break;
+//                case $k>=$value*2+$a[$k] && $k<$value*3+$a[$k]:
+//                    $score=8;
+//                    break;
+//                case $k>=$value*3+$a[$k] && $k<$value*4+$a[$k]:
+//                    $score=7;
+//                    break;
+//                case $k>=$value*4+$a[$k] && $k<$value*5+$a[$k]:
+//                    $score=6;
+//                    break;
+//                case $k>$value*5 && $k<=$value*6+$a[$k]:
+//                    $score=5;
+//                    break;
+//                case $k>$value*6 && $k<=$value*7+$a[$k]:
+//                    $score=4;
+//                    break;
+//                case $k>$value*7 && $k<=$value*8+$a[$k]:
+//                    $score=3;
+//                    break;
+//                case $k>$value*8 && $k<=$value*9+$a[$k]:
+//                    $score=2;
+//                    break;
+//                case $k>$value*9 && $k<=$value*10+$a[$k]:
+//                    $score=1;
+//                    break;
+//            }
+//            if($score>0){
+//                $comp_score=Db::name('comp_score')->where('comp_id',$v['comp_id'])->find();
+//                $account_s=$comp_score['account_score']+$score;
+//                $app[$i]['comp_id']=$v['comp_id'];
+//                $app[$i]['account_score']=$account_s;
+//                $app[$i]['total_score']=$comp_score['total_score']+$score;
+//                $app[$i]['add_s']=$score;
+//                $i+=1;
+//            }
+//
+//        }
+
+
+//        foreach ($num as $k=>$v){
+//
+//            switch ($k){
+//                case $k>0 && $k<$value+$a[$k]:
+//                    $score=10;
+//                    break;
+//                case $k>=$value+$a[$k] && $k<$value*2+$a[$k]:
+//                    $score=9;
+//                    break;
+//                case $k>=$value*2+$a[$k] && $k<$value*3+$a[$k]:
+//                    $score=8;
+//                    break;
+//                case $k>$value*3 && $k<=$value*4+$a[$k]:
+//                    $score=7;
+//                    break;
+//                case $k>$value*4 && $k<=$value*5+$a[$k]:
+//                    $score=6;
+//                    break;
+//                case $k>$value*5 && $k<=$value*6+$a[$k]:
+//                    $score=5;
+//                    break;
+//                case $k>$value*6 && $k<=$value*7+$a[$k]:
+//                    $score=4;
+//                    break;
+//                case $k>$value*7 && $k<=$value*8+$a[$k]:
+//                    $score=3;
+//                    break;
+//                case $k>$value*8 && $k<=$value*9+$a[$k]:
+//                    $score=2;
+//                    break;
+//                case $k>$value*9 && $k<=$value*10+$a[$k]:
+//                    $score=1;
+//                    break;
+//            }
+//            if($score>0){
+//                $comp_score=Db::name('comp_score')->where('comp_id',$v['comp_id'])->find();
+//                $account_s=$comp_score['account_score']+$score;
+//                $app[$i]['comp_id']=$v['comp_id'];
+//                $app[$i]['account_score']=$account_s;
+//                $app[$i]['total_score']=$comp_score['total_score']+$score;
+//                $app[$i]['add_s']=$score;
+//                $i+=1;
+//            }
+//
+//        }
+//        $a = intval(count($num)/10);
+        $a = ceil(count($num)/10);//前几名几个人  2
+        $d = intval(count($num)/10);//前几名几个人  1
+        $b = count($num)%10;//前几名，每组多少人         3
+        foreach ($num as  $i=> $v) {
+            ++$i;
+            if($i < $a*$b) {
+                $c = ceil($i/$a);
+            }else {
+                $c = ceil(($i - $a*$b)/$d)+$b;
+            }
+            switch ($c) {
+                case 1:
+                    $score =10;
+                    break;
+                case 2:
+                    $score =9;
+                    break;
+                case 3:
+                    $score =8;
+                    break;
+                case 4:
+                    $score =7;
+                    break;
+                case 5:
+                    $score =6;
+                    break;
+                case 6:
+                    $score =5;
+                    break;
+                case 7:
+                    $score =4;
+                    break;
+                case 8:
+                    $score =3;
+                    break;
+                case 9:
+                    $score =2;
+                    break;
+                case 10:
+                    $score =1;
+                    break;
         }
 
-//        $value_k=$sum_count%10;
-        $value=$sum_count/10;
-//        var_dump($value_k);
-//        echo '<br/>';
-//        var_dump($value);die;
-        $i=0;
-        foreach ($num as $k=>$v){
-            switch ($k){
-                case $k>0 && $k<=$value:
-                    $score=10;
-                    break;
-                case $k>$value && $k<=$value*2:
-                    $score=9;
-                    break;
-                case $k>$value*2 && $k<=$value*3:
-                    $score=8;
-                    break;
-                case $k>$value*3 && $k<=$value*4:
-                    $score=7;
-                    break;
-                case $k>$value*4 && $k<=$value*5:
-                    $score=6;
-                    break;
-                case $k>$value*5 && $k<=$value*6:
-                    $score=5;
-                    break;
-                case $k>$value*6 && $k<=$value*7:
-                    $score=4;
-                    break;
-                case $k>$value*7 && $k<=$value*8:
-                    $score=3;
-                    break;
-                case $k>$value*8 && $k<=$value*9:
-                    $score=2;
-                    break;
-                case $k>$value*9 && $k<=$value*10:
-                    $score=1;
-                    break;
-            }
-            if($score>0){
-                $comp_score=Db::name('comp_score')->where('comp_id',$v['comp_id'])->find();
-                $account_s=$comp_score['account_score']+$score;
-                $app[$i]['comp_id']=$v['comp_id'];
-                $app[$i]['account_score']=$account_s;
-                $app[$i]['total_score']=$comp_score['total_score']+$score;
-                $app[$i]['add_s']=$score;
-                $i+=1;
-            }
 
+        $comp_score=Db::name('comp_score')->where('comp_id',$v['comp_id'])->find();
+        $account_s=$comp_score['account_score']+$score;
+        $app[$i]['comp_id']=$v['comp_id'];
+        $app[$i]['account_score']=$account_s;
+        $app[$i]['total_score']=$comp_score['total_score']+$score;
+        $app[$i]['add_s']=$score;
         }
+
+
+
+
         dump($app);die;
 
 
