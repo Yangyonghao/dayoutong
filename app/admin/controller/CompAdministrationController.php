@@ -107,13 +107,20 @@ class CompAdministrationController extends AdminBaseController
         $admin_id = $this->request->param('id');
         $comp_admin_info = Db::name('comp_administration')->where('id', $admin_id)->find();
         //获取未添
-        $comp_arr = Db::name('comp_basic')
-            ->where('status', 1)->field('id,comp_name')->select();
+        $comp_arr=Db::name('comp_basic')
+            ->where('id','NOT IN',function($query){
+                $query->name('comp_administration')->where('status',1)->field('comp_id');
+            })
+            ->field('id,comp_name')->select();
+
         $this->assign('comp_arr', $comp_arr);
         $this->assign('comp_admin_info', $comp_admin_info);
         return $this->fetch();
     }
     /*
+     * @function：编辑页面
+     * @author:yyh
+     * @date:20170815
      * */
     public function editPost(){
         if ($this->request->isPost()) {
@@ -133,8 +140,6 @@ class CompAdministrationController extends AdminBaseController
             if($result_info){
                 //取差集
                 $ssp=array_diff_assoc($post,$admin_info);
-
-//                $comp_id    =   $ssp["comp_id"];
                 unset($ssp["comp_id"]);unset($ssp["admin_id"]);
                 //获取字段相应的分数数组
                 $result =  $this->getScoreRole($ssp,$admin_info);

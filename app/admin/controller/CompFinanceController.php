@@ -16,8 +16,6 @@ use think\Db;
 class CompFinanceController extends AdminBaseController
 {
     public function index(){
-
-
         /**搜索条件**/
         $comp_name = trim($this->request->param('comp_name'));
         $where=[];
@@ -77,18 +75,32 @@ class CompFinanceController extends AdminBaseController
             $this->success('添加成功!', url('CompFinance/index'));
         }
     }
-
+    /*
+     * @author:yangyh
+     * @date:20170815
+     * @function编辑金融部数据
+     * */
     public function edit(){
 
         $finance_id=$post=$this->request->param('finance_id');
         $finance_info=Db::name('comp_finance')->where('id',$finance_id)->find();
-//        var_dump($finance_info);die;
-        $comp_arr=Db::name('comp_basic')->where('status',1)->field('id,comp_name')->select();
+
+        $comp_arr=Db::name('comp_basic')
+            ->where('id','NOT IN',function($query){
+                $query->name('comp_finance')->where('status',1)->field('comp_id');
+            })
+            ->field('id,comp_name')->select();
+
+//        $comp_arr=Db::name('comp_basic')->where('status',1)->field('id,comp_name')->select();
         $this->assign('finance_info',$finance_info);
         $this->assign('comp_arr',$comp_arr);
         return $this->fetch();
     }
-
+    /*
+     * @author:yangyh
+     * @date:20170815
+     * @function执行编辑金融部数据
+     * */
     public function editPost(){
         if ($this->request->isPost()) {
 
@@ -102,7 +114,7 @@ class CompFinanceController extends AdminBaseController
             $result = $compFinanceModel->editCompFinance($post,$id);
 
             if ($result === false) {
-                $this->error('添加失败!');
+                $this->error('保存失败!');
             }
 
             $this->success('保存成功!', url('CompFinance/index'));

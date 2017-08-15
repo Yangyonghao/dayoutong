@@ -76,18 +76,30 @@ class CompBusinessController extends AdminBaseController
             $this->success('添加成功!', url('CompBusiness/index'));
         }
     }
-
+    /*
+     * @author:yangyh
+     * @date:20170815
+     * @编辑业务部门数据
+     * */
     public function edit(){
         $id=$this->request->param('id');
         $business_info=Db::name('comp_business')->where('id',$id)->find();
-        $comp_arr=Db::name('comp_basic')->where('status',1)->field('id,comp_name')->select();
+        $comp_arr=Db::name('comp_basic')
+            ->where('id','NOT IN',function($query){
+                $query->name('comp_business')->where('status',1)->field('comp_id');
+            })
+            ->field('id,comp_name')->select();
+//        $comp_arr=Db::name('comp_basic')->where('status',1)->field('id,comp_name')->select();
         $this->assign('business_info',$business_info);
         $this->assign('comp_arr',$comp_arr);
 
         return $this->fetch();
     }
-
-
+    /*
+     * @author:yangyh
+     * @date:20170815
+     * @执行编辑业务部门数据
+     * */
     public function editPost(){
         if ($this->request->isPost()) {
             $post=$this->request->param();
