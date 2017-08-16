@@ -17,11 +17,7 @@
 				<tr>
 					<th>企业名称</th>
 					<th>总分</th>
-					<th>会员部统计分数</th>
-					<th>金融部统计分数</th>
-					<th>业务部统计分数</th>
-					<th>财务部统计分数</th>
-					<th>行政部统计分数</th>
+					<th>统计年份</th>
 					<!--<th width="130">{:lang('ACTIONS')}</th>-->
 				</tr>
 			</thead>
@@ -30,11 +26,8 @@
 					<tr>
 						<td>{$vo.comp_name}</td>
 						<td>{$vo.total_score}</td>
-						<td>{$vo.member_score}</td>
-						<td>{$vo.finance_score}</td>
-						<td>{$vo.sales_score}</td>
-						<td>{$vo.account_score}</td>
-						<td>{$vo.admin_score}</td>
+						<td>{$vo.account_time}</td>
+
 						<!--<td><a href="{:url('CompBasic/edit',array('id'=>$vo.id))}">编辑</a></td>-->
 					</tr>
 				</volist>
