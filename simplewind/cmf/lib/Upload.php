@@ -199,11 +199,11 @@ class Upload
         if (!file_exists($strSaveFileDir)) {
             mkdir($strSaveFileDir, 0777, true);
         }
-        if(!@mkdir($strSaveFileDir)){
-            $this->error="不能建立目录 $strSaveFileDir";
-            return false;
-        }
-        @chmod($strSaveFileDir,0777);
+//        if(!@mkdir($strSaveFileDir)){
+//            $this->error="不能建立目录 $strSaveFileDir";
+//            return false;
+//        }
+//        @chmod($strSaveFileDir,0777);
 
         // 合并临时文件
         if (!$out = @fopen($strSaveFilePath, "wb")) {
