@@ -292,7 +292,7 @@ class Upload
             if (file_exists('./upload/' . $arrInfo["file_path"])) {
                 @unlink($strSaveFilePath); // 删除已经上传的文件
             } else {
-                rename($strSaveFilePath, './upload/' . $arrInfo["file_path"]);
+                rename($strSaveFilePath, '/data/wwwroot/dayoutong/public/upload/' . $arrInfo["file_path"]);
             }
 
         } else {
