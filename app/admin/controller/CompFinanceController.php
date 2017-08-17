@@ -83,17 +83,28 @@ class CompFinanceController extends AdminBaseController
     public function edit(){
 
         $finance_id=$post=$this->request->param('finance_id');
-        $finance_info=Db::name('comp_finance')->where('id',$finance_id)->find();
+        $finance_info=Db::name('comp_finance')
+            ->alias('a')->field('a.id as finance_id,a.*,w.comp_name')
+            ->join('spec_comp_basic w','a.comp_id = w.id')
+            ->where('a.id',$finance_id)
+            ->find();
+//        dump($result_list);die;
+//        dump($finance_info);die;
 
-        $comp_arr=Db::name('comp_basic')
-            ->where('id','NOT IN',function($query){
-                $query->name('comp_finance')->where('status',1)->field('comp_id');
-            })
-            ->field('id,comp_name')->select();
+//        $finance_info=Db::name('comp_finance')->where('id',$finance_id)->find();
+
+//        $comp_arr=Db::name('comp_basic')
+//            ->where('id','NOT IN',function($query){
+//                $query->name('comp_finance')->where('status',1)->field('comp_id');
+//            })
+//            ->field('id,comp_name')->select();
+//
+//
+//        echo Db::name('comp_basic')->getLastSql();die;
 
 //        $comp_arr=Db::name('comp_basic')->where('status',1)->field('id,comp_name')->select();
         $this->assign('finance_info',$finance_info);
-        $this->assign('comp_arr',$comp_arr);
+//        $this->assign('comp_arr',$comp_arr);
         return $this->fetch();
     }
     /*

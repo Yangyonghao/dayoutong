@@ -77,12 +77,11 @@ class CompFinanceModel extends CommonModel
     }
 
     public function editCompFinance($data,$id){
-
         $return_msg=Db::name('comp_finance')->where('id',$id)->update($data);
         $comp_id=$data['comp_id'];
         if($return_msg){
-            Db::startTrans();
-            try{
+//            Db::startTrans();
+//            try{
                 $where['comp_id']=$comp_id;
                 $where['key_name']=array_keys($data)[1];
                 $result=Db::name('comp_score_log')->where($where)->sum('score');
@@ -100,12 +99,12 @@ class CompFinanceModel extends CommonModel
                 $app['ip']=get_client_ip();
                 $score_status=Db::name('comp_score_log')->insertGetId($app);
 
-                Db::commit();
-            }catch(Exception $e){
-                // 回滚事务
-                Db::rollback();
-                $this->error($e->getMessage());
-            }
+//                Db::commit();
+//            }catch(Exception $e){
+//                // 回滚事务
+//                Db::rollback();
+//                $this->error($e->getMessage());
+//            }
 
             if($score_status){
                 $score=Db::name('comp_score_log')->where($where)->sum('score');

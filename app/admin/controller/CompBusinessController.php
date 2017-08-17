@@ -83,15 +83,21 @@ class CompBusinessController extends AdminBaseController
      * */
     public function edit(){
         $id=$this->request->param('id');
-        $business_info=Db::name('comp_business')->where('id',$id)->find();
-        $comp_arr=Db::name('comp_basic')
-            ->where('id','NOT IN',function($query){
-                $query->name('comp_business')->where('status',1)->field('comp_id');
-            })
-            ->field('id,comp_name')->select();
+//        $business_info=Db::name('comp_business')->where('id',$id)->find();
+        $business_info=Db::name('comp_business')
+            ->alias('a')->field('a.id as finance_id,a.*,w.comp_name')
+            ->join('spec_comp_basic w','a.comp_id = w.id')
+            ->where('a.id',$id)
+            ->find();
+
+//        $comp_arr=Db::name('comp_basic')
+//            ->where('id','NOT IN',function($query){
+//                $query->name('comp_business')->where('status',1)->field('comp_id');
+//            })
+//            ->field('id,comp_name')->select();
 //        $comp_arr=Db::name('comp_basic')->where('status',1)->field('id,comp_name')->select();
         $this->assign('business_info',$business_info);
-        $this->assign('comp_arr',$comp_arr);
+//        $this->assign('comp_arr',$comp_arr);
 
         return $this->fetch();
     }
