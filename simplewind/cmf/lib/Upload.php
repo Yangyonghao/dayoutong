@@ -289,10 +289,10 @@ class Upload
             $arrAsset = $objAsset->toArray();
             //$arrInfo["url"] = $this->request->domain() . $arrAsset["file_path"];
             $arrInfo["file_path"] = $arrAsset["file_path"];
-            if (file_exists('./upload/' . $arrInfo["file_path"])) {
+            if (file_exists('/upload/' . $arrInfo["file_path"])) {
                 @unlink($strSaveFilePath); // 删除已经上传的文件
             } else {
-                rename($strSaveFilePath, './upload/' . $arrInfo["file_path"]);
+                rename($strSaveFilePath, '/upload/' . $arrInfo["file_path"]);
             }
 
         } else {
