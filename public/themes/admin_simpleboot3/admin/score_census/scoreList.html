@@ -3,8 +3,8 @@
 <body>
 	<div class="wrap js-check-wrap">
 		<ul class="nav nav-tabs">
-			<li class="active"><a href="{:url('score_census/index')}">基本分数列表</a></li>
-			<li><a href="{:url('score_census/list')}">总分数列表</a></li>
+			<li><a href="{:url('score_census/index')}">基本分数列表</a></li>
+			<li class="active"><a href="{:url('score_census/scorelist')}">总分数列表</a></li>
 		</ul>
         <form class="well form-inline margin-top-20" method="post" action="{:url('score_census/index')}">
             用户名:
@@ -22,13 +22,13 @@
 				</tr>
 			</thead>
 			<tbody>
-				<volist name="result_list" id="vo">
+				<volist name="scoreList" id="vo">
 					<tr>
-						<td>{$vo.comp_name}</td>
+						<td>{$vo.comp_id}</td>
 						<td>{$vo.total_score}</td>
 						<td>{$vo.account_time}</td>
 
-						<!--<td><a href="{:url('CompBasic/edit',array('id'=>$vo.id))}">编辑</a></td>-->
+						<!--<td><a href="{:url('CompBasic/edit',array('id'=>$vo.comp_id))}">编辑</a></td>-->
 					</tr>
 				</volist>
 

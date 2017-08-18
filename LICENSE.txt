@@ -1,1 +1,18 @@
 ThinkCMF遵循LGPL开源协议发布，并提供免费使用。
+SELECT
+	scs.total_score,
+	a.*
+FROM
+	spec_comp_score AS scs
+LEFT JOIN (
+	SELECT
+		SUM(score) AS score,
+		account_time,
+		comp_id
+	FROM
+		spec_total_score
+	WHERE
+		account_time = '2017'
+	GROUP BY
+		comp_id
+) AS a ON scs.comp_id = a.comp_id
