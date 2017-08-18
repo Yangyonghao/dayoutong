@@ -105,15 +105,22 @@ class CompAdministrationController extends AdminBaseController
      * */
     public function edit(){
         $admin_id = $this->request->param('id');
-        $comp_admin_info = Db::name('comp_administration')->where('id', $admin_id)->find();
-        //获取未添
-        $comp_arr=Db::name('comp_basic')
-            ->where('id','NOT IN',function($query){
-                $query->name('comp_administration')->where('status',1)->field('comp_id');
-            })
-            ->field('id,comp_name')->select();
+//        $comp_admin_info = Db::name('comp_administration')->where('id', $admin_id)->find();
+        $comp_admin_info=Db::name('comp_administration')
+            ->alias('a')->field('a.*,w.comp_name')
+            ->join('spec_comp_basic w','a.comp_id = w.id')
+            ->where('a.id',$admin_id)
+            ->find();
+//        var_dump($comp_admin_info);die;
 
-        $this->assign('comp_arr', $comp_arr);
+        //获取未添
+//        $comp_arr=Db::name('comp_basic')
+//            ->where('id','NOT IN',function($query){
+//                $query->name('comp_administration')->where('status',1)->field('comp_id');
+//            })
+//            ->field('id,comp_name')->select();
+
+//        $this->assign('comp_arr', $comp_arr);
         $this->assign('comp_admin_info', $comp_admin_info);
         return $this->fetch();
     }

@@ -279,13 +279,18 @@ class CompStatementsController extends AdminBaseController
         $statement_id = $this->request->param('basic_finance_id');
 
 
-        $basic_finance_info = Db::name('comp_basic_finance')->where('id', $statement_id)->find();
+//        $basic_finance_info = Db::name('comp_basic_finance')->where('id', $statement_id)->find();
         //获取未添
-        $comp_arr=Db::name('comp_basic')
-            ->where('id','NOT IN',function($query){
-                $query->name('comp_basic_finance')->where('status',1)->field('comp_id');
-            })->field('id,comp_name')->select();
-        $this->assign('comp_arr', $comp_arr);
+        $basic_finance_info=Db::name('comp_basic_finance')
+            ->alias('a')->field('a.*,w.comp_name')
+            ->join('spec_comp_basic w','a.comp_id = w.id')
+            ->where('a.id',$statement_id)
+            ->find();
+//        $comp_arr=Db::name('comp_basic')
+//            ->where('id','NOT IN',function($query){
+//                $query->name('comp_basic_finance')->where('status',1)->field('comp_id');
+//            })->field('id,comp_name')->select();
+//        $this->assign('comp_arr', $comp_arr);
         $this->assign('basic_finance_info', $basic_finance_info);
         return $this->fetch();
     }
