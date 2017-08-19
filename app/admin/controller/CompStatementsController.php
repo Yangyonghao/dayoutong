@@ -154,13 +154,14 @@ class CompStatementsController extends AdminBaseController
 
     public function edit()
     {
+        //获取id
         $statement_id = $this->request->param('statement_id');
-        $statement_info = Db::name('comp_statements')->where('id', $statement_id)->find();
-        //获取未添
-        $comp_arr = Db::name('comp_basic')
-            ->where('status', 1)->field('id,comp_name')->select();
-//        var_dump($statement_info);die;
-        $this->assign('comp_arr', $comp_arr);
+        //查询数据
+        $statement_info=Db::name('comp_statements')
+            ->alias('a')->field('a.*,w.comp_name')
+            ->join('spec_comp_basic w','a.comp_id = w.id')
+            ->where('a.id',$statement_id)
+            ->find();
         $this->assign('statement_info', $statement_info);
         return $this->fetch();
     }
