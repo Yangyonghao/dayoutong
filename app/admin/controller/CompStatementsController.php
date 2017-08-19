@@ -123,9 +123,13 @@ class CompStatementsController extends AdminBaseController
      */
     public function add()
     {
-        //获取未添
-        $comp_arr = Db::name('comp_basic')
-            ->where('status', 1)->field('id,comp_name')->select();
+//        SELECT * from spec_comp_basic where id not in( select comp_id from spec_comp_statements where input_monthly='201708') and `status`=1
+
+        $comp_arr=Db::name('comp_basic')
+            ->where('id','NOT IN',function($query){
+                $query->name('comp_statements')->where('input_monthly',date("Ym"))->field('comp_id');
+            })->where('status',1)->field('id,comp_name')->select();
+
         $this->assign('comp_arr', $comp_arr);
         return $this->fetch();
     }
