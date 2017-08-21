@@ -20,6 +20,7 @@ class CompStatementsModel extends Model
         //添加到公司信息表
         $data['add_time']=date('Y-m-d H:i:s');
         $data['input_monthly']=date("Ym");
+        $data['input_year']=date("Y");
         $result_id=$this->insertGetId($data);
         return $result_id;
     }

@@ -414,66 +414,9 @@ class CompStatementsController extends AdminBaseController
         return $score;
     }
 
-    /*
-     * @function：根据毛利率算分数
-     * */
-    public function getScoreByRate(){
-        $num=Db::name('comp_basic_finance')->order('gross_profit_rate desc')->select();
-        $total=count($num);
-        $mod     = $total % 10;
-        $num_s   = intval($total / 10);
-        $score_arr = array();
-        for ( $i = 0 ; $i < 10; $i++ ) {
-            $score_arr[] = ($i + 1) * $num_s;
-        }
-        foreach ($score_arr as $key => $value) {
-            if ($key < $mod) {
-                $score_arr[$key] = $value + $key + 1;
-            } else {
-                $score_arr[$key] = $value + $mod;
-            }
-        }
-        $i=0;$score=0;
-        foreach ($num as $k=>$v){
-            if($k>=0 && $k<$score_arr[0]){
-                $score=10;
-            }elseif ($k>=$score_arr[0] && $k<$score_arr[1]){
-                $score=9;
-            }elseif ($k>=$score_arr[1] && $k<$score_arr[2]){
-                $score=8;
-            }elseif ($k>=$score_arr[2] && $k<$score_arr[3]){
-                $score=7;
-            }elseif ($k>=$score_arr[3] && $k<$score_arr[4]){
-                $score=6;
-            }elseif ($k>=$score_arr[4] && $k<$score_arr[5]){
-                $score=5;
-            }elseif ($k>=$score_arr[5] && $k<$score_arr[6]){
-                $score=4;
-            }elseif ($k>=$score_arr[6] && $k<$score_arr[7]){
-                $score=3;
-            }elseif ($k>=$score_arr[7] && $k<$score_arr[8]){
-                $score=2;
-            }elseif ($k>=$score_arr[8] && $k<$score_arr[9]){
-                $score=1;
-            }
-//            $comp_score=Db::name('comp_score')->where('comp_id',$v['comp_id'])->find();
-//            $account_s=$comp_score['account_score']+$score;
-            $app[$i]['comp_id']=$v['comp_id'];
-            $app[$i]['score']=$score;
-            $app[$i]['remark']="毛利率排名，加".$score.'分';
-            $app[$i]['account_time']=date("Y");
-            $app[$i]['add_time']=date('Y-m-d H:i:s');
-            $i+=1;
-        }
-        try{
-            for($i=0;$i<count($app);$i++){
-                Db::name('score_total')->where('comp_id',$app[$i]['comp_id'])->insert($app[$i]);
-            }
-            ajaxmsg(['status'=>0,'msg'=>'统计成功']);
-        }catch (Exception $e){
-            ajaxmsg(['status'=>-1,'msg'=>$e->getMessage()]);
-        }
-    }
+
+
+
 
 
 //    public function sss(){
