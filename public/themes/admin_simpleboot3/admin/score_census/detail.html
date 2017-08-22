@@ -10,12 +10,66 @@
 
 		<div class="row">
 			<div class="col-md-6">
-				<a class="btn btn-success" href="{:url('score_census/add')}" >执行毛利率排名加分</a>
-				<a class="btn btn-success" href="{:url('score_census/add')}" >执行销售额排名加分</a>
-				<a class="btn btn-success" href="{:url('score_census/add')}" >执行税收额排名加分</a>
+				<a class="btn btn-success" href="#" id="execRate">执行毛利率排名加分</a>
+				<a class="btn btn-success" href="#" id="execSale">执行销售额排名加分</a>
+				<a class="btn btn-success" href="#" id="execTax">执行税收额排名加分</a>
 			</div>
 		</div>
 	</div>
-	<script src="__STATIC__/js/admin.js"></script>
+ 	<script src="__STATIC__/js/admin.js"></script>
+    <script>
+		$("#execRate").on('click',function () {
+			$.ajax({
+				url:'/admin/score_census/execRateAddScore',
+				type:'post',
+				success:function (data) {
+					if(data.status==0){
+						alert(data.msg)
+					}else if(data.status==-1){
+						alert(data.msg)
+					}else{
+						alert('统计失败');
+					}
+				}
+			})
+		});
+		$("#execSale").on('click',function () {
+			$.ajax({
+				url:'/admin/score_census/execSaleAddScore',
+				dataType:'json',
+				type:'post',
+				success:function (data) {
+					if(data.status==0){
+						alert(data.msg)
+					}else if(data.status==-1){
+						alert(data.msg)
+					}else{
+						alert('统计失败');
+					}
+				}
+			})
+		});
+		$(function () {
+
+
+
+			$("#execTax").on('click',function () {
+				$.ajax({
+					url:'/admin/score_census/execTaxAddScore',
+					type:'post',
+					success:function (data) {
+						if(data.status==0){
+							alert(data.msg)
+						}else if(data.status==-1){
+							alert(data.msg)
+						}else{
+							alert('统计失败');
+						}
+					}
+				})
+			})
+
+		})
+	</script>
 </body>
 </html>

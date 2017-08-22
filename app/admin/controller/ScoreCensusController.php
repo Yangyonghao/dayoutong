@@ -9,6 +9,7 @@
 namespace app\admin\controller;
 use think\Db;
 use cmf\controller\AdminBaseController;
+use think\Exception;
 
 //公司分数排名
 class ScoreCensusController extends AdminBaseController
@@ -54,6 +55,8 @@ class ScoreCensusController extends AdminBaseController
     }
 
     public function detail(){
+
+
         return $this->fetch();
     }
     /*
@@ -63,6 +66,16 @@ class ScoreCensusController extends AdminBaseController
      * */
     public function execRateAddScore(){
         if($this->request->isAjax()){
+            //查询2017年的毛利率是否已经排名
+            $condition=[
+                'account_time'=>date("Y"),
+                'type'=>'毛利率'
+            ];
+            $add_score_list=Db::name("total_score")->where($condition)->select();
+            if(isset($add_score_list) && !empty($add_score_list)){
+                return json(['status'=>-1,'msg'=>date("Y").'的毛利率已排名加分']);
+            }
+            //查询毛利率
             $num=Db::name('comp_basic_finance')->order('gross_profit_rate desc')->select();
             $total=count($num);
             $mod     = $total % 10;
@@ -111,12 +124,12 @@ class ScoreCensusController extends AdminBaseController
                 $i+=1;
             }
             try{
-                for($i=0;$i<count($app);$i++){
-                    Db::name('score_total')->where('comp_id',$app[$i]['comp_id'])->insert($app[$i]);
+                for($j=1;$j<count($app);$j++){
+                    Db::name('total_score')->insert($app[$j]);
                 }
-                ajaxmsg(['status'=>0,'msg'=>'统计成功']);
+                return json(['status'=>0,'msg'=>'统计成功']);
             }catch (Exception $e){
-                ajaxmsg(['status'=>-1,'msg'=>$e->getMessage()]);
+                return json(['status'=>-1,'msg'=>$e->getMessage()]);
             }
         }
     }
@@ -128,7 +141,19 @@ class ScoreCensusController extends AdminBaseController
      * */
     public function execSaleAddScore(){
         if($this->request->isAjax()){
-            $num=Db::name('comp_basic_finance')->order('gross_profit_rate desc')->select();
+            //判断是否已经添加销售额排名
+            $condition=[
+                'account_time'=>date("Y"),
+                'type'=>'销售额'
+            ];
+            $add_score_list=Db::name("total_score")->where($condition)->select();
+            if(isset($add_score_list) && !empty($add_score_list)){
+                return json(['status'=>-1,'msg'=>date("Y").'的销售额已排名加分']);
+            }
+            //查询每个公司十二个月的销售额，并倒序
+            $new_year=date("Y");
+            $num=Db::query("select sum(monthly_sales) as total_sales,comp_id from spec_comp_statements where input_year=".$new_year." group by comp_id ORDER BY total_sales DESC");
+
             $a = ceil(count($num)/10);//前几名几个人  2
             $d = intval(count($num)/10);//前几名几个人  1
             $b = count($num)%10;//前几名，每组多少人         3
@@ -137,7 +162,7 @@ class ScoreCensusController extends AdminBaseController
                 ++$i;
                 if($i < $a*$b) {
                     $c = ceil($i/$a);
-                }else {
+                }elseif($i > $b){
                     $c = ceil(($i - $a*$b)/$d)+$b;
                 }
                 switch ($c) {
@@ -175,17 +200,23 @@ class ScoreCensusController extends AdminBaseController
                 $app[$i]['comp_id']=$v['comp_id'];
                 $app[$i]['score']=$score;
                 $app[$i]['remark']="税收额排名第".$c."，加".$score.'分';
-                $app[$i]['type']="毛利率";
+                $app[$i]['type']="销售额";
                 $app[$i]['account_time']=date("Y");
                 $app[$i]['add_time']=date('Y-m-d H:i:s');
             }
             try{
-                for($i=0;$i<count($app);$i++){
-                    Db::name('score_total')->where('comp_id',$app[$i]['comp_id'])->insert($app[$i]);
+                $arg=[];
+                for($j=1;$j<=count($app);$j++){
+                    $insert_id=Db::name('total_score')->insertGetId($app[$j]);
+                    array_push($arg,$insert_id);
                 }
-                ajaxmsg(['status'=>0,'msg'=>'统计成功']);
+                if(!empty($arg)){
+                    return json(['status'=>0,'msg'=>'统计成功']);
+                }else{
+                    return json(['status'=>-1,'msg'=>'统计失败']);
+                }
             }catch (Exception $e){
-                ajaxmsg(['status'=>-1,'msg'=>$e->getMessage()]);
+                return json(['status'=>-1,'msg'=>$e->getMessage()]);
             }
         }
     }
@@ -196,16 +227,27 @@ class ScoreCensusController extends AdminBaseController
      * */
     public function execTaxAddScore(){
         if($this->request->isAjax()){
-            $num=Db::name('comp_basic_finance')->order('gross_profit_rate desc')->select();
-            $a = ceil(count($num)/10);//前几名几个人  2
-            $d = intval(count($num)/10);//前几名几个人  1
-            $b = count($num)%10;//前几名，每组多少人         3
+            $condition=[
+                'account_time'=>date("Y"),
+                'type'=>'税收额'
+            ];
+            $add_score_list=Db::name("total_score")->where($condition)->select();
+            if(isset($add_score_list) && !empty($add_score_list)){
+                return json(['status'=>-1,'msg'=>date("Y").'的税收额已排名加分']);
+            }
+            //查询每个公司十二个月的税收额，并倒序
+            $new_year=date("Y");
+            $result=Db::query("select sum(monthly_tax_amount) as total_sales,comp_id from spec_comp_statements where input_year=".$new_year." group by comp_id ORDER BY total_sales DESC");
+
+            $a = ceil(count($result)/10);//前几名几个人  2
+            $d = intval(count($result)/10);//前几名几个人  1
+            $b = count($result)%10;//前几名，每组多少人         3
             $app=[];
-            foreach ($num as  $i=> $v) {
+            foreach ($result as  $i=> $v) {
                 ++$i;
                 if($i < $a*$b) {
                     $c = ceil($i/$a);
-                }else {
+                }else if($i > $b){
                     $c = ceil(($i - $a*$b)/$d)+$b;
                 }
                 switch ($c) {
@@ -243,18 +285,25 @@ class ScoreCensusController extends AdminBaseController
                 $app[$i]['comp_id']=$v['comp_id'];
                 $app[$i]['score']=$score;
                 $app[$i]['remark']="税收额排名第".$c."，加".$score.'分';
-                $app[$i]['type']="毛利率";
+                $app[$i]['type']="税收额";
                 $app[$i]['account_time']=date("Y");
                 $app[$i]['add_time']=date('Y-m-d H:i:s');
             }
             try{
-                for($i=0;$i<count($app);$i++){
-                    Db::name('score_total')->where('comp_id',$app[$i]['comp_id'])->insert($app[$i]);
+                $arg=[];
+                for($j=1;$j<=count($app);$j++){
+                    $insert_id=Db::name('total_score')->insertGetId($app[$j]);
+                    array_push($arg,$insert_id);
                 }
-                ajaxmsg(['status'=>0,'msg'=>'统计成功']);
+                if(!empty($arg)){
+                    return json(['status'=>0,'msg'=>'统计成功']);
+                }else{
+                    return json(['status'=>-1,'msg'=>'统计失败']);
+                }
             }catch (Exception $e){
-                ajaxmsg(['status'=>-1,'msg'=>$e->getMessage()]);
+                return json(['status'=>-1,'msg'=>$e->getMessage()]);
             }
         }
     }
+
 }
