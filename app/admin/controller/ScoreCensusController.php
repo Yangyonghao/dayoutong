@@ -72,7 +72,7 @@ class ScoreCensusController extends AdminBaseController
                 'type'=>'毛利率'
             ];
             $add_score_list=Db::name("total_score")->where($condition)->select();
-            if(isset($add_score_list) && !empty($add_score_list)){
+            if(count($add_score_list)>0){
                 return json(['status'=>-1,'msg'=>date("Y").'的毛利率已排名加分']);
             }
             //查询毛利率
@@ -147,7 +147,7 @@ class ScoreCensusController extends AdminBaseController
                 'type'=>'销售额'
             ];
             $add_score_list=Db::name("total_score")->where($condition)->select();
-            if(isset($add_score_list) && !empty($add_score_list)){
+            if(count($add_score_list)>0){
                 return json(['status'=>-1,'msg'=>date("Y").'的销售额已排名加分']);
             }
             //查询每个公司十二个月的销售额，并倒序
@@ -232,7 +232,7 @@ class ScoreCensusController extends AdminBaseController
                 'type'=>'税收额'
             ];
             $add_score_list=Db::name("total_score")->where($condition)->select();
-            if(isset($add_score_list) && !empty($add_score_list)){
+            if(count($add_score_list)>0){
                 return json(['status'=>-1,'msg'=>date("Y").'的税收额已排名加分']);
             }
             //查询每个公司十二个月的税收额，并倒序
