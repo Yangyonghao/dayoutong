@@ -15,6 +15,21 @@ use think\Exception;
 class ScoreCensusController extends AdminBaseController
 {
     public function index(){
+        $num=Db::name('comp_basic_finance')->order('gross_profit_rate desc')->select();
+        $total=count($num);
+        $mod     = $total % 10;
+        $num_s   = intval($total / 10);
+        $score_arr = array();
+        for ( $i = 0 ; $i < 10; $i++ ) {
+            $score_arr[] = ($i + 1) * $num_s;
+        }
+        foreach ($score_arr as $key => $value) {
+            if ($key < $mod) {
+                $score_arr[$key] = $value + $key + 1;
+            } else {
+                $score_arr[$key] = $value + $mod;
+            }
+        }
         /**搜索条件**/
         $comp_name = trim($this->request->param('comp_name'));
         $where=['status'=>1];
@@ -36,19 +51,37 @@ class ScoreCensusController extends AdminBaseController
 
     //总分数记录表
     public function scoreList(){
-        $subsql = Db::table('spec_total_score')->where(['account_time'=>'2017'])->field('sum(score) as score,account_time,comp_id')->group('comp_id')->buildSql();
-        $scoreList=Db::table('spec_comp_score')->alias('a')->join([$subsql=> 'w'], 'a.comp_id = w.comp_id')->field('a.total_score,a.comp_id,w.score,w.account_time')->order("a.total_score DESC")->paginate(10);
+        /**搜索条件**/
+        $comp_name = trim($this->request->param('comp_name'));
+        $account_time = trim($this->request->param('account_time'));
+        $sort_list = trim($this->request->param('sort_list'));
+        $where=[];
+        if ($comp_name) {
+            $where['comp_name'] = ['like', "%$comp_name%"];
+        }
+        if ($account_time) {
+            $where['account_time'] = ['eq', "$account_time"];
+        }
+
+
+        $subsql = Db::table('spec_total_score')->field('sum(score) as score,account_time,comp_id')->group('comp_id')->buildSql();
+        $scoreList=Db::table('spec_comp_score')->alias('a')
+            ->join([$subsql=> 'w'], 'a.comp_id = w.comp_id')
+            ->join("spec_comp_basic scb","a.comp_id = scb.id")
+            ->field('a.total_score,a.comp_id,w.score,w.account_time,scb.comp_name')
+            ->where($where)
+            ->order("a.total_score DESC")->paginate(20);
+
         //获取分页显示
         $page = $scoreList->render();
         $app=[];
         foreach ($scoreList as $k=>$val){
-            $data=['status'=>1,'id'=>$val['comp_id']];
-            $result=$this->getProjectInfo('comp_basic',$data);
-            $val['comp_name']=isset($result['comp_name'])?$result['comp_name']:'--';
+            $val['comp_name']=isset($val['comp_name'])?$val['comp_name']:'--';
             $val['sum_score']=$val['score']+$val['total_score'];
             $app[]=$val;
         }
 
+        $this->assign('sort_list',$sort_list);
         $this->assign('page',$page);
         $this->assign('scoreList',$app);
         return $this->fetch();
@@ -304,6 +337,28 @@ class ScoreCensusController extends AdminBaseController
                 return json(['status'=>-1,'msg'=>$e->getMessage()]);
             }
         }
+    }
+
+    //分数日志表
+    public function scoreLog(){
+        $where=[];
+        $score_log_list=Db::name("comp_score_log")->where($where)->order("add_time DESC")->paginate(20);
+        //获取分页显示
+        $page = $score_log_list->render();
+        $this->assign("page",$page);
+        $this->assign("score_log_list",$score_log_list);
+        return $this->fetch();
+    }
+
+    //分数日志表
+    public function totalScoreLog(){
+        $where=[];
+        $score_log_arr=Db::name("total_score")->where($where)->order("add_time DESC")->paginate(20);
+        //获取分页显示
+        $page = $score_log_arr->render();
+        $this->assign("page",$page);
+        $this->assign("score_log_arr",$score_log_arr);
+        return $this->fetch();
     }
 
 }

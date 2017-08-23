@@ -1,0 +1,47 @@
+<include file="public@header" />
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="{:url('ScoreCensus/scoreLog')}">财务部管理</a></li>
+			<li ><a href="{:url('ScoreCensus/totalScoreLog')}">财务部基本信息管理</a></li>
+
+		</ul>
+        <form class="well form-inline margin-top-20" method="post" action="{:url('comp_statements/index')}">
+			企业名称:
+            <input type="text" class="form-control" name="comp_name" style="width: 136px;" value="{:input('request.comp_name/s','')}" placeholder="请输入企业名称">
+			月份:
+			<input type="text" class="form-control" name="input_monthly" style="width: 136px;" value="{:input('request.input_monthly/s','')}" placeholder="请输入录入月份">
+            <input type="submit" class="btn btn-primary" value="搜索" />
+            <a class="btn btn-danger" href="{:url('ScoreCensus/scoreLog')}">清空</a>
+        </form>
+		<table class="table table-hover table-bordered">
+			<thead>
+				<tr>
+					<th>企业ID</th>
+					<th>分数</th>
+					<th>备注</th>
+					<th>所属部门</th>
+					<th>添加时间</th>
+					<th>关键字</th>
+				</tr>
+			</thead>
+			<tbody>
+				<volist name="score_log_list" id="vo">
+					<tr>
+						<td>{$vo.comp_id}</td>
+						<td>{$vo.score}</td>
+						<td>{$vo.score_source}</td>
+						<td>{$vo.department_type}</td>
+						<td>{$vo.add_time}</td>
+						<td>{$vo.key_name}</td>
+					</tr>
+				</volist>
+
+			</tbody>
+		</table>
+		<ul class="pagination">{$page|default=''}</ul>
+	</div>
+	<script src="__STATIC__/js/admin.js"></script>
+</body>
+</html>
