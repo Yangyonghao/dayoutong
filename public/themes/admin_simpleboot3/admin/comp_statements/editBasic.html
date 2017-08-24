@@ -18,11 +18,8 @@
 						<div class="form-group">
 							<label for="comp_name"><span class="form-required">*</span>企业名称</label>
 							<div>
-								<select class="form-control" id="comp_name" name="comp_id" >
-									<volist name="comp_arr" id="vo">
-										<option value="{$vo.id}" <?php if($vo['id'] == $basic_finance_info['comp_id'])echo "selected=\"selected\"";?>>{$vo.comp_name}</option>
-									</volist>
-								</select>
+								<input type="text" class="form-control" id="comp_name" value="{$basic_finance_info.comp_name}" readonly>
+								<input type="hidden" class="form-group" name="comp_id" value="{$basic_finance_info.comp_id}" >
 							</div>
 						</div>
 						<!--月度销售额-->
