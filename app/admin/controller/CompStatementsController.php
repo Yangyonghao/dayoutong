@@ -382,7 +382,7 @@ class CompStatementsController extends AdminBaseController
 
         if(isset($data['agency_fee'])){
             //是否缴纳代理记账费
-            $logistics=$data['agency_fee']=='是'?["remark" => "有物流,加2分", "score" => "+2"]:["remark" => "没有物流，减2分", "score" => "-2"];
+            $logistics=$data['agency_fee']=='是'?["remark" => "缴纳记账费,加5分", "score" => "+5"]:["remark" => "没有缴纳记账费,减5分", "score" => "-5"];
             $account_score['agency_fee']=$logistics;
         }
 
