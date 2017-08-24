@@ -342,7 +342,18 @@ class ScoreCensusController extends AdminBaseController
     //分数日志表
     public function scoreLog(){
         $where=[];
-        $score_log_list=Db::name("comp_score_log")->where($where)->order("add_time DESC")->paginate(20);
+        $comp_name=$this->request->param("comp_name");
+        $department_type=$this->request->param("department_type");
+        if($comp_name){
+            $where['comp_name'] = ['like', "%$comp_name%"];
+        }
+        if($department_type){
+            $where['department_type'] = ['like', "%$department_type%"];
+        }
+        $score_log_list=Db::name("comp_score_log")->alias('a')
+            ->join("spec_comp_basic scb","scb.id=a.comp_id")
+            ->field("a.*,scb.comp_name")
+            ->where($where)->order("add_time DESC")->paginate(20);
         //获取分页显示
         $page = $score_log_list->render();
         $this->assign("page",$page);
@@ -350,10 +361,21 @@ class ScoreCensusController extends AdminBaseController
         return $this->fetch();
     }
 
-    //分数日志表
+    //总分数日志表
     public function totalScoreLog(){
         $where=[];
-        $score_log_arr=Db::name("total_score")->where($where)->order("add_time DESC")->paginate(20);
+        $comp_name=$this->request->param("comp_name");
+        $type=$this->request->param("type");
+        if($comp_name){
+            $where['comp_name'] = ['like', "%$comp_name%"];
+        }
+        if($type){
+            $where['type'] = ['like', "%$type%"];
+        }
+        $score_log_arr=Db::name("total_score")->alias('a')
+            ->join("spec_comp_basic scb","scb.id=a.comp_id")
+            ->field("a.*,scb.comp_name")
+            ->where($where)->order("add_time DESC")->paginate(20);
         //获取分页显示
         $page = $score_log_arr->render();
         $this->assign("page",$page);
