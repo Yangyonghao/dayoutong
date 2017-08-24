@@ -347,7 +347,7 @@ class CompStatementsController extends AdminBaseController
                 $comp_score=[
                     'comp_id'=>$comp_id,
                     'total_score'=>$new_total_score,
-                    'sales_score'=>$score,
+                    'account_score'=>$score,
                 ];
                 //更新分数
                 Db::name('comp_score')->where('comp_id',$comp_id)->update($comp_score);
