@@ -26,6 +26,7 @@ class CompFinanceModel extends CommonModel
             unset($data['comp_id']);unset($data['add_time']);
             $result_list=$this->addScoreRole($data);
             $i = 0;$score_num=0;
+            $app=[];
             if(is_array($result_list['b'])){
                 foreach ($result_list['b'] as $key => $value) {
                     $app[$i]['comp_id']=$comp_id;
@@ -40,7 +41,8 @@ class CompFinanceModel extends CommonModel
                 }
             }
 
-            if(Db::name('comp_score_log')->insertAll($app)){
+
+            if(!empty($app) && Db::name('comp_score_log')->insertAll($app)){
                 $comp_score_msg=self::getCompScoreBasic($comp_id);
                 $total_num=$comp_score_msg['total_score']+$score_num;
                 $comp_score=[
