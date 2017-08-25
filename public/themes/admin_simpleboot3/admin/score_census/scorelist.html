@@ -1,49 +1,42 @@
 <include file="public@header" />
 </head>
 <body>
-	<div class="wrap js-check-wrap">
-		<ul class="nav nav-tabs">
-			<li><a href="{:url('score_census/index')}">基本分数列表</a></li>
-			<li class="active"><a href="{:url('score_census/scorelist')}">总分数列表</a></li>
-			<li ><a href="{:url('score_census/detail')}">加分项执行</a></li>
-		</ul>
-        <form class="well form-inline margin-top-20" method="post" action="{:url('score_census/scorelist')}">
-            用户名:
-            <input type="text" class="form-control" name="comp_name" style="width: 120px;" value="{:input('request.comp_name/s','')}" placeholder="请输入企业名称">
-			年份:
-			<input type="text" class="form-control" name="account_time" style="width: 120px;" value="{:input('request.account_time/s','')}" placeholder="请输入年份">
-			<!--条数:-->
-			<!--<select name="sort_list" class="form-control">-->
-				<!--<option value="10" <?php if($sort_list==10){echo "selected=\"selected\"";}?>>10</option>-->
-				<!--<option value="20" <?php if($sort_list==20){echo "selected=\"selected\""; }?>>20</option>-->
-				<!--<option value="50" <?php if($sort_list==50){echo "selected=\"selected\""; }?>>50</option>-->
-			<!--</select>-->
-            <input type="submit" class="btn btn-primary" value="搜索" />
-            <a class="btn btn-danger" href="{:url('score_census/scorelist')}">清空</a>
-        </form>
+<div class="wrap js-check-wrap">
+	<ul class="nav nav-tabs">
+		<li><a href="{:url('score_census/index')}">基本分数列表</a></li>
+		<li class="active"><a href="{:url('score_census/scorelist')}">总分数列表</a></li>
+		<li ><a href="{:url('score_census/detail')}">加分项执行</a></li>
 
-		<table class="table table-hover table-bordered">
-			<thead>
-				<tr>
-					<th>企业名称</th>
-					<th>总分</th>
-					<th>统计年份</th>
-					<!--<th width="130">{:lang('ACTIONS')}</th>-->
-				</tr>
-			</thead>
-			<tbody>
-				<volist name="scoreList" id="vo">
-					<tr>
-						<td>{$vo.comp_name}</td>
-						<td>{$vo.sum_score}</td>
-						<td>{$vo.account_time}</td>
-						<!--<td><a href="{:url('CompBasic/edit',array('id'=>$vo.comp_id))}">编辑</a></td>-->
-					</tr>
-				</volist>
-			</tbody>
-		</table>
-		<ul class="pagination">{$page|default=''}</ul>
-	</div>
-	<script src="__STATIC__/js/admin.js"></script>
+	</ul>
+	<form class="well form-inline margin-top-20" method="post" action="{:url('score_census/index')}">
+		用户名:
+		<input type="text" class="form-control" name="comp_name" style="width: 120px;" value="{:input('request.comp_name/s','')}" placeholder="请输入企业名称">
+		<input type="submit" class="btn btn-primary" value="搜索" />
+		<a class="btn btn-danger" href="{:url('score_census/index')}">清空</a>
+	</form>
+
+	<table class="table table-hover table-bordered">
+		<thead>
+		<tr>
+			<th>企业名称</th>
+			<th>总分</th>
+			<th>统计年份</th>
+			<!--<th width="130">{:lang('ACTIONS')}</th>-->
+		</tr>
+		</thead>
+		<tbody>
+		<volist name="scoreList" id="vo">
+			<tr>
+				<td>{$vo.comp_name}</td>
+				<td>{$vo.sum_score}</td>
+				<td>{$vo.account_time}</td>
+				<!--<td><a href="{:url('CompBasic/edit',array('id'=>$vo.comp_id))}">编辑</a></td>-->
+			</tr>
+		</volist>
+		</tbody>
+	</table>
+	<ul class="pagination">{$page|default=''}</ul>
+</div>
+<script src="__STATIC__/js/admin.js"></script>
 </body>
 </html>
