@@ -157,10 +157,16 @@ class ScoreCensusController extends AdminBaseController
                 $i+=1;
             }
             try{
-                for($j=1;$j<count($app);$j++){
-                    Db::name('total_score')->insert($app[$j]);
+                $arg=[];
+                for($j=0;$j<count($app);$j++){
+                    $insert_id=Db::name('total_score')->insertGetId($app[$j]);
+                    array_push($arg,$insert_id);
                 }
-                return json(['status'=>0,'msg'=>'统计成功']);
+                if(!empty($arg)){
+                    return json(['status'=>0,'msg'=>'统计成功']);
+                }else{
+                    return json(['status'=>-1,'msg'=>'统计失败']);
+                }
             }catch (Exception $e){
                 return json(['status'=>-1,'msg'=>$e->getMessage()]);
             }
@@ -232,7 +238,7 @@ class ScoreCensusController extends AdminBaseController
                 }
                 $app[$i]['comp_id']=$v['comp_id'];
                 $app[$i]['score']=$score;
-                $app[$i]['remark']="税收额排名第".$c."，加".$score.'分';
+                $app[$i]['remark']="销售额排名第".$c."，加".$score.'分';
                 $app[$i]['type']="销售额";
                 $app[$i]['account_time']=date("Y");
                 $app[$i]['add_time']=date('Y-m-d H:i:s');
