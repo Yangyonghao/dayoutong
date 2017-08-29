@@ -18,9 +18,10 @@ class CompStatementsModel extends Model
     public function addCompStatements($data){
 
         //添加到公司信息表
+        $input_date=$data['input_date'];unset($data['input_date']);
         $data['add_time']=date('Y-m-d H:i:s');
-        $data['input_monthly']=date("Ym");
-        $data['input_year']=date("Y");
+        $data['input_monthly']=substr($input_date,0,4).substr($input_date,5,8);
+        $data['input_year']=substr($input_date,0,4);
         $result_id=$this->insertGetId($data);
         return $result_id;
     }

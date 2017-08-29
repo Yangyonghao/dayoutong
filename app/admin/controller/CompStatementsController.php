@@ -166,6 +166,7 @@ class CompStatementsController extends AdminBaseController
             ->join('spec_comp_basic w','a.comp_id = w.id')
             ->where('a.id',$statement_id)
             ->find();
+        $statement_info['input_date']=substr($statement_info['input_monthly'],0,4)."-".substr($statement_info['input_monthly'],4,6);
         $this->assign('statement_info', $statement_info);
         return $this->fetch();
     }
@@ -185,6 +186,9 @@ class CompStatementsController extends AdminBaseController
             }
             $id = $data_post['id'];
             unset($data_post['id']);
+            $input_date=$data_post['input_date'];unset($data_post['input_date']);
+            $data_post['input_monthly']=substr($input_date,0,4).substr($input_date,5,8);
+            $data_post['input_year']=substr($input_date,0,4);
             $result_id = Db::name('comp_statements')->where('id', $id)->update($data_post);
             if ($result_id) {
                 $this->success('保存成功!', url('CompStatements/index'));

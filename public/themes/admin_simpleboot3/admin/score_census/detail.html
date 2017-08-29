@@ -9,18 +9,96 @@
 		</ul>
 		<br/>
 		<div class="row">
-			<div class="col-md-6">
-				<a class="btn btn-success" href="#" id="execRate">执行毛利率排名加分</a>
-				<a class="btn btn-success" href="#" id="execSale">执行销售额排名加分</a>
-				<a class="btn btn-success" href="#" id="execTax">执行税收额排名加分</a>
+			<div class="col-md-2">
+				<input type="text"  id ="valid_end_date"  class="Wdate form-control"  onFocus="WdatePicker({dateFmt:'yyyy' })" />
+			</div>
+			<div class="col-md-10">
+				<!--data-target="#myModal"-->
+				<button class="btn btn-primary" data-toggle="modal" id="aaa">执行毛利率排名加分</button>
+				<button class="btn btn-primary" data-toggle="modal" id="bbb">执行销售额排名加分</button>
+				<button class="btn btn-primary" data-toggle="modal" id="ccc">执行税收额排名加分</button>
+				<!--<a class="btn btn-success" href="#" id="execRate">执行毛利率排名加分</a>-->
+				<!--<a class="btn btn-success" href="#" id="execSale">执行销售额排名加分</a>-->
+				<!--<a class="btn btn-success" href="#" id="execTax">执行税收额排名加分</a>-->
 			</div>
 		</div>
 	</div>
+
+	<!-- 执行毛利率加分（Modal） -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">提示</h4>
+				</div>
+				<div class="modal-body">确认执行毛利率排名加分吗？</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<a class="btn btn-success" href="#" id="execRate">确定</a>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal -->
+	</div>
+
+	<!-- 执行销售额排名加分（Modal） -->
+	<div class="modal fade" id="mySale" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">提示</h4>
+				</div>
+				<div class="modal-body">确认执行销售额排名加分吗？</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<a class="btn btn-success" href="#" id="execSale">执行销售额排名加分</a>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal -->
+	</div>
+	<!-- 执行毛利率加分（Modal） -->
+	<div class="modal fade" id="myTax" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="">提示</h4>
+				</div>
+				<div class="modal-body">确认执行税收额排名加分吗？</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<a class="btn btn-success" href="#" id="execTax">确定</a>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal -->
+	</div>
+
  	<script src="__STATIC__/js/admin.js"></script>
     <script>
+		/*******************根据毛利率排名**************/
+		$("#aaa").on("click",function () {
+			var choose_date=$("#valid_end_date").val();
+			if(!choose_date){
+				alert("请选择执行的年份");
+				return false;
+			}
+			$('#myModal').find(".modal-body").html("确认执行"+choose_date+"年的毛利率排名加分吗？");
+			var input_btn="<input type='hidden' value='"+choose_date+"' id='rate_date'>";
+			$('#myModal').find(".modal-footer").append(input_btn);
+			$('#myModal').modal('show')
+		});
 		$("#execRate").on('click',function () {
+			var rate_date=$("#rate_date").val();
+			if(!rate_date){
+				alert("请选择执行的年份");
+				return false;
+			}
+
 			$.ajax({
 				url:'/admin/score_census/execRateAddScore',
+				data:{"rate_date":rate_date},
+				dataType:"json",
 				type:'post',
 				success:function (data) {
 					if(data.status==0){
@@ -30,12 +108,31 @@
 					}else{
 						alert('统计失败');
 					}
+					$('#myModal').modal('hide')
 				}
 			})
 		});
+		/**********根据销售额排名加分*************/
+		$("#bbb").on("click",function () {
+			var choose_date=$("#valid_end_date").val();
+			if(!choose_date){
+				alert("请选择执行的年份");
+				return false;
+			}
+			$('#mySale').find(".modal-body").html("确认执行"+choose_date+"年的销售额排名加分吗？");
+			var input_btn="<input type='hidden' value='"+choose_date+"' id='sale_date'>";
+			$('#mySale').find(".modal-footer").append(input_btn);
+			$('#mySale').modal('show')
+		});
 		$("#execSale").on('click',function () {
+			var sale_date=$("#sale_date").val();
+			if(!sale_date){
+				alert("请选择执行的年份");
+				return false;
+			}
 			$.ajax({
 				url:'/admin/score_census/execSaleAddScore',
+				data:{"sale_date":sale_date},
 				dataType:'json',
 				type:'post',
 				success:function (data) {
@@ -46,30 +143,45 @@
 					}else{
 						alert('统计失败');
 					}
+					$('#mySale').modal('hide')
 				}
 			})
 		});
-		$(function () {
-
-
-
-			$("#execTax").on('click',function () {
-				$.ajax({
-					url:'/admin/score_census/execTaxAddScore',
-					type:'post',
-					success:function (data) {
-						if(data.status==0){
-							alert(data.msg)
-						}else if(data.status==-1){
-							alert(data.msg)
-						}else{
-							alert('统计失败');
-						}
+		/**********根据销售额排名加分开始*************/
+		$("#ccc").on("click",function () {
+			var choose_date=$("#valid_end_date").val();
+			if(!choose_date){
+				alert("请选择执行的年份");
+				return false;
+			}
+			$('#myTax').find(".modal-body").html("确认执行"+choose_date+"年的税收额排名加分吗？");
+			var input_btn="<input type='hidden' value='"+choose_date+"' id='tax_date'>";
+			$('#myTax').find(".modal-footer").append(input_btn);
+			$('#myTax').modal('show')
+		});
+		$("#execTax").on('click',function () {
+			var tax_date=$("#tax_date").val();
+			if(!tax_date){
+				alert("请选择执行的年份");
+				return false;
+			}
+			$.ajax({
+				url:'/admin/score_census/execTaxAddScore',
+				data:{"tax_date":tax_date},
+				type:'post',
+				success:function (data) {
+					if(data.status==0){
+						alert(data.msg)
+					}else if(data.status==-1){
+						alert(data.msg)
+					}else{
+						alert('统计失败');
 					}
-				})
+					$('#myTax').modal('hide')
+				}
 			})
-
 		})
+
 	</script>
 </body>
 </html>

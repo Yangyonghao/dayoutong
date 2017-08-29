@@ -63,33 +63,23 @@ class ScoreCensusController extends AdminBaseController
             $where['account_time'] = ['eq', "$account_time"];
         }
 
-
         $subsql = Db::table('spec_total_score')->field('sum(score) as score,account_time,comp_id')->group('comp_id')->buildSql();
         $scoreList=Db::table('spec_comp_score')->alias('a')
             ->join([$subsql=> 'w'], 'a.comp_id = w.comp_id')
             ->join("spec_comp_basic scb","a.comp_id = scb.id")
-            ->field('a.total_score,a.comp_id,w.score,w.account_time,scb.comp_name')
+            ->field('(a.total_score+w.score) as sum_score,a.total_score,a.comp_id,w.score,w.account_time,scb.comp_name')
             ->where($where)
-            ->order("a.total_score DESC")->paginate(20);
-
+            ->order("sum_score DESC")->paginate(20);
         //获取分页显示
         $page = $scoreList->render();
-        $app=[];
-        foreach ($scoreList as $k=>$val){
-            $val['comp_name']=isset($val['comp_name'])?$val['comp_name']:'--';
-            $val['sum_score']=$val['score']+$val['total_score'];
-            $app[]=$val;
-        }
 
         $this->assign('sort_list',$sort_list);
         $this->assign('page',$page);
-        $this->assign('scoreList',$app);
+        $this->assign('scoreList',$scoreList);
         return $this->fetch();
     }
 
     public function detail(){
-
-
         return $this->fetch();
     }
     /*
@@ -99,14 +89,15 @@ class ScoreCensusController extends AdminBaseController
      * */
     public function execRateAddScore(){
         if($this->request->isAjax()){
+            $rate_date=$this->request->param("rate_date");
             //查询2017年的毛利率是否已经排名
             $condition=[
-                'account_time'=>date("Y"),
+                'account_time'=>$rate_date,
                 'type'=>'毛利率'
             ];
             $add_score_list=Db::name("total_score")->where($condition)->select();
             if(count($add_score_list)>0){
-                return json(['status'=>-1,'msg'=>date("Y").'的毛利率已排名加分']);
+                return json(['status'=>-1,'msg'=>$rate_date.'的毛利率已排名加分']);
             }
             //查询毛利率
             $num=Db::name('comp_basic_finance')->order('gross_profit_rate desc')->select();
@@ -152,7 +143,7 @@ class ScoreCensusController extends AdminBaseController
                 $app[$i]['score']=$score;
                 $app[$i]['remark']="毛利率排名，加".$score.'分';
                 $app[$i]['type']="毛利率";
-                $app[$i]['account_time']=date("Y");
+                $app[$i]['account_time']=$rate_date;
                 $app[$i]['add_time']=date('Y-m-d H:i:s');
                 $i+=1;
             }

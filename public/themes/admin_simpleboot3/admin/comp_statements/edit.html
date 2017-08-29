@@ -31,6 +31,12 @@
 								<input type="hidden" class="form-group" name="comp_id" value="{$statement_info.comp_id}" >
 							</div>
 						</div>
+						<div class="form-group">
+							<label for="monthly-sales"><span class="form-required">*</span>录入时间</label>
+							<div>
+								<input type="text" name="input_date" class="Wdate form-control"  onFocus="WdatePicker({dateFmt:'yyyy-MM' })" value="{$statement_info.input_date}"/>
+							</div>
+						</div>
 						<!--月度销售额-->
 						<div class="form-group">
 							<label for="monthly-sales"><span class="form-required">*</span>月度销售额</label>
