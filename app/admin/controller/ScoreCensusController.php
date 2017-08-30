@@ -171,17 +171,18 @@ class ScoreCensusController extends AdminBaseController
      * */
     public function execSaleAddScore(){
         if($this->request->isAjax()){
+            $sale_date=$this->request->param("sale_date");
             //判断是否已经添加销售额排名
             $condition=[
-                'account_time'=>date("Y"),
+                'account_time'=>$sale_date,
                 'type'=>'销售额'
             ];
             $add_score_list=Db::name("total_score")->where($condition)->select();
             if(count($add_score_list)>0){
-                return json(['status'=>-1,'msg'=>date("Y").'的销售额已排名加分']);
+                return json(['status'=>-1,'msg'=>$sale_date.'的销售额已排名加分']);
             }
             //查询每个公司十二个月的销售额，并倒序
-            $new_year=date("Y");
+            $new_year=$sale_date;
             $num=Db::query("select sum(monthly_sales) as total_sales,comp_id from spec_comp_statements where input_year=".$new_year." group by comp_id ORDER BY total_sales DESC");
 
             $a = ceil(count($num)/10);//前几名几个人  2
@@ -231,7 +232,7 @@ class ScoreCensusController extends AdminBaseController
                 $app[$i]['score']=$score;
                 $app[$i]['remark']="销售额排名第".$c."，加".$score.'分';
                 $app[$i]['type']="销售额";
-                $app[$i]['account_time']=date("Y");
+                $app[$i]['account_time']=$sale_date;
                 $app[$i]['add_time']=date('Y-m-d H:i:s');
             }
             try{
@@ -257,16 +258,17 @@ class ScoreCensusController extends AdminBaseController
      * */
     public function execTaxAddScore(){
         if($this->request->isAjax()){
+            $tax_date=$this->request->param("tax_date");
             $condition=[
-                'account_time'=>date("Y"),
+                'account_time'=>$tax_date,
                 'type'=>'税收额'
             ];
             $add_score_list=Db::name("total_score")->where($condition)->select();
             if(count($add_score_list)>0){
-                return json(['status'=>-1,'msg'=>date("Y").'的税收额已排名加分']);
+                return json(['status'=>-1,'msg'=>$tax_date.'的税收额已排名加分']);
             }
             //查询每个公司十二个月的税收额，并倒序
-            $new_year=date("Y");
+            $new_year=$tax_date;
             $result=Db::query("select sum(monthly_tax_amount) as total_sales,comp_id from spec_comp_statements where input_year=".$new_year." group by comp_id ORDER BY total_sales DESC");
 
             $a = ceil(count($result)/10);//前几名几个人  2
@@ -316,7 +318,7 @@ class ScoreCensusController extends AdminBaseController
                 $app[$i]['score']=$score;
                 $app[$i]['remark']="税收额排名第".$c."，加".$score.'分';
                 $app[$i]['type']="税收额";
-                $app[$i]['account_time']=date("Y");
+                $app[$i]['account_time']=$tax_date;
                 $app[$i]['add_time']=date('Y-m-d H:i:s');
             }
             try{
