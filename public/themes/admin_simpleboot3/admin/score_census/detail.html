@@ -9,10 +9,16 @@
 		</ul>
 		<br/>
 		<div class="row">
-			<div class="col-md-2">
-				<input type="text"  id ="valid_end_date"  class="Wdate form-control"  onFocus="WdatePicker({dateFmt:'yyyy' })" />
+			<div class="col-md-4">
+				<div class="col-md-3" style="padding-right:0;">
+					<span style="height:34px;line-height: 34px;" class="pull-right">年 份：</span>
+				</div>
+				<div class="col-md-9">
+					<input type="text"  id ="valid_end_date"  class="pull-left Wdate form-control"  onFocus="WdatePicker({dateFmt:'yyyy' })" placeholder="请选择年份" />
+				</div>
+
 			</div>
-			<div class="col-md-10">
+			<div class="col-md-8">
 				<!--data-target="#myModal"-->
 				<button class="btn btn-primary" data-toggle="modal" id="aaa">执行毛利率排名加分</button>
 				<button class="btn btn-primary" data-toggle="modal" id="bbb">执行销售额排名加分</button>
