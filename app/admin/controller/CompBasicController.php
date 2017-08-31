@@ -35,11 +35,12 @@ class CompBasicController extends AdminBaseController
         $where = ["status" => 1];
         /**搜索条件**/
         $comp_name = trim($this->request->param('comp_name'));
-
+        $search=[];
         if ($comp_name) {
             $where['comp_name'] = ['like', "%$comp_name%"];
+            $search['comp_name'] =$comp_name;
         }
-        $result_list=Db::name('comp_basic')->where($where)->order("id DESC")->paginate(10);
+        $result_list=Db::name('comp_basic')->where($where)->order("id DESC")->paginate(10)->appends($search);
         // 获取分页显示
         $page = $result_list->render();
         $this->assign('result_list',$result_list);

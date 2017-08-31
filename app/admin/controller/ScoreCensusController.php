@@ -15,33 +15,20 @@ use think\Exception;
 class ScoreCensusController extends AdminBaseController
 {
     public function index(){
-        $num=Db::name('comp_basic_finance')->order('gross_profit_rate desc')->select();
-        $total=count($num);
-        $mod     = $total % 10;
-        $num_s   = intval($total / 10);
-        $score_arr = array();
-        for ( $i = 0 ; $i < 10; $i++ ) {
-            $score_arr[] = ($i + 1) * $num_s;
-        }
-        foreach ($score_arr as $key => $value) {
-            if ($key < $mod) {
-                $score_arr[$key] = $value + $key + 1;
-            } else {
-                $score_arr[$key] = $value + $mod;
-            }
-        }
         /**搜索条件**/
         $comp_name = trim($this->request->param('comp_name'));
         $where=['status'=>1];
+        $search=[];
         if ($comp_name) {
             $where['comp_name'] = ['like', "%$comp_name%"];
+            $search['comp_name'] = $comp_name;
         }
         //分数统计列表
         $result_list=Db::name('comp_score')
             ->alias('a')->field('a.id as score_id,a.*,w.comp_name')
             ->join('spec_comp_basic w','a.comp_id = w.id')
             ->where($where)
-            ->order("a.total_score DESC")->paginate(10);
+            ->order("a.total_score DESC")->paginate(5)->appends($search);
         //获取分页显示
         $page = $result_list->render();
         $this->assign('result_list',$result_list);
@@ -56,11 +43,14 @@ class ScoreCensusController extends AdminBaseController
         $account_time = trim($this->request->param('account_time'));
         $sort_list = trim($this->request->param('sort_list'));
         $where=[];
+        $search=[];
         if ($comp_name) {
             $where['comp_name'] = ['like', "%$comp_name%"];
+            $search['comp_name'] = $comp_name;
         }
         if ($account_time) {
             $where['account_time'] = ['eq', "$account_time"];
+            $search['account_time'] = $account_time;
         }
 
         $subsql = Db::table('spec_total_score')->field('sum(score) as score,account_time,comp_id')->group('comp_id')->buildSql();
@@ -69,7 +59,7 @@ class ScoreCensusController extends AdminBaseController
             ->join("spec_comp_basic scb","a.comp_id = scb.id")
             ->field('(a.total_score+w.score) as sum_score,a.total_score,a.comp_id,w.score,w.account_time,scb.comp_name')
             ->where($where)
-            ->order("sum_score DESC")->paginate(20);
+            ->order("sum_score DESC")->paginate(10)->appends($search);
         //获取分页显示
         $page = $scoreList->render();
 
@@ -343,16 +333,19 @@ class ScoreCensusController extends AdminBaseController
         $where=[];
         $comp_name=$this->request->param("comp_name");
         $department_type=$this->request->param("department_type");
+        $search=[];
         if($comp_name){
             $where['comp_name'] = ['like', "%$comp_name%"];
+            $search['comp_name'] = $comp_name;
         }
         if($department_type){
             $where['department_type'] = ['like', "%$department_type%"];
+            $search['department_type'] = $department_type;
         }
         $score_log_list=Db::name("comp_score_log")->alias('a')
             ->join("spec_comp_basic scb","scb.id=a.comp_id")
             ->field("a.*,scb.comp_name")
-            ->where($where)->order("add_time DESC")->paginate(20);
+            ->where($where)->order("add_time DESC")->paginate(20)->appends($search);
         //获取分页显示
         $page = $score_log_list->render();
         $this->assign("page",$page);
@@ -365,16 +358,19 @@ class ScoreCensusController extends AdminBaseController
         $where=[];
         $comp_name=$this->request->param("comp_name");
         $type=$this->request->param("type");
+        $search=[];
         if($comp_name){
             $where['comp_name'] = ['like', "%$comp_name%"];
+            $search['comp_name'] = $comp_name;
         }
         if($type){
             $where['type'] = ['like', "%$type%"];
+            $search['type'] = $type;
         }
         $score_log_arr=Db::name("total_score")->alias('a')
             ->join("spec_comp_basic scb","scb.id=a.comp_id")
             ->field("a.*,scb.comp_name")
-            ->where($where)->order("add_time DESC")->paginate(20);
+            ->where($where)->order("add_time DESC")->paginate(10)->appends($search);
         //获取分页显示
         $page = $score_log_arr->render();
         $this->assign("page",$page);

@@ -21,15 +21,17 @@ class CompBusinessController extends AdminBaseController
         /**搜索条件**/
         $comp_name = trim($this->request->param('comp_name'));
         $where=[];
+        $search=[];
         if ($comp_name) {
             $where['comp_name'] = ['like', "%$comp_name%"];
+            $search['comp_name'] =$comp_name;
         }
 
         $result_list=Db::name('comp_business')
             ->alias('a')
             ->join('spec_comp_basic w','a.comp_id = w.id')->field('a.id as business_id,w.*,a.*')
             ->where($where)
-            ->order("a.id DESC")->paginate(10);
+            ->order("a.id DESC")->paginate(10)->appends($search);
         // 获取分页显示
         $page = $result_list->render();
         $this->assign('result_list',$result_list);
