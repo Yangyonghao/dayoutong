@@ -28,7 +28,7 @@ class ScoreCensusController extends AdminBaseController
             ->alias('a')->field('a.id as score_id,a.*,w.comp_name')
             ->join('spec_comp_basic w','a.comp_id = w.id')
             ->where($where)
-            ->order("a.total_score DESC")->paginate(5)->appends($search);
+            ->order("a.total_score DESC")->paginate(10)->appends($search);
         //获取分页显示
         $page = $result_list->render();
         $this->assign('result_list',$result_list);
