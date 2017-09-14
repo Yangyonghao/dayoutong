@@ -18,6 +18,7 @@ class CompBusinessModel extends Model
     public function addCompBusiness($data){
 
         //添加到公司信息表
+        $data['add_time']=date("Y-m-d H:i:s");
         $result_id=$this->insertGetId($data);
         $comp_id=$data['comp_id'];
         if($result_id !=false){
