@@ -22,7 +22,7 @@ class CompBusinessModel extends Model
         $result_id=$this->insertGetId($data);
         $comp_id=$data['comp_id'];
         if($result_id !=false){
-            unset($data['comp_id']);
+            unset($data['comp_id']);unset($data['add_time']);
             $result_list=$this->scoreRole($data);
             $i = 0;$score_num=0;
             foreach ($result_list['b'] as $key => $value) {
