@@ -378,4 +378,62 @@ class ScoreCensusController extends AdminBaseController
         return $this->fetch();
     }
 
+
+    /*
+     * 统计公司所有信息
+     * @author:yyh
+     * @date:20170915
+     * */
+    public function compList(){
+        $where = ["status" => 1];
+        /**搜索条件**/
+        $comp_name = trim($this->request->param('comp_name'));
+        $search=[];
+        if ($comp_name) {
+            $where['comp_name'] = ['like', "%$comp_name%"];
+            $search['comp_name'] =$comp_name;
+        }
+        $result_list=Db::name('comp_basic')->where($where)->order("id DESC")->paginate(10)->appends($search);
+        // 获取分页显示
+        $page = $result_list->render();
+        $this->assign('result_list',$result_list);
+        $this->assign('page',$page);
+        return $this->fetch();
+    }
+
+    //公司所有信息
+    public function compDetail(){
+        $comp_id=$this->request->param('comp_id');
+
+        //会员部数据
+        $spec_comp_fields="comp_name,comp_classify,reg_money,
+                     business_license_pic,link_addr,legal_person,
+                     service_pay,reg_time,comp_aptitude";
+        $spec_comp=Db::name('comp_basic')->field($spec_comp_fields)->where('id',$comp_id)->find();
+
+        //行政部数据
+        $spec_comp_admin_fields="abnormal_operation,bank_credit,illegal_dishonesty,
+                     legal_disputes,civil_law,criminal_law,
+                     is_website,evil_network";
+        $spec_comp_administration=Db::table('spec_comp_administration')->field($spec_comp_admin_fields)->where('comp_id',$comp_id)->find();
+
+        //财务部数据
+        $spec_comp_basic_finance=Db::table('spec_comp_basic_finance')->field("agency_fee,gross_profit_rate,invoice_version")->where('comp_id',$comp_id)->find();
+        //业务部数据
+        $spec_comp_business=Db::table('spec_comp_business')->field("`storage`,logistics,collection,oil_quality,transaction_num,performance")->where('comp_id',$comp_id)->find();
+        //金融部数据
+        $spec_comp_finance=Db::table('spec_comp_finance')->field("financing")->where('comp_id',$comp_id)->find();
+
+        $spec_comp  =   empty($spec_comp)?[]:$spec_comp;
+        $spec_comp_admin=empty($spec_comp_administration)?[]:$spec_comp_administration;
+        $spec_comp_business=empty($spec_comp_business)?[]:$spec_comp_business;
+        $spec_comp_finance=empty($spec_comp_finance)?[]:$spec_comp_finance;
+        $spec_comp_basic_finance=empty($spec_comp_basic_finance)?[]:$spec_comp_basic_finance;
+        //合并数组
+        $score_log_arr=array_merge($spec_comp,$spec_comp_admin,$spec_comp_business,$spec_comp_finance,$spec_comp_basic_finance);
+//        dump($score_log_arr);die;
+        $this->assign('comp_info',$score_log_arr);
+        return $this->fetch();
+    }
+
 }

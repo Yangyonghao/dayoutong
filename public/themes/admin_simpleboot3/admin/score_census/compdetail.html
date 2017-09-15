@@ -1,0 +1,217 @@
+<include file="public@header" />
+</head>
+<body>
+<div class="wrap js-check-wrap">
+	<ul class="nav nav-tabs">
+		<li><a href="{:url('ScoreCensus/compList')}">企业信息列表</a></li>
+		<li class="active"><a href="javascript:void(0);">企业详情</a></li>
+	</ul>
+	<br/>
+	<table class="table table-hover table-bordered">
+		<tbody>
+		<tr>
+			<th>企业名称</th>
+			<td>{$comp_info.comp_name}</td>
+			<th>企业类型</th>
+			<td>{$comp_info.comp_classify}</td>
+		</tr>
+		<tr>
+			<th>成立时间</th>
+			<td>{$comp_info.reg_time}</td>
+			<th>注册资本</th>
+			<td>{$comp_info.reg_money}</td>
+		</tr>
+		<tr>
+			<th>企业基础资质</th>
+			<td>
+				<if condition="$comp_info.business_license_pic neq ''">
+					<img src="__UPLOAD__/{$comp_info.business_license_pic}" onclick="parent.imagePreviewDialog(this.src);" style="width: 56px;height: 56px;cursor: pointer"/>
+					<else/>
+					<img src="__TMPL__/public/assets/images/default-thumbnail.png" width="56" style="cursor: pointer"/>
+				</if>
+			</td>
+			<th>企业联系地址</th>
+			<td>{$comp_info.link_addr}</td>
+		</tr>
+		<tr>
+			<th>法人代表</th>
+			<td>{$comp_info.legal_person}</td>
+			<th>服务费支付情况</th>
+			<td>{$comp_info.service_pay}</td>
+		</tr>
+		<tr>
+			<th>企业附加资质</th>
+			<td>{$comp_info.comp_aptitude}</td>
+			<th>毛利率</th>
+			<td>
+				<if condition="isset($comp_info.gross_profit_rate)">
+					{$comp_info.gross_profit_rate}
+				<else/>
+					--
+				</if>
+			</td>
+		</tr>
+		<tr>
+			<th>发票版本</th>
+			<td>
+				<if condition="isset($comp_info.invoice_version)">
+					{$comp_info.invoice_version}
+				<else/>
+					--
+				</if>
+			</td>
+			<th>是否缴纳代理记账费</th>
+			<td>
+				<if condition="isset($comp_info.agency_fee)">
+					{$comp_info.agency_fee}
+					<else/>
+					--
+				</if>
+			</td>
+		</tr>
+		<tr>
+			<th>仓储资源</th>
+			<td>
+				<if condition="isset($comp_info.storage)">
+					{$comp_info.storage}
+				<else/>
+					--
+				</if>
+			</td>
+			<th>物流资源</th>
+			<td>
+				<if condition="isset($comp_info.logistics)">
+					{$comp_info.logistics}
+				<else/>
+					--
+				</if>
+			</td>
+		</tr>
+		<tr>
+			<th>油品质量达标率</th>
+			<td>
+				<if condition="isset($comp_info.oil_quality)">
+					{$comp_info.oil_quality}
+					<else/>
+					--
+				</if>
+			</td>
+			<th>回款周期</th>
+			<td>
+				<if condition="isset($comp_info.collection)">
+					{$comp_info.collection}
+					<else/>
+					--
+				</if>
+			</td>
+		</tr>
+		<tr>
+			<th>交易频次</th>
+			<td>
+				<if condition="isset($comp_info.transaction_num)">
+					{$comp_info.transaction_num}
+					<else/>
+					--
+				</if>
+			</td>
+			<th>履约情况</th>
+			<td>
+				<if condition="isset($comp_info.performance)">
+					{$comp_info.performance}
+				<else/>
+					--
+				</if>
+			</td>
+		</tr>
+		<tr>
+			<th>是否被银行列入不诚信名单</th>
+			<td>
+				<if condition="isset($comp_info.bank_credit)">
+					{$comp_info.bank_credit}
+					<else/>
+					--
+				</if>
+			</td>
+			<th>是否被列入经营异常名录</th>
+			<td>
+				<if condition="isset($comp_info.abnormal_operation)">
+					{$comp_info.abnormal_operation}
+				<else/>
+					--
+				</if>
+			</td>
+		</tr>
+
+		<tr>
+			<th>是否被列入严重违法失信企业名单</th>
+			<td>
+				<if condition="isset($comp_info.illegal_dishonesty)">
+					{$comp_info.illegal_dishonesty}
+					<else/>
+					--
+				</if>
+			</td>
+			<th>是否有网络搜索恶评</th>
+			<td>
+				<if condition="isset($comp_info.evil_network)">
+					{$comp_info.evil_network}
+					<else/>
+					--
+				</if>
+			</td>
+
+		</tr>
+		<tr>
+			<th>是否有公司官网</th>
+			<td>
+				<if condition="isset($comp_info.is_website)">
+					{$comp_info.is_website}
+					<else/>
+					--
+				</if>
+			</td>
+			<th>企业民事法律纠纷/次</th>
+			<td>
+				<if condition="isset($comp_info.legal_disputes)">
+					{$comp_info.legal_disputes}次
+					<else/>
+					--
+				</if>
+			</td>
+		</tr>
+		<tr>
+			<th>股东、法人、高管民事法律纠纷/次</th>
+			<td>
+				<if condition="isset($comp_info.civil_law)">
+					{$comp_info.civil_law}次
+					<else/>
+					--
+				</if>
+			</td>
+			<th>股东、法人、高管刑事法律纠纷/次</th>
+			<td>
+				<if condition="isset($comp_info.criminal_law)">
+					{$comp_info.civil_law}次
+				<else/>
+					--
+				</if>
+			</td>
+		</tr>
+		<tr>
+
+			<th>是否有银行融资贷款</th>
+			<td>
+				<if condition="isset($comp_info.financing)">
+					{$comp_info.financing}
+					<else/>
+					--
+				</if>
+			</td>
+
+		</tr>
+		</tbody>
+	</table>
+</div>
+<script src="__STATIC__/js/admin.js"></script>
+</body>
+</html>
