@@ -68,6 +68,7 @@ class CompStatementsController extends AdminBaseController
      */
     public function add()
     {
+
 //        SELECT * from spec_comp_basic where id not in( select comp_id from spec_comp_statements where input_monthly='201708') and `status`=1
 
         $comp_arr=Db::name('comp_basic')
