@@ -1,28 +1,76 @@
 <?php
-namespace Admin\Controller;
+namespace app\admin\controller;
+use cmf\controller\AdminBaseController;
+use cmf\lib\Upload;
 use PHPExcel;
-use Think\Controller;
+use PHPExcel_IOFactory;
+use PHPExcel_Reader_CSV;
 use think\Db;
+use think\Loader;
 
-class ExcelController extends Controller {
+class ExcelController extends AdminBaseController{
     public function excelList(){
         $this->display();
     }
-//    导入
     public function import(){
+          Loader::import('PHPExcel.Classes.PHPExcel');
+          Loader::import('PHPExcel.Classes.PHPExcel.IOFactory.PHPExcel_IOFactory');
+          Loader::import('PHPExcel.Classes.PHPExcel.Reader.Excel5');
+          //获取表单上传文件
+          $dir = ROOT_PATH . 'public' . DS . 'upload';
+          $file = request()->file('file_stu');
+          $info = $file->validate(['size'=>3145728,'ext'=>'xls,xlsx,csv'])->rule('uniqid')->move($dir) ;//上传验证后缀名,以及上传之后移动的地址
+          if($info) {
+              $filename = $dir. DS .$info->getSaveName();
+              $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION) );
+              if($extension == 'xlsx' ) {
+                  $objReader =\PHPExcel_IOFactory::createReader('Excel2007');
+                  $objPHPExcel = $objReader->load($filename, $encode = 'utf-8');
+              }else if($extension == 'xls'){
+                  $objReader =\PHPExcel_IOFactory::createReader('Excel5');
+                  $objPHPExcel = $objReader->load($filename, $encode = 'utf-8');
+              }else if($extension=='csv'){
+                  $PHPReader = new PHPExcel_Reader_CSV();
+                  //默认输入字符集
+                  $PHPReader->setInputEncoding('GBK');
+                  //默认的分隔符
+                  $PHPReader->setDelimiter(',');
+                  //载入文件
+                  $objPHPExcel = $PHPReader->load($filename);
+              }
+             $excel_array=$objPHPExcel->getsheet(0)->toArray();   //转换为数组格式
+             array_shift($excel_array);  //删除第一个数组(标题);
+             $city = [];
+             foreach($excel_array as $k=>$v) {
+                 $city[$k]['Id']    = $v[0];
+                 $city[$k]['code']  = $v[1];
+                 $city[$k]['path']  = $v[2];
+                 $city[$k]['pcode'] = $v[3];
+                 $city[$k]['name']  = $v[4];
+             }
+//             Db::name('city')->insertAll($city); //批量插入数据
+        } else {
+             echo $file->getError();
+        }
+    }
+
+
+//    导入
+    public function import11(){
         if(!empty($_FILES['file_stu']['name'])){
-            $tmp_file = $_FILES['file_stu']['tmp_name'];    //临时文件名
-            $file_types = explode('.',$_FILES['file_stu']['name']); //  拆分文件名
-            $file_type = $file_types [count ( $file_types ) - 1];   //  文件类型
+            $tmp_file = $_FILES['file_stu']['tmp_name'];            //临时文件名
+            $file_types = explode('.',$_FILES['file_stu']['name']); //拆分文件名
+            $file_type = $file_types [count ( $file_types ) - 1];   //文件类型
             /*判断是否为excel文件*/
             if($file_type == 'xls' || $file_type == 'xlsx'|| $file_type == 'csv'){    //  符合类型
                 /*上传业务*/
-                $upload = new \Think\Upload();
+                $upload=new Upload();
+//                $upload = new \Think\Upload();
                 $upload->maxSize   =     3145728 ;
                 $upload->exts      =     array('xls', 'csv', 'xlsx');
-                $upload->rootPath  =      './Public';
-                $upload->savePath  =      '/Excel/';
-                $upload->saveName  =      date('YmdHis');
+                $upload->rootPath  =     './Public';
+                $upload->savePath  =     '/Excel/';
+                $upload->saveName  =     date('YmdHis');
                 $info   =   $upload->upload();
                 if(!$info) {    // 上传错误提示错误信息
                     $this->error($upload->getError());
