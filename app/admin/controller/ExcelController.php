@@ -1,5 +1,6 @@
 <?php
 namespace app\admin\controller;
+use app\admin\model\CompBasicModel;
 use cmf\controller\AdminBaseController;
 use cmf\lib\Upload;
 use PHPExcel;
@@ -37,16 +38,18 @@ class ExcelController extends AdminBaseController{
                   //载入文件
                   $objPHPExcel = $PHPReader->load($filename);
               }
-             $excel_array=$objPHPExcel->getsheet(0)->toArray();   //转换为数组格式
-             array_shift($excel_array);  //删除第一个数组(标题);
-             $city = [];
-             foreach($excel_array as $k=>$v) {
+              $excel_array=$objPHPExcel->getsheet(0)->toArray();   //转换为数组格式
+              array_shift($excel_array);  //删除第一个数组(标题);
+              $city = [];
+              $compBasicModel = new CompBasicModel();
+              $result = $compBasicModel->addCompBasic($excel_array);
+              foreach($excel_array as $k=>$v) {
                  $city[$k]['Id']    = $v[0];
                  $city[$k]['code']  = $v[1];
                  $city[$k]['path']  = $v[2];
                  $city[$k]['pcode'] = $v[3];
                  $city[$k]['name']  = $v[4];
-             }
+              }
 //             Db::name('city')->insertAll($city); //批量插入数据
         } else {
              echo $file->getError();
