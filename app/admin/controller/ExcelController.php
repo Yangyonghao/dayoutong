@@ -3,7 +3,6 @@ namespace app\admin\controller;
 use cmf\controller\AdminBaseController;
 use cmf\lib\Upload;
 use PHPExcel;
-use PHPExcel_IOFactory;
 use PHPExcel_Reader_CSV;
 use think\Db;
 use think\Loader;
@@ -22,7 +21,7 @@ class ExcelController extends AdminBaseController{
           $info = $file->validate(['size'=>3145728,'ext'=>'xls,xlsx,csv'])->rule('uniqid')->move($dir) ;//上传验证后缀名,以及上传之后移动的地址
           if($info) {
               $filename = $dir. DS .$info->getSaveName();
-              $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION) );
+              $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
               if($extension == 'xlsx' ) {
                   $objReader =\PHPExcel_IOFactory::createReader('Excel2007');
                   $objPHPExcel = $objReader->load($filename, $encode = 'utf-8');
