@@ -91,18 +91,54 @@ class CompBasicModel extends Model
      * */
     public function excelAddCompBasic($data){
         //添加到公司信息表
-        $ss=[];
-        foreach ($data as $key=>$v){
-            $ss[$key]['comp_aptitude']=rtrim(implode('|',$v['check_box']),'|');
-            $ss[$key]['add_time']=date('Y-m-d H:i:s');
-            unset($v['check_box']);
+        foreach ($data as $k=>$v){
+            $v['add_time']=date('Y-m-d H:i:s');
             $result=self::findCompOne(['comp_name'=>$v['comp_name']]);
-            if(!$result){
+            if(!empty($result)){
                 continue;
             }
-            $result_id=$this->insertGetId($ss);
-            $data[$key]['comp_id']=$result_id;
+            $result_id=Db::name('comp_basic')->insertGetId($v);
+            $data[$k]['comp_id']=$result_id;
         }
+
+        foreach ($data as $i=>$j){
+            unset($j['add_time']);
+            $artitude_score_count=count(explode('|',$j['comp_aptitude']));
+            $result_list[$i]=$this->scoreRole($artitude_score_count);
+            if($j['service_pay']=='是'){
+                $result_list[$i]['service_pay'] = ["remark"=>"支付服务费，加5分","score" => "5"];
+            }else{
+                unset($j['service_pay']);
+            }
+        }
+        $i = 0;$score_num=0;
+        foreach ($data as $key => $value) {
+            if (!empty($value)) {
+                foreach ($result_list as $m=>$n){
+                    $app[$i]['comp_id']=$value['comp_id'];
+                    $app[$i]['score']=isset($result_list[$m]['score'])?$result_list[$m]['score']:0;
+                    $app[$i]['score_source']=isset($result_list[$m]['remark'])?$result_list[$m]['remark']:0;
+                    $app[$i]['department_type']='会员部数据';
+                    $app[$i]['add_time']=date('Y-m-d H:i:s');
+                    $app[$i]['key_name']=$key;
+                    $app[$i]['ip']=get_client_ip();
+                    $score_num +=$result_list[$m]['score'];
+                    $i += 1;
+                }
+
+            }
+        }
+        Db::name('comp_score_log')->insertAll($app);
+        $comp_score=[
+            'comp_id'=>$result_id,
+            'total_score'=>$score_num,
+            'member_score'=>$score_num,
+            'finance_score'=>0,
+            'sales_score'=>0,
+            'account_score'=>0,
+            'admin_score'=>0,
+        ];
+        Db::name('comp_score')->insert($comp_score);
 
 
 
@@ -147,7 +183,7 @@ class CompBasicModel extends Model
     }
 
     public function findCompOne($param){
-        $result=Db::name('basic_comp')->where($param)->find();
+        $result=Db::name('comp_basic')->where($param)->find();
         return $result;
     }
 }

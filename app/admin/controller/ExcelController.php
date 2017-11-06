@@ -42,14 +42,18 @@ class ExcelController extends AdminBaseController{
               array_shift($excel_array);  //删除第一个数组(标题);
               $city = [];
               $compBasicModel = new CompBasicModel();
-              $result = $compBasicModel->addCompBasic($excel_array);
+
               foreach($excel_array as $k=>$v) {
-                 $city[$k]['Id']    = $v[0];
-                 $city[$k]['code']  = $v[1];
-                 $city[$k]['path']  = $v[2];
-                 $city[$k]['pcode'] = $v[3];
-                 $city[$k]['name']  = $v[4];
+                 $city[$k]['comp_name']      = $v[0];//公司名称
+                 $city[$k]['comp_classify']  = $v[1];//公司类型
+                 $city[$k]['reg_time']       = $v[2];//注册时间
+                 $city[$k]['reg_money']      = $v[3];//注册资金
+                 $city[$k]['link_addr']      = $v[4];//联系地址
+                 $city[$k]['legal_person']   = $v[5];//企业法人
+                 $city[$k]['service_pay']    = $v[6];//是否支付服务费
+                 $city[$k]['comp_aptitude']  = $v[7];//企业附加资质
               }
+              $result = $compBasicModel->excelAddCompBasic($city);
 //             Db::name('city')->insertAll($city); //批量插入数据
         } else {
              echo $file->getError();

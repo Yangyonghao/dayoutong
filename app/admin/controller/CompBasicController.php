@@ -177,7 +177,7 @@ class CompBasicController extends AdminBaseController
             'legal_person'         => array("remark" => "填写企业法人记1分","score" => "1"),
             'link_addr'            => array("remark" => "填写地址记1分","score" => "1"),
             'business_license_pic' => array("remark" => "上传营业执照记1分","score" => "1"),
-            'comp_aptitude'        => array("remark" => '添加附加资质记'.$artitude_score_count.'分',"score" => $artitude_score_count),
+            'comp_aptitude'        => array("remark" => '添加附加资质,加'.$artitude_score_count.'分',"score" => '+'.$artitude_score_count),
         );
         return $account_score;
     }
