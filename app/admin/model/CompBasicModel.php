@@ -111,63 +111,26 @@ class CompBasicModel extends Model
                 unset($j['service_pay']);
             }
         }
-        $i = 0;$score_num=0;
+        $i = 0;$score_num=[];
         foreach ($data as $key => $value) {
             if (!empty($value)) {
-                foreach ($result_list as $m=>$n){
+                foreach ($result_list[$key] as $m=>$n){
                     $app[$i]['comp_id']=$value['comp_id'];
-                    $app[$i]['score']=isset($result_list[$m]['score'])?$result_list[$m]['score']:0;
-                    $app[$i]['score_source']=isset($result_list[$m]['remark'])?$result_list[$m]['remark']:0;
+                    $app[$i]['score']=isset($n['score'])?$n['score']:0;
+                    $app[$i]['score_source']=isset($n['remark'])?$n['remark']:0;
                     $app[$i]['department_type']='会员部数据';
                     $app[$i]['add_time']=date('Y-m-d H:i:s');
-                    $app[$i]['key_name']=$key;
+                    $app[$i]['key_name']=$m;
                     $app[$i]['ip']=get_client_ip();
-                    $score_num +=$result_list[$m]['score'];
+                    $score_num[$key]['score'] +=$n['score'];
+                    $score_num[$key]['comp_id'] =$value['comp_id'];
                     $i += 1;
+                    Db::name('comp_score_log')->insert($app);
                 }
-
             }
         }
-        Db::name('comp_score_log')->insertAll($app);
-        $comp_score=[
-            'comp_id'=>$result_id,
-            'total_score'=>$score_num,
-            'member_score'=>$score_num,
-            'finance_score'=>0,
-            'sales_score'=>0,
-            'account_score'=>0,
-            'admin_score'=>0,
-        ];
-        Db::name('comp_score')->insert($comp_score);
-
-
-
-        if($result_id !=false){
-            unset($data['status']);unset($data['add_time']);
-            $artitude_score_count=count(explode('|',$data['comp_aptitude']));
-            $result_list=$this->scoreRole($artitude_score_count);
-            if($data['service_pay']=='是'){
-                $result_list['service_pay'] = ["remark"=>"支付服务费记5分","score" => "5"];
-            }else{
-                unset($data['service_pay']);
-            }
-            $i = 0;$score_num=0;
-            foreach ($data as $key => $value) {
-                if (!empty($value)) {
-                    $app[$i]['comp_id']=$result_id;
-                    $app[$i]['score']=isset($result_list[$key]['score'])?$result_list[$key]['score']:0;
-                    $app[$i]['score_source']=$result_list[$key]['remark'];
-                    $app[$i]['department_type']='会员部数据';
-                    $app[$i]['add_time']=date('Y-m-d H:i:s');
-                    $app[$i]['key_name']=$key;
-                    $app[$i]['ip']=get_client_ip();
-                    $score_num +=$result_list[$key]['score'];
-                    $i += 1;
-                }
-            }
-
-            Db::name('comp_score_log')->insertAll($app);
-            $comp_score=[
+        foreach ($score_num as $v=>$x){
+            $comp_score[$v]=[
                 'comp_id'=>$result_id,
                 'total_score'=>$score_num,
                 'member_score'=>$score_num,
@@ -176,10 +139,11 @@ class CompBasicModel extends Model
                 'account_score'=>0,
                 'admin_score'=>0,
             ];
-            Db::name('comp_score')->insert($comp_score);
-
-            return $result_id;
+            Db::name('comp_score')->insert($comp_score[$v]);
         }
+
+
+        return $result_id;
     }
 
     public function findCompOne($param){
