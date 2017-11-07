@@ -106,13 +106,14 @@ class CompBasicModel extends Model
             $artitude_score_count=count(explode('|',$j['comp_aptitude']));
             $result_list[$i]=$this->scoreRole($artitude_score_count);
             if($j['service_pay']=='是'){
-                $result_list[$i]['service_pay'] = ["remark"=>"支付服务费，加5分","score" => "5"];
+                $result_list[$i]['service_pay'] = ["remark"=>"支付服务费，加5分","score" => "+5"];
             }else{
                 unset($j['service_pay']);
             }
         }
-        $i = 0;$score_num=[];
+        $i = 0;
         foreach ($data as $key => $value) {
+            $score_num[$key]=[];$score_num[$key]['score']=0;
             if (!empty($value)) {
                 foreach ($result_list[$key] as $m=>$n){
                     $app[$i]['comp_id']=$value['comp_id'];
@@ -122,18 +123,18 @@ class CompBasicModel extends Model
                     $app[$i]['add_time']=date('Y-m-d H:i:s');
                     $app[$i]['key_name']=$m;
                     $app[$i]['ip']=get_client_ip();
-                    $score_num[$key]['score'] +=$n['score'];
+                    $score_num[$key]['score'] +=substr($n['score'],1);
                     $score_num[$key]['comp_id'] =$value['comp_id'];
+                    Db::name('comp_score_log')->insert($app[$i]);
                     $i += 1;
-                    Db::name('comp_score_log')->insert($app);
                 }
             }
         }
         foreach ($score_num as $v=>$x){
             $comp_score[$v]=[
-                'comp_id'=>$result_id,
-                'total_score'=>$score_num,
-                'member_score'=>$score_num,
+                'comp_id'=>$x['comp_id'],
+                'total_score'=>$x['score'],
+                'member_score'=>$x['score'],
                 'finance_score'=>0,
                 'sales_score'=>0,
                 'account_score'=>0,
@@ -143,7 +144,7 @@ class CompBasicModel extends Model
         }
 
 
-        return $result_id;
+        return true;
     }
 
     public function findCompOne($param){

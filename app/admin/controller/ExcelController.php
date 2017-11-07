@@ -54,6 +54,7 @@ class ExcelController extends AdminBaseController{
                  $city[$k]['comp_aptitude']  = $v[7];//企业附加资质
               }
               $result = $compBasicModel->excelAddCompBasic($city);
+              return $this->fetch();
 //             Db::name('city')->insertAll($city); //批量插入数据
         } else {
              echo $file->getError();
