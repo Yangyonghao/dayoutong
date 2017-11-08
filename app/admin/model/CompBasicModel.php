@@ -105,6 +105,9 @@ class CompBasicModel extends Model
             unset($j['add_time']);
             $artitude_score_count=count(explode('|',$j['comp_aptitude']));
             $result_list[$i]=$this->scoreRole($artitude_score_count);
+            if(!isset($j['business_license_pic'])){
+                unset($result_list[$i]['business_license_pic']);
+            }
             if($j['service_pay']=='是'){
                 $result_list[$i]['service_pay'] = ["remark"=>"支付服务费，加5分","score" => "+5"];
             }else{

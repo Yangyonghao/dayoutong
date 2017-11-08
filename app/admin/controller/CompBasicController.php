@@ -7,6 +7,7 @@
  */
 namespace app\admin\controller;
 
+use app\admin\model\ExcelModel;
 use cmf\controller\AdminBaseController;
 use app\admin\model\CompBasicModel;
 use think\Db;
@@ -93,8 +94,6 @@ class CompBasicController extends AdminBaseController
         $param=['id'=>$id];
         $basic_info=$this->getProjectInfo('comp_basic',$param);
         $basic_info['comp_aptitude']=explode('|',$basic_info['comp_aptitude']);
-//        var_dump($list);
-//        var_dump($basic_info);die;
         $this->assign('list',$list);
         $this->assign('basic_info',$basic_info);
         return $this->fetch();
@@ -210,5 +209,23 @@ class CompBasicController extends AdminBaseController
         }
 
         return $account_score;
+    }
+
+    /*
+     * @author:yangyh
+     * @date:20171108
+     * 导入会员数据
+     * */
+    public function import(){
+        $file = request()->file('file_stu');
+        $excel=new ExcelModel();
+        $comp_basic=new CompBasicModel();
+        $basic=$excel->import($file,'会员部数据');
+        $comp_basic->excelAddCompBasic($basic);
+        if(!$comp_basic){
+            $this->success('导入失败!', url('CompBasic/index'));
+        }else{
+            $this->success('导入成功!', url('CompBasic/index'));
+        }
     }
 }
