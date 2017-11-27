@@ -221,9 +221,12 @@ class CompBasicController extends AdminBaseController
         $excel=new ExcelModel();
         $comp_basic=new CompBasicModel();
         $basic=$excel->import($file,'会员部数据');
-        $comp_basic->excelAddCompBasic($basic);
-        if(!$comp_basic){
-            $this->success('导入失败!', url('CompBasic/index'));
+        if(!$basic){
+            $this->success('请检查导入的数据是否存在问题!', url('CompBasic/index'));
+        }
+        $result=$comp_basic->excelAddCompBasic($basic);
+        if(!$result){
+            $this->success('请检查导入的数据是否存在问题!', url('CompBasic/index'));
         }else{
             $this->success('导入成功!', url('CompBasic/index'));
         }

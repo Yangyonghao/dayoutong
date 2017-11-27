@@ -95,10 +95,14 @@ class CompBasicModel extends Model
             $v['add_time']=date('Y-m-d H:i:s');
             $result=self::findCompOne(['comp_name'=>$v['comp_name']]);
             if(!empty($result)){
+                unset($data[$k]);
                 continue;
             }
             $result_id=Db::name('comp_basic')->insertGetId($v);
             $data[$k]['comp_id']=$result_id;
+        }
+        if(empty($data)){
+            return false;
         }
 
         foreach ($data as $i=>$j){
