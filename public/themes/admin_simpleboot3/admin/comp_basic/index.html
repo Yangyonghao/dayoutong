@@ -46,7 +46,7 @@
 				<volist name="result_list" id="vo">
 					<tr>
 						<td>{$vo.id}</td>
-						<td>{$vo.comp_name}</td>
+						<td><a href="{:url('score_census/compDetail',['comp_id'=>$vo['id']])}">{$vo.comp_name}</a></td>
 						<td>{$vo.comp_classify}</td>
 						<td>{$vo.reg_time}</td>
 						<td>{$vo.reg_money}</td>
