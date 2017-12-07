@@ -7,6 +7,7 @@
  */
 namespace app\admin\controller;
 
+use app\admin\model\ExcelModel;
 use cmf\controller\AdminBaseController;
 use app\admin\model\CompStatementsModel;
 use app\admin\model\CompBasicFinanceModel;
@@ -310,6 +311,28 @@ class CompStatementsController extends AdminBaseController
             $this->error('更新失败!');
         }
         $this->success('保存成功!', url('CompStatements/basicFinanceList'));
+    }
+
+
+    /*
+     * @author:yangyh
+     * @date:20171108
+     * 导入会员数据
+     * */
+    public function import(){
+        $file = request()->file('file_stu');
+        $excel=new ExcelModel();
+        $comp_basic=new CompStatementsModel();
+        $basic=$excel->import($file,'财务部数据');
+//        if(!$basic){
+//            $this->success('请检查导入的数据是否存在问题!', url('CompStatements/index'));
+//        }
+        $result=$comp_basic->excelAddCompStatements($basic);
+        if(!$result || !$basic){
+            $this->success('请检查导入的数据是否存在问题!', url('CompStatements/index'));
+        }else{
+            $this->success('导入成功!', url('CompStatements/index'));
+        }
     }
     /*
      * @function：返回分数数组

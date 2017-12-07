@@ -92,17 +92,23 @@ class ExcelModel extends Model
             }
         }else if($comp_type=='财务部数据'){
             foreach($excel_array as $k=>$v) {
-                $city[$k]['comp_name']      = $v[0];//公司名称
-                $city[$k]['comp_classify']  = $v[1];//公司类型
-                $city[$k]['reg_time']       = $v[2];//注册时间
-                $city[$k]['reg_money']      = $v[3];//注册资金
-                $city[$k]['link_addr']      = $v[4];//联系地址
-                $city[$k]['legal_person']   = $v[5];//企业法人
-                $city[$k]['service_pay']    = $v[6];//是否支付服务费
-                $city[$k]['comp_aptitude']  = $v[7];//企业附加资质
+                $city[$k]['comp_name']            = $v[0];//公司名称
+                $city[$k]['input_monthly']        = $v[1];//录入月份
+                $city[$k]['monthly_sales']        = $v[2];//月度销售额
+                $city[$k]['comp_income_tax']      = $v[3];//企业所得税
+                $city[$k]['construction_tax']     = $v[4];//城建税
+                $city[$k]['personal_tax']         = $v[5];//个人所得税
+                $city[$k]['river_management_fee'] = $v[6];//河道管理费
+                $city[$k]['additional_edu_fees']  = $v[7];//教育附加费
+                $city[$k]['local_edu_fees']       = $v[8];//地方教育附加费
+                $city[$k]['profit_current']       = $v[9];//本期净利润
+                $city[$k]['profit_year']          = $v[10];//本年净利润
+                $city[$k]['taxable_sales']        = $v[11];//应税销售额
+                $city[$k]['add_value_tax']        = $v[12];//增值税
             }
         }
 
         return $city;
     }
 }
+

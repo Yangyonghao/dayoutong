@@ -13,7 +13,7 @@ use think\Model;
 use think\Cache;
 
 
-class CompBasicModel extends Model
+class CompBasicModel extends CommonModel
 {
     //添加企业信息
     public function addCompBasic($data){
@@ -93,7 +93,7 @@ class CompBasicModel extends Model
         //添加到公司信息表
         foreach ($data as $k=>$v){
             $v['add_time']=date('Y-m-d H:i:s');
-            $result=self::findCompOne(['comp_name'=>$v['comp_name']]);
+            $result=parent::findCompOne(['comp_name'=>$v['comp_name']]);
             if(!empty($result)){
                 unset($data[$k]);
                 continue;
@@ -154,8 +154,5 @@ class CompBasicModel extends Model
         return true;
     }
 
-    public function findCompOne($param){
-        $result=Db::name('comp_basic')->where($param)->find();
-        return $result;
-    }
+
 }

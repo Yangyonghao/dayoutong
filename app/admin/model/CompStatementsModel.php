@@ -12,7 +12,7 @@ use think\Db;
 use think\Model;
 
 
-class CompStatementsModel extends Model
+class CompStatementsModel extends CommonModel
 {
     //添加基本财务信息
     public function addCompStatements($data){
@@ -55,6 +55,26 @@ class CompStatementsModel extends Model
         //添加到公司信息表
         $result_id=Db::name('comp_basic_finance')->where('id',$business_id)->update($param);
         return $result_id;
+    }
+
+
+    /*
+     * 批量循环导入并计算分数
+     * */
+    public function excelAddCompStatements($data){
+        //添加到公司信息表
+        foreach ($data as $k=>$v){
+            $data[$k]['add_time']=date('Y-m-d H:i:s');
+            $result=parent::findCompOne(['comp_name'=>$v['comp_name']]);
+            if(!empty($result)){
+                $data[$k]['comp_id']=$result['id'];
+                unset($data[$k]['comp_name']);
+            }else{
+                unset($data[$k]);
+            }
+        }
+
+        return Db::name('comp_statements')->insertAll($data);
     }
 
 }

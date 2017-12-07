@@ -6,8 +6,9 @@
  * Time: 14:54
  */
 namespace app\admin\model;
+use think\Db;
 use think\Model;
-
+use think\Cache;
 
 class CommonModel extends Model
 {
@@ -24,5 +25,10 @@ class CommonModel extends Model
                 break;
         }
         return $total;
+    }
+
+    public function findCompOne($param){
+        $result=Db::name('comp_basic')->where($param)->find();
+        return $result;
     }
 }
