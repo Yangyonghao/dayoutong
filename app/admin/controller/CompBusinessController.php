@@ -10,6 +10,7 @@ namespace app\admin\controller;
 
 
 use app\admin\model\CompBusinessModel;
+use app\admin\model\ExcelModel;
 use cmf\controller\AdminBaseController;
 use think\Db;
 
@@ -266,6 +267,28 @@ class CompBusinessController extends AdminBaseController
         }
 
         return $score;
+    }
+
+
+    /*
+     * @author:yangyh
+     * @date:20171108
+     * 导入会员数据
+     * */
+    public function import(){
+        $file = request()->file('file_stu');
+        $excel=new ExcelModel();
+        $comp_basic=new CompBasicModel();
+        $basic=$excel->import($file,'会员部数据');
+        if(!$basic){
+            $this->success('请检查导入的数据是否存在问题!', url('CompBasic/index'));
+        }
+        $result=$comp_basic->excelAddCompBasic($basic);
+        if(!$result){
+            $this->success('请检查导入的数据是否存在问题!', url('CompBasic/index'));
+        }else{
+            $this->success('导入成功!', url('CompBasic/index'));
+        }
     }
 
 }
