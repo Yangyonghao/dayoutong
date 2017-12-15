@@ -65,12 +65,12 @@ class ExcelModel extends Model
             }
         }else if($comp_type=='金融部数据'){
             foreach($excel_array as $k=>$v) {
-                $city[$k]['comp_id']      = $v[0];//公司名称
-                $city[$k]['financing']    = $v[1];//公司类型
+                $city[$k]['comp_name']       = $v[0];//公司名称
+                $city[$k]['financing']       = $v[1];//公司类型
             }
         }else if($comp_type=='业务部数据'){
             foreach($excel_array as $k=>$v) {
-                $city[$k]['comp_id']         = $v[0];//公司ID
+                $city[$k]['comp_name']       = $v[0];//公司ID
                 $city[$k]['storage']         = $v[1];//长期合作的油库
                 $city[$k]['logistics']       = $v[2];//长期合作的物流公司
                 $city[$k]['collection']      = $v[3];//回款周期,'较好','一般','正常'
@@ -80,7 +80,7 @@ class ExcelModel extends Model
             }
         }else if($comp_type=='行政部数据'){
             foreach($excel_array as $k=>$v) {
-                $city[$k]['comp_id']            = $v[0];//公司名称
+                $city[$k]['comp_name']          = $v[0];//公司名称
                 $city[$k]['bank_credit']        = $v[1];//是否被银行列入不诚信名单，是或者否
                 $city[$k]['abnormal_operation'] = $v[2];//是否被列入经营异常名录
                 $city[$k]['illegal_dishonesty'] = $v[3];//否被列入严重违法失信企业名单

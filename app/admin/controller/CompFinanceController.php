@@ -50,7 +50,7 @@ class CompFinanceController extends AdminBaseController
                 $query->name('comp_finance')->where('status',1)->field('comp_id');
             })
             ->field('id,comp_name')->select();
-
+//        echo Db::name('comp_basic')->getLastSql();die;
 //        $comp_arr=Db::name('comp_basic')->field('id,comp_name')->select();
         $this->assign('comp_arr',$comp_arr);
         return $this->fetch();
@@ -91,23 +91,13 @@ class CompFinanceController extends AdminBaseController
             ->join('spec_comp_basic w','a.comp_id = w.id')
             ->where('a.id',$finance_id)
             ->find();
-//        dump($result_list);die;
-//        dump($finance_info);die;
-
-//        $finance_info=Db::name('comp_finance')->where('id',$finance_id)->find();
-
 //        $comp_arr=Db::name('comp_basic')
 //            ->where('id','NOT IN',function($query){
 //                $query->name('comp_finance')->where('status',1)->field('comp_id');
 //            })
 //            ->field('id,comp_name')->select();
-//
-//
-//        echo Db::name('comp_basic')->getLastSql();die;
 
-//        $comp_arr=Db::name('comp_basic')->where('status',1)->field('id,comp_name')->select();
         $this->assign('finance_info',$finance_info);
-//        $this->assign('comp_arr',$comp_arr);
         return $this->fetch();
     }
     /*
@@ -143,17 +133,20 @@ class CompFinanceController extends AdminBaseController
      * */
     public function import(){
         $file = request()->file('file_stu');
-        $excel=new ExcelModel();
-        $comp_basic=new CompBasicModel();
-        $basic=$excel->import($file,'会员部数据');
-        if(!$basic){
-            $this->success('请检查导入的数据是否存在问题!', url('CompBasic/index'));
+        if(empty($file)){
+            $this->error("请选择要导入的文件");
         }
-        $result=$comp_basic->excelAddCompBasic($basic);
+        $excel=new ExcelModel();
+        $basic=$excel->import($file,'金融部数据');
+        if(!$basic){
+            $this->success('请检查导入的数据是否存在问题!', url('CompFinance/index'));
+        }
+        $comp_basic=new CompFinanceModel();
+        $result=$comp_basic->excelAddCompFinance($basic);
         if(!$result){
-            $this->success('请检查导入的数据是否存在问题!', url('CompBasic/index'));
+            $this->success('请检查导入的数据是否存在问题!', url('CompFinance/index'));
         }else{
-            $this->success('导入成功!', url('CompBasic/index'));
+            $this->success('导入成功!', url('CompFinance/index'));
         }
     }
 

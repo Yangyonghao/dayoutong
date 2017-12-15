@@ -62,7 +62,7 @@ class CompFinanceModel extends CommonModel
 
         //是否有仓库
         if($data['financing']=='是'){
-            $account_score['financing']=["remark" => "选择是记1分", "score" => "+1"];
+            $account_score['financing']=["remark" => "银行融资/贷款情况选择是，加1分", "score" => "+1"];
         }else{
             unset($data['financing']);
         }
@@ -122,5 +122,53 @@ class CompFinanceModel extends CommonModel
         }
         return $return_msg;
     }
+    /*
+     * @function：excel导入
+     * @date:201171215
+     * */
+    public function excelAddCompFinance($data)
+    {
+        //添加到公司金融数据表
+        $param=[];
+        foreach ($data as $k => $v) {
+            //根据名称查询公司是否存在
+            $result = parent::findCompOne(['comp_name' => $v['comp_name']]);
+            if (!empty($result)) {
+                $comp_finance_arr=Db::name('comp_finance')->where(['comp_id'=>$result['id']])->find();
+                if(!empty($comp_finance_arr)){
+                    continue;
+                }else{
+                    $v['add_time'] = date('Y-m-d H:i:s');
+                    $v['comp_id']  = $result['id'];
+                    unset($v['comp_name']);
+                    $param[]=$v;
+                }
+            }
+        }
 
+        //添加到分数log日志
+        $finance_log=[];
+        foreach($param as $i=>$j){
+            $sss=self::addScoreRole($j);
+            if(!empty($sss['a'])){
+                $finance_log[$i]['comp_id']=$j['comp_id'];
+                $finance_log[$i]['score']=$sss['a']['financing']['score'];
+                $finance_log[$i]['score_source']=$sss['a']['financing']['remark'];
+                $finance_log[$i]['department_type']='金融部数据';
+                $finance_log[$i]['add_time']=date("Y-m-d H:i:s");
+                $finance_log[$i]['key_name']=array_keys($sss['a'])[0];
+                $finance_log[$i]['ip']=get_client_ip();
+            }
+        }
+
+        $basic_score=[];
+        foreach ($finance_log as $m=>$n){
+            $fields="comp_id,total_score,id";
+            $score_arr=Db::name('comp_score')->field($fields)->where(['comp_id'=>$n['comp_id']])->find();
+            $basic_score['total_score']   =$score_arr['total_score']+substr($n['score'],1);
+            $basic_score['finance_score'] =substr($n['score'],1);
+//            Db::name('comp_score')->where(['id'=>$score_arr['id']])->update($basic_score);
+        }
+        return false;
+    }
 }
