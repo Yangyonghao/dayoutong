@@ -12,7 +12,7 @@ use think\Db;
 use think\Model;
 
 
-class CompAdministrationModel extends Model
+class CompAdministrationModel extends CommonModel
 {
     //添加企业信息
     public function addCompAdministration($data){
@@ -135,5 +135,63 @@ class CompAdministrationModel extends Model
         //添加到公司信息表
         $result_id=Db::name('comp_administration')->where('id',$admin_id)->update($post_param);
         return $result_id;
+    }
+
+
+    /*
+     * @function：excel导入
+     * @date:201171215
+     * */
+    public function excelAddCompAdministration($data)
+    {
+        //添加到公司金融数据表
+        $param=[];
+        foreach ($data as $k => $v) {
+            //根据名称查询公司是否存在
+            $result = parent::findCompOne(['comp_name' => $v['comp_name']]);
+            if (!empty($result)) {
+                $comp_finance_arr=Db::name('comp_administration')->where(['comp_id'=>$result['id']])->find();
+                if(!empty($comp_finance_arr)){
+                    continue;
+                }else{
+                    $v['add_time'] = date('Y-m-d H:i:s');
+                    $v['comp_id']  = $result['id'];
+                    unset($v['comp_name']);
+                    $param[]=$v;
+                }
+            }
+        }
+
+        //添加到分数log日志
+        $finance_log=[];
+        $av=0;$score=[];
+        foreach($param as $i=>$j){
+            $sss=self::scoreRole($j);
+            if(!empty($sss['a'])){
+                $score[$i]['score']=0;
+                foreach ($sss['a'] as $a=>$v){
+                    $finance_log[$av]['comp_id']=$j['comp_id'];
+                    $finance_log[$av]['score']=$v['score'];
+                    $finance_log[$av]['score_source']=$v['remark'];
+                    $finance_log[$av]['department_type']='行政部数据';
+                    $finance_log[$av]['add_time']=date("Y-m-d H:i:s");
+                    $finance_log[$av]['key_name']=$a;
+                    $finance_log[$av]['ip']=get_client_ip();
+                    $score[$i]['score'] +=substr($v['score'],1);
+                    $score[$i]['comp_id']=$j['comp_id'];
+                    $av++;
+                }
+            }
+        }
+
+        $basic_score=[];
+        foreach ($finance_log as $m=>$n){
+            $fields="comp_id,total_score,id";
+            $score_arr=Db::name('comp_score')->field($fields)->where(['comp_id'=>$n['comp_id']])->find();
+            $basic_score['total_score']   =$score_arr['total_score']+substr($n['score'],1);
+            $basic_score['finance_score'] =substr($n['score'],1);
+//            Db::name('comp_score')->where(['id'=>$score_arr['id']])->update($basic_score);
+        }
+        return false;
     }
 }

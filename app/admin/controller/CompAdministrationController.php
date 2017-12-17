@@ -7,6 +7,7 @@
  */
 namespace app\admin\controller;
 
+use app\admin\model\ExcelModel;
 use cmf\controller\AdminBaseController;
 use app\admin\model\CompAdministrationModel;
 use think\Db;
@@ -59,14 +60,6 @@ class CompAdministrationController extends AdminBaseController
     /**
      * 添加导航
      * @adminMenu(
-     *     'name'   => '添加导航',
-     *     'parent' => 'index',
-     *     'display'=> false,
-     *     'hasView'=> true,
-     *     'order'  => 10000,
-     *     'icon'   => '',
-     *     'remark' => '添加导航',
-     *     'param'  => ''
      * )
      */
     public function add()
@@ -113,7 +106,6 @@ class CompAdministrationController extends AdminBaseController
             ->join('spec_comp_basic w','a.comp_id = w.id')
             ->where('a.id',$admin_id)
             ->find();
-//        var_dump($comp_admin_info);die;
 
         //获取未添
 //        $comp_arr=Db::name('comp_basic')
@@ -181,6 +173,30 @@ class CompAdministrationController extends AdminBaseController
             }else{
                 $this->error('保存失败!');
             }
+        }
+    }
+
+    /*
+     * @author:yangyh
+     * @date:201712
+     * 导入会员数据
+     * */
+    public function import(){
+        $file = request()->file('file_stu');
+        if(empty($file)){
+            $this->error("请选择要导入的文件");
+        }
+        $excel=new ExcelModel();
+        $basic=$excel->import($file,'行政部数据');
+        if(!$basic){
+            $this->success('请检查导入的数据是否存在问题!', url('CompAdministration/index'));
+        }
+        $comp_basic=new CompAdministrationModel();
+        $result=$comp_basic->excelAddCompAdministration($basic);
+        if(!$result){
+            $this->success('请检查导入的数据是否存在问题!', url('CompAdministration/index'));
+        }else{
+            $this->success('导入成功!', url('CompAdministration/index'));
         }
     }
 
