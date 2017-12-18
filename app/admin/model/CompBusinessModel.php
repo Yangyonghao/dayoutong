@@ -178,8 +178,8 @@ class CompBusinessModel extends CommonModel
         //开启事务
         Db::startTrans();
         try{
-//            Db::name("comp_business")->insertAll($param);
-//            Db::name("comp_score_log")->insertAll($finance_log);
+            Db::name("comp_business")->insertAll($param);
+            Db::name("comp_score_log")->insertAll($finance_log);
             $basic_score=[];
             foreach ($score as $m=>$n){
                 $fields="comp_id,total_score,id";
@@ -187,7 +187,7 @@ class CompBusinessModel extends CommonModel
                 $basic_score['total_score'] =$score_arr['total_score']+$n['score'];
                 $basic_score['sales_score'] =$n['score'];
                 //更新分数表
-//                Db::name('comp_score')->where(['id'=>$score_arr['id']])->update($basic_score);
+                Db::name('comp_score')->where(['id'=>$score_arr['id']])->update($basic_score);
             }
             // 提交事务
             Db::commit();
