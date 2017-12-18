@@ -16,9 +16,11 @@ use think\Db;
 
 class CompBusinessController extends AdminBaseController
 {
+    /*
+     * 业务部
+     * @author：yangyh
+     * */
     public function index(){
-
-
         /**搜索条件**/
         $comp_name = trim($this->request->param('comp_name'));
         $where=[];
@@ -278,16 +280,16 @@ class CompBusinessController extends AdminBaseController
     public function import(){
         $file = request()->file('file_stu');
         $excel=new ExcelModel();
-        $comp_basic=new CompBasicModel();
-        $basic=$excel->import($file,'会员部数据');
+        $comp_basic=new CompBusinessModel();
+        $basic=$excel->import($file,'业务部数据');
         if(!$basic){
-            $this->success('请检查导入的数据是否存在问题!', url('CompBasic/index'));
+            $this->success('请检查导入的数据是否存在问题!', url('CompBusiness/index'));
         }
-        $result=$comp_basic->excelAddCompBasic($basic);
+        $result=$comp_basic->excelAddCompBusiness($basic);
         if(!$result){
-            $this->success('请检查导入的数据是否存在问题!', url('CompBasic/index'));
+            $this->success('请检查导入的数据是否存在问题!', url('CompBusiness/index'));
         }else{
-            $this->success('导入成功!', url('CompBasic/index'));
+            $this->success('导入成功!', url('CompBusiness/index'));
         }
     }
 

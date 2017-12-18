@@ -54,57 +54,57 @@ class ExcelModel extends Model
         $city=[];
         if($comp_type=='会员部数据'){
             foreach($excel_array as $k=>$v) {
-                $city[$k]['comp_name']      = $v[0];//公司名称
-                $city[$k]['comp_classify']  = $v[1];//公司类型
-                $city[$k]['reg_time']       = $v[2];//注册时间
-                $city[$k]['reg_money']      = $v[3];//注册资金
-                $city[$k]['link_addr']      = $v[4];//联系地址
-                $city[$k]['legal_person']   = $v[5];//企业法人
-                $city[$k]['service_pay']    = $v[6];//是否支付服务费
-                $city[$k]['comp_aptitude']  = $v[7];//企业附加资质
+                $city[$k]['comp_name']      = trim($v[0]);//公司名称
+                $city[$k]['comp_classify']  = trim($v[1]);//公司类型
+                $city[$k]['reg_time']       = trim($v[2]);//注册时间
+                $city[$k]['reg_money']      = trim($v[3]);//注册资金
+                $city[$k]['link_addr']      = trim($v[4]);//联系地址
+                $city[$k]['legal_person']   = trim($v[5]);//企业法人
+                $city[$k]['service_pay']    = trim($v[6]);//是否支付服务费
+                $city[$k]['comp_aptitude']  = trim($v[7]);//企业附加资质
             }
         }else if($comp_type=='金融部数据'){
             foreach($excel_array as $k=>$v) {
-                $city[$k]['comp_name']       = $v[0];//公司名称
-                $city[$k]['financing']       = $v[1];//公司类型
+                $city[$k]['comp_name']       = trim($v[0]);//公司名称
+                $city[$k]['financing']       = trim($v[1]);//公司类型
             }
         }else if($comp_type=='业务部数据'){
             foreach($excel_array as $k=>$v) {
-                $city[$k]['comp_name']       = $v[0];//公司ID
-                $city[$k]['storage']         = $v[1];//长期合作的油库
-                $city[$k]['logistics']       = $v[2];//长期合作的物流公司
-                $city[$k]['collection']      = $v[3];//回款周期,'较好','一般','正常'
-                $city[$k]['oil_quality']     = $v[4];//是否有货物质量问题，是或者否
-                $city[$k]['transaction_num'] = $v[5];//交易频次'频繁','较频繁','一般','较少','极少'
-                $city[$k]['performance']     = $v[6];//履约情况
+                $city[$k]['comp_name']       = trim($v[0]);//公司ID
+                $city[$k]['storage']         = trim($v[1]);//长期合作的油库
+                $city[$k]['logistics']       = trim($v[2]);//长期合作的物流公司
+                $city[$k]['oil_quality']     = trim($v[3]);//是否有货物质量问题，是或者否
+                $city[$k]['collection']      = trim($v[4]);//回款周期,'较好','一般','正常'
+                $city[$k]['transaction_num'] = trim($v[5]);//交易频次'频繁','较频繁','一般','较少','极少'
+                $city[$k]['performance']     = trim($v[6]);//履约情况
             }
         }else if($comp_type=='行政部数据'){
             foreach($excel_array as $k=>$v) {
-                $city[$k]['comp_name']          = $v[0];//公司名称
-                $city[$k]['bank_credit']        = $v[1];//是否被银行列入不诚信名单，是或者否
-                $city[$k]['abnormal_operation'] = $v[2];//是否被列入经营异常名录
-                $city[$k]['illegal_dishonesty'] = $v[3];//否被列入严重违法失信企业名单
-                $city[$k]['legal_disputes']     = $v[4];//企业民事法律纠纷次数
-                $city[$k]['civil_law']          = $v[5];//股东、法人、高管民事法律纠纷次数
-                $city[$k]['criminal_law']       = $v[6];//股东、法人、高管刑事法律纠纷次数
-                $city[$k]['is_website']         = $v[7];//是否有公司官网
-                $city[$k]['evil_network']       = $v[8];//是否有网络搜索恶评
+                $city[$k]['comp_name']          = trim($v[0]);//公司名称
+                $city[$k]['bank_credit']        = trim($v[1]);//是否被银行列入不诚信名单，是或者否
+                $city[$k]['abnormal_operation'] = trim($v[2]);//是否被列入经营异常名录
+                $city[$k]['illegal_dishonesty'] = trim($v[3]);//否被列入严重违法失信企业名单
+                $city[$k]['legal_disputes']     = trim($v[4]);//企业民事法律纠纷次数
+                $city[$k]['civil_law']          = trim($v[5]);//股东、法人、高管民事法律纠纷次数
+                $city[$k]['criminal_law']       = trim($v[6]);//股东、法人、高管刑事法律纠纷次数
+                $city[$k]['is_website']         = trim($v[7]);//是否有公司官网
+                $city[$k]['evil_network']       = trim($v[8]);//是否有网络搜索恶评
             }
         }else if($comp_type=='财务部数据'){
             foreach($excel_array as $k=>$v) {
-                $city[$k]['comp_name']            = $v[0];//公司名称
-                $city[$k]['input_monthly']        = $v[1];//录入月份
-                $city[$k]['monthly_sales']        = $v[2];//月度销售额
-                $city[$k]['comp_income_tax']      = $v[3];//企业所得税
-                $city[$k]['construction_tax']     = $v[4];//城建税
-                $city[$k]['personal_tax']         = $v[5];//个人所得税
-                $city[$k]['river_management_fee'] = $v[6];//河道管理费
-                $city[$k]['additional_edu_fees']  = $v[7];//教育附加费
-                $city[$k]['local_edu_fees']       = $v[8];//地方教育附加费
-                $city[$k]['profit_current']       = $v[9];//本期净利润
-                $city[$k]['profit_year']          = $v[10];//本年净利润
-                $city[$k]['taxable_sales']        = $v[11];//应税销售额
-                $city[$k]['add_value_tax']        = $v[12];//增值税
+                $city[$k]['comp_name']            = trim($v[0]);//公司名称
+                $city[$k]['input_monthly']        = trim($v[1]);//录入月份
+                $city[$k]['monthly_sales']        = trim($v[2]);//月度销售额
+                $city[$k]['comp_income_tax']      = trim($v[3]);//企业所得税
+                $city[$k]['construction_tax']     = trim($v[4]);//城建税
+                $city[$k]['personal_tax']         = trim($v[5]);//个人所得税
+                $city[$k]['river_management_fee'] = trim($v[6]);//河道管理费
+                $city[$k]['additional_edu_fees']  = trim($v[7]);//教育附加费
+                $city[$k]['local_edu_fees']       = trim($v[8]);//地方教育附加费
+                $city[$k]['profit_current']       = trim($v[9]);//本期净利润
+                $city[$k]['profit_year']          = trim($v[10]);//本年净利润
+                $city[$k]['taxable_sales']        = trim($v[11]);//应税销售额
+                $city[$k]['add_value_tax']        = trim($v[12]);//增值税
             }
         }
 
