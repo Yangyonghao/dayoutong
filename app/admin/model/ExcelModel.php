@@ -20,7 +20,7 @@ class ExcelModel extends Model
         Loader::import('PHPExcel.Classes.PHPExcel.IOFactory.PHPExcel_IOFactory');
         Loader::import('PHPExcel.Classes.PHPExcel.Reader.Excel5');
         //获取表单上传文件
-        $dir = ROOT_PATH . 'public' . DS . 'upload';
+        $dir = ROOT_PATH . 'public' . DS . 'upload'.DS.'excel';
 //        $file = request()->file('file_stu');
         $info = $file->validate(['size'=>3145728,'ext'=>'xls,xlsx,csv'])->rule('uniqid')->move($dir) ;//上传验证后缀名,以及上传之后移动的地址
         if($info) {

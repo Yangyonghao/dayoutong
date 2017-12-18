@@ -161,7 +161,6 @@ class CompAdministrationModel extends CommonModel
                 }
             }
         }
-
         //添加到分数log日志
         $finance_log=[];
         $av=0;$score=[];
@@ -183,15 +182,26 @@ class CompAdministrationModel extends CommonModel
                 }
             }
         }
-
-        $basic_score=[];
-        foreach ($finance_log as $m=>$n){
-            $fields="comp_id,total_score,id";
-            $score_arr=Db::name('comp_score')->field($fields)->where(['comp_id'=>$n['comp_id']])->find();
-            $basic_score['total_score']   =$score_arr['total_score']+substr($n['score'],1);
-            $basic_score['finance_score'] =substr($n['score'],1);
-//            Db::name('comp_score')->where(['id'=>$score_arr['id']])->update($basic_score);
+        Db::startTrans();
+        try{
+            Db::name('comp_administration')->insertAll($param);
+            Db::name("comp_score_log")->insertAll($finance_log);
+            $basic_score=[];
+            foreach ($score as $m=>$n){
+                $fields="comp_id,total_score,id";
+                $score_arr=Db::name('comp_score')->field($fields)->where(['comp_id'=>$n['comp_id']])->find();
+                $basic_score['total_score'] =$score_arr['total_score']+$n['score'];
+                $basic_score['admin_score'] =$n['score'];
+                //更新分数表
+                Db::name('comp_score')->where(['id'=>$score_arr['id']])->update($basic_score);
+            }
+            // 提交事务
+            Db::commit();
+            return true;
+        } catch (\Exception $e) {
+            // 回滚事务
+            Db::rollback();
+            return 101;
         }
-        return false;
     }
 }
