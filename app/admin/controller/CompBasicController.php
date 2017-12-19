@@ -225,7 +225,7 @@ class CompBasicController extends AdminBaseController
             $this->success('请检查导入的数据是否存在问题!', url('CompBasic/index'));
         }
         $result=$comp_basic->excelAddCompBasic($basic);
-        if(!$result){
+        if($result==101){
             $this->success('请检查导入的数据是否存在问题!', url('CompBasic/index'));
         }else{
             $this->success('导入成功!', url('CompBasic/index'));

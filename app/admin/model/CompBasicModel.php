@@ -9,6 +9,7 @@
 namespace app\admin\model;
 
 use think\Db;
+use think\Exception;
 use think\Model;
 use think\Cache;
 
@@ -91,68 +92,70 @@ class CompBasicModel extends CommonModel
      * */
     public function excelAddCompBasic($data){
         //添加到公司信息表
-        foreach ($data as $k=>$v){
-            $v['add_time']=date('Y-m-d H:i:s');
-            $result=parent::findCompOne(['comp_name'=>$v['comp_name']]);
-            if(!empty($result)){
-                unset($data[$k]);
-                continue;
+        Db::startTrans();
+        try{
+            foreach ($data as $k=>$v){
+                $result=parent::findCompOne(['comp_name'=>$v['comp_name']]);
+                if(!empty($result)){
+                    unset($data[$k]);
+                    continue;
+                }
+                $v['add_time']=date("Y-m-d H:i:s");
+                $result_id=Db::name('comp_basic')->insertGetId($v);
+                $data[$k]['comp_id']=$result_id;
             }
-            $result_id=Db::name('comp_basic')->insertGetId($v);
-            $data[$k]['comp_id']=$result_id;
-        }
-        if(empty($data)){
-            return false;
-        }
-
-        foreach ($data as $i=>$j){
-            unset($j['add_time']);
-            $artitude_score_count=count(explode('|',$j['comp_aptitude']));
-            $result_list[$i]=$this->scoreRole($artitude_score_count);
-            if(!isset($j['business_license_pic'])){
-                unset($result_list[$i]['business_license_pic']);
+            if(empty($data)){
+                return false;
             }
-            if($j['service_pay']=='是'){
-                $result_list[$i]['service_pay'] = ["remark"=>"支付服务费，加5分","score" => "+5"];
-            }else{
-                unset($j['service_pay']);
-            }
-        }
-        $i = 0;
-        foreach ($data as $key => $value) {
-            $score_num[$key]=[];$score_num[$key]['score']=0;
-            if (!empty($value)) {
-                foreach ($result_list[$key] as $m=>$n){
-                    $app[$i]['comp_id']=$value['comp_id'];
-                    $app[$i]['score']=isset($n['score'])?$n['score']:0;
-                    $app[$i]['score_source']=isset($n['remark'])?$n['remark']:0;
-                    $app[$i]['department_type']='会员部数据';
-                    $app[$i]['add_time']=date('Y-m-d H:i:s');
-                    $app[$i]['key_name']=$m;
-                    $app[$i]['ip']=get_client_ip();
-                    $score_num[$key]['score'] +=substr($n['score'],1);
-                    $score_num[$key]['comp_id'] =$value['comp_id'];
-                    Db::name('comp_score_log')->insert($app[$i]);
-                    $i += 1;
+            foreach ($data as $i=>$j){
+                unset($j['add_time']);
+                $aptitude_score_count=count(explode('|',$j['comp_aptitude']));
+                $result_list[$i]=$this->scoreRole($aptitude_score_count);
+                if(!isset($j['business_license_pic'])){
+                    unset($result_list[$i]['business_license_pic']);
+                }
+                if($j['service_pay']=='是'){
+                    $result_list[$i]['service_pay'] = ["remark"=>"支付服务费，加5分","score" => "+5"];
+                }else{
+                    unset($j['service_pay']);
                 }
             }
-        }
-        foreach ($score_num as $v=>$x){
-            $comp_score[$v]=[
-                'comp_id'=>$x['comp_id'],
-                'total_score'=>$x['score'],
-                'member_score'=>$x['score'],
-                'finance_score'=>0,
-                'sales_score'=>0,
-                'account_score'=>0,
-                'admin_score'=>0,
-            ];
-            Db::name('comp_score')->insert($comp_score[$v]);
-        }
+            $i = 0;
+            foreach ($data as $key => $value) {
+                $score_num[$key]=[];$score_num[$key]['score']=0;
+                if (!empty($value)) {
+                    foreach ($result_list[$key] as $m=>$n){
+                        $app[$i]['comp_id']=$value['comp_id'];
+                        $app[$i]['score']=isset($n['score'])?$n['score']:0;
+                        $app[$i]['score_source']=isset($n['remark'])?$n['remark']:0;
+                        $app[$i]['department_type']='会员部数据';
+                        $app[$i]['add_time']=date('Y-m-d H:i:s');
+                        $app[$i]['key_name']=$m;
+                        $app[$i]['ip']=get_client_ip();
+                        $score_num[$key]['score'] +=substr($n['score'],1);
+                        $score_num[$key]['comp_id'] =$value['comp_id'];
+                        Db::name('comp_score_log')->insert($app[$i]);
+                        $i += 1;
+                    }
+                }
+            }
+            foreach ($score_num as $v=>$x){
+                $comp_score[$v]=[
+                    'comp_id'=>$x['comp_id'],
+                    'total_score'=>$x['score'],
+                    'member_score'=>$x['score'],
+                    'finance_score'=>0,
+                    'sales_score'=>0,
+                    'account_score'=>0,
+                    'admin_score'=>0,
+                ];
+                Db::name('comp_score')->insert($comp_score[$v]);
+            }
 
-
-        return true;
+            Db::commit();
+        }catch(Exception $e){
+            Db::rollback();
+            return 101;
+        }
     }
-
-
 }

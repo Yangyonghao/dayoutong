@@ -317,19 +317,36 @@ class CompStatementsController extends AdminBaseController
     /*
      * @author:yangyh
      * @date:20171108
-     * 导入会员数据
+     * 导入公司每月税收记录
      * */
     public function import(){
         $file = request()->file('file_stu');
         $excel=new ExcelModel();
         $comp_basic=new CompStatementsModel();
-        $basic=$excel->import($file,'财务部数据');
+        $basic=$excel->import($file,'税收数据录入');
 //        if(!$basic){
 //            $this->success('请检查导入的数据是否存在问题!', url('CompStatements/index'));
 //        }
         $result=$comp_basic->excelAddCompStatements($basic);
         if(!$result || !$basic){
             $this->success('请检查导入的数据是否存在问题!', url('CompStatements/index'));
+        }else{
+            $this->success('导入成功!', url('CompStatements/index'));
+        }
+    }
+    /*
+     * @function：财务部导入企业基本信息
+     * @date:20171219
+     * @author:yangyh
+     * */
+    public function importAdd(){
+        $file = request()->file('file_stu');
+        $excel=new ExcelModel();
+        $comp_basic=new CompBasicFinanceModel();
+        $basic=$excel->import($file,'财务部数据');
+        $result=$comp_basic->excelAddBasicFinance($basic);
+        if(!$result || !$basic){
+            $this->error('请检查导入的数据是否存在问题!', url('CompStatements/index'));
         }else{
             $this->success('导入成功!', url('CompStatements/index'));
         }

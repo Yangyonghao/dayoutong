@@ -90,7 +90,7 @@ class ExcelModel extends Model
                 $city[$k]['is_website']         = trim($v[7]);//是否有公司官网
                 $city[$k]['evil_network']       = trim($v[8]);//是否有网络搜索恶评
             }
-        }else if($comp_type=='财务部数据'){
+        }else if($comp_type=='税收数据录入'){
             foreach($excel_array as $k=>$v) {
                 $city[$k]['comp_name']            = trim($v[0]);//公司名称
                 $city[$k]['input_monthly']        = trim($v[1]);//录入月份
@@ -105,6 +105,13 @@ class ExcelModel extends Model
                 $city[$k]['profit_year']          = trim($v[10]);//本年净利润
                 $city[$k]['taxable_sales']        = trim($v[11]);//应税销售额
                 $city[$k]['add_value_tax']        = trim($v[12]);//增值税
+            }
+        }else if($comp_type=='财务部数据'){
+            foreach($excel_array as $k=>$v) {
+                $city[$k]['comp_name']            = trim($v[0]);//公司名称
+                $city[$k]['gross_profit_rate']    = trim($v[1]);//毛利率
+                $city[$k]['agency_fee']           = trim($v[2]);//是否缴纳记账费
+                $city[$k]['invoice_version']      = trim($v[3]);//发票版本
             }
         }
 

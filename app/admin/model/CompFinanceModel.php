@@ -89,10 +89,10 @@ class CompFinanceModel extends CommonModel
                 $result=Db::name('comp_score_log')->where($where)->sum('score');
                 if($result>0){
                     $app['score']='-1';
-                    $app['score_source']='选择否减1分';
+                    $app['score_source']='银行融资/贷款情况选择否，减1分';
                 }else{
                     $app['score']='+1';
-                    $app['score_source']='选择否加1分';
+                    $app['score_source']='银行融资/贷款情况选择是，加1分';
                 }
                 $app['comp_id']=$comp_id;
                 $app['department_type']='金融部数据';
